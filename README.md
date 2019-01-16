@@ -1,9 +1,5 @@
-# Team Xbot 2019 Project [![Build Status](https://dev.azure.com/Team488/Team%20488%20Builds/_apis/build/status/Team488.FRCRobotTemplate?branchName=master)](https://dev.azure.com/Team488/Team%20488%20Builds/_build/latest?definitionId=3?branchName=master)
+# Team Xbot 2019 Project [![Build Status](https://dev.azure.com/Team488/Team%20488%20Builds/_apis/build/status/Team488.TeamXbot2019?branchName=master)](https://dev.azure.com/Team488/Team%20488%20Builds/_build/latest?definitionId=4?branchName=master)
 
-This is a template project which includes all the boilerplate to use our Seriously Common Lib. It can be forked and used as a robot project for the season if you want to use our library.
+This is our competition code for the 2019 Deep Space season.
 
-To find out more about the library, visit the [Seriously Common Lib repo](https://github.com/Team488/SeriouslyCommonLib).
-
-## Up-front warning
-
-This template, like our library as a whole, is a work-in-progress. See the library readme for more information.
+To find out more about our year-over-year library, visit the [Seriously Common Lib repo](https://github.com/Team488/SeriouslyCommonLib).
