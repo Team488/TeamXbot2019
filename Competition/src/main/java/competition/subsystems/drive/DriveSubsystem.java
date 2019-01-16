@@ -34,31 +34,26 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     public final XCANTalon rightFollower;
 
     private Map<XCANTalon, MotionRegistration> masterTalons;
-    
 
     @Inject
     public DriveSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract) {
         log.info("Creating DriveSubsystem");
 
-        leftTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix()+"leftDriveTicksPer5Feet",
-        100281);
-        rightTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix()+"rightDriveTicksPer5Feet",
-        100281);
+        leftTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "leftDriveTicksPer5Feet", 100281);
+        rightTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "rightDriveTicksPer5Feet", 100281);
 
         this.leftMaster = factory.createCANTalon(contract.getLeftDriveMaster().channel);
         this.leftFollower = factory.createCANTalon(contract.getLeftDriveFollower().channel);
         this.rightMaster = factory.createCANTalon(contract.getRightDriveMaster().channel);
         this.rightFollower = factory.createCANTalon(contract.getRightDriveFollower().channel);
 
-        XCANTalon.configureMotorTeam("LeftDrive", "LeftMaster", leftMaster, leftFollower, 
-            contract.getLeftDriveMaster().inverted,
-            contract.getLeftDriveFollower().inverted,
-            contract.getLeftDriveMasterEncoder().inverted);
+        XCANTalon.configureMotorTeam("LeftDrive", "LeftMaster", leftMaster, leftFollower,
+                contract.getLeftDriveMaster().inverted, contract.getLeftDriveFollower().inverted,
+                contract.getLeftDriveMasterEncoder().inverted);
 
-        XCANTalon.configureMotorTeam("RightDrive", "RightMaster", rightMaster, rightFollower, 
-            contract.getRightDriveMaster().inverted,
-            contract.getRightDriveFollower().inverted,
-            contract.getRightDriveMasterEncoder().inverted);
+        XCANTalon.configureMotorTeam("RightDrive", "RightMaster", rightMaster, rightFollower,
+                contract.getRightDriveMaster().inverted, contract.getRightDriveFollower().inverted,
+                contract.getRightDriveMasterEncoder().inverted);
 
         masterTalons = new HashMap<XCANTalon, BaseDriveSubsystem.MotionRegistration>();
         masterTalons.put(leftMaster, new MotionRegistration(0, 1, -1));
@@ -96,10 +91,10 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     }
 
     @Override
-	public double getTransverseDistance() {
-		return 0;
+    public double getTransverseDistance() {
+        return 0;
     }
-    
+
     public double ticksToInches(Side side, double ticks) {
         double ticksPerInch = getSideTicksPerInch(side);
 
