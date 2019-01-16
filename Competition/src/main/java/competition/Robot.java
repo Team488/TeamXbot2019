@@ -1,6 +1,7 @@
 
 package competition;
 
+import competition.CompetitionModule.RobotPlatform;
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
 import xbot.common.command.BaseRobot;
@@ -16,6 +17,6 @@ public class Robot extends BaseRobot {
 
     @Override
     protected void setupInjectionModule() {
-        this.injectionModule = new CompetitionModule(true);
+        this.injectionModule = new CompetitionModule(RobotPlatform.Competition2018);
     }
 }
