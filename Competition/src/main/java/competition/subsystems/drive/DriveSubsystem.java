@@ -77,7 +77,7 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     protected Map<XCANTalon, MotionRegistration> getAllMasterTalons() {
-        return null;
+        return masterTalons;
     }
 
     @Override
