@@ -15,7 +15,6 @@ public class PoseSubsystem extends BasePoseSubsystem {
         super(clf, propManager);
     }
 
-
     @Override
     protected double getLeftDriveDistance() {
         return 0;
