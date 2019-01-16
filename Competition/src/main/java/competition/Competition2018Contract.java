@@ -1,5 +1,8 @@
 package competition;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
