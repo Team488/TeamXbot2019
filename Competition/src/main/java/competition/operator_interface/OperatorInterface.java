@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import xbot.common.controls.sensors.XFTCGamepad;
-import xbot.common.controls.sensors.XJoystick;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.logging.RobotAssertionManager;
 
@@ -21,5 +20,6 @@ public class OperatorInterface {
         gamepad = factory.createGamepad(0, 12);
         gamepad.setLeftStickYInversion(true);
         gamepad.setRightStickYInversion(true);
+        gamepad.setRightStickXInversion(true);
     }
 }
