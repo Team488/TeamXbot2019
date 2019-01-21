@@ -11,4 +11,9 @@ public class RobotInitTest extends BaseCompetitionTest {
         this.injector.getInstance(SubsystemDefaultCommandMap.class);
         this.injector.getInstance(OperatorCommandMap.class);
     }
+
+    @Test
+    public void testRobotInit() {
+        Robot robot = new Robot();
+    }
 }
