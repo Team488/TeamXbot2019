@@ -1,5 +1,7 @@
 package competition.subsystems.drive.commands;
 
+import com.google.inject.Inject;
+
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
 import xbot.common.command.BaseCommand;
@@ -9,6 +11,7 @@ public class CheesyDriveWithJoysticksCommand extends BaseCommand {
     final DriveSubsystem driveSubsystem;
     final OperatorInterface oi;
 
+    @Inject
     public CheesyDriveWithJoysticksCommand(OperatorInterface oi, DriveSubsystem driveSubsystem) {
         this.oi = oi;
         this.driveSubsystem = driveSubsystem;
