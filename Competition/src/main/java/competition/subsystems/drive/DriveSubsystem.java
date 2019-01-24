@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import competition.ElectricalContract2019;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.math.PIDFactory;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -35,9 +36,26 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
     private Map<XCANTalon, MotionRegistration> masterTalons;
 
+    private final PIDManager positionalPid;
+    private final PIDManager rotateToHeadingPid;
+    private final PIDManager rotateDecayPid;
+
     @Inject
-    public DriveSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract) {
+    public DriveSubsystem(
+        CommonLibFactory factory, 
+        XPropertyManager propManager, 
+        ElectricalContract2019 contract,
+        PIDFactory pf) {
         log.info("Creating DriveSubsystem");
+
+        positionalPid = pf.createPIDManager(getPrefix()+"Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
+        
+        rotateToHeadingPid = pf.createPIDManager(getPrefix()+"DriveHeading", 0.02, 0, 0, 0, 1, -1, 5, 1, 0.5);
+        rotateToHeadingPid.setEnableErrorThreshold(true);
+        rotateToHeadingPid.setEnableDerivativeThreshold(true);
+        rotateToHeadingPid.setEnableTimeThreshold(true);
+
+        rotateDecayPid = pf.createPIDManager(getPrefix()+"DriveDecay", 0, 0, 1);
 
         leftTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "leftDriveTicksPer5Feet", 100281);
         rightTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "rightDriveTicksPer5Feet", 100281);
@@ -62,17 +80,17 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
     @Override
     public PIDManager getPositionalPid() {
-        return null;
+        return positionalPid;
     }
 
     @Override
     public PIDManager getRotateToHeadingPid() {
-        return null;
+        return rotateToHeadingPid;
     }
 
     @Override
     public PIDManager getRotateDecayPid() {
-        return null;
+        return rotateDecayPid;
     }
 
     @Override
