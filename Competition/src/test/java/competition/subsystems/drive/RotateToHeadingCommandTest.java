@@ -54,7 +54,11 @@ public class RotateToHeadingCommandTest extends BaseCompetitionTest {
         assertEquals(1, drive.rightMaster.getMotorOutputPercent(), 0.001);
         changeMockGyroHeading(90);
 
+        // Once for error to stabilize to 0
         command.execute();
+        // Again for the derivative to stabilize to 0
+        command.execute();
+        // Then let time pass for the time stability check
         timer.advanceTimeInSecondsBy(3);
         command.execute();
 
