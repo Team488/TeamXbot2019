@@ -10,6 +10,8 @@ import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
 import xbot.common.subsystems.drive.PurePursuitCommand.PointLoadingMode;
+import xbot.common.subsystems.pose.ResetHeadingAndDistanceCommandGroup;
+import xbot.common.subsystems.pose.commands.ResetDistanceCommand;
 import xbot.common.subsystems.drive.RabbitPoint;
 
 @Singleton
@@ -26,7 +28,8 @@ public class OperatorCommandMap {
             TankDriveWithJoysticksCommand tank,
             RotateToHeadingCommand rotate,
             CheesyQuickTurnCommand quickTurn,
-            ConfigurablePurePursuitCommand pursuit)
+            ConfigurablePurePursuitCommand pursuit,
+            ResetHeadingAndDistanceCommandGroup resetPose)
     {
         operatorInterface.gamepad.getifAvailable(6).whileHeld(quickTurn);
         operatorInterface.gamepad.getPovIfAvailable(0).whenPressed(tank);
@@ -35,9 +38,12 @@ public class OperatorCommandMap {
 
         pursuit.setMode(PointLoadingMode.Relative);
         pursuit.addPoint(new RabbitPoint(3*12, 3*12, 0));
+        operatorInterface.gamepad.getifAvailable(2).whenPressed(pursuit);
         
         rotate.setHeadingGoal(90, true);
         operatorInterface.gamepad.getifAvailable(1).whenPressed(rotate);
+
+        operatorInterface.gamepad.getifAvailable(3).whenPressed(resetPose);
     }
     
 }
