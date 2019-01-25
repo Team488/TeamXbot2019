@@ -50,7 +50,7 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
         positionalPid = pf.createPIDManager(getPrefix()+"Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
         
-        rotateToHeadingPid = pf.createPIDManager(getPrefix()+"DriveHeading", 0.02, 0, 0, 0, 1, -1, 5, 1, 0.5);
+        rotateToHeadingPid = pf.createPIDManager(getPrefix()+"DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
         rotateToHeadingPid.setEnableErrorThreshold(true);
         rotateToHeadingPid.setEnableDerivativeThreshold(true);
         rotateToHeadingPid.setEnableTimeThreshold(true);
