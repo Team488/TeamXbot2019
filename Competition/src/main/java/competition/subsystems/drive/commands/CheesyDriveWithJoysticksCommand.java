@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.math.MathUtils;
 
 public class CheesyDriveWithJoysticksCommand extends BaseCommand {
 
@@ -26,7 +27,7 @@ public class CheesyDriveWithJoysticksCommand extends BaseCommand {
     @Override
     public void execute() {
         double translation = oi.gamepad.getLeftVector().y;
-        double rotation = oi.gamepad.getRightVector().x;
+        double rotation = MathUtils.squareAndRetainSign(oi.gamepad.getRightVector().x);
 
         driveSubsystem.cheesyDrive(translation, rotation);
     }
