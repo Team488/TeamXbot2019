@@ -8,6 +8,8 @@ import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
+import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
+import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
 import xbot.common.subsystems.drive.PurePursuitCommand.PointLoadingMode;
 import xbot.common.subsystems.pose.ResetHeadingAndDistanceCommandGroup;
@@ -44,6 +46,23 @@ public class OperatorCommandMap {
         operatorInterface.gamepad.getifAvailable(1).whenPressed(rotate);
 
         operatorInterface.gamepad.getifAvailable(3).whenPressed(resetPose);
+    }
+
+    @Inject
+    public void setupPoseCommands(
+        SetPoseToFieldLandmarkCommand setPoseToHabLevelOne,
+        SetPoseToFieldLandmarkCommand setPoseToRightLoadingStation,
+        SetPoseToFieldLandmarkCommand setPoseToCargoShipSix
+    ) {
+        setPoseToHabLevelOne.setLandmark(FieldLandmark.HabLevelOne);
+        setPoseToHabLevelOne.forceHeading(true);
+        setPoseToHabLevelOne.includeOnSmartDashboard();
+        setPoseToRightLoadingStation.setLandmark(FieldLandmark.RightLoadingStation);
+        setPoseToRightLoadingStation.forceHeading(true);
+        setPoseToRightLoadingStation.includeOnSmartDashboard();
+        setPoseToCargoShipSix.setLandmark(FieldLandmark.CargoShipSix);
+        setPoseToCargoShipSix.forceHeading(true);
+        setPoseToCargoShipSix.includeOnSmartDashboard();
     }
     
 }
