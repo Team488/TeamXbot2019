@@ -16,4 +16,13 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getLeftDriveMasterEncoder();
 
     public abstract DeviceInfo getRightDriveMasterEncoder();
+
+    public abstract DeviceInfo getElevatorMasterMotor();
+
+    public abstract DeviceInfo getElevatorMasterEncoder();
+
+    public abstract DeviceInfo getElevatorCalibrationSensor();
+
+    public abstract boolean isElevatorReady();
+    
 }

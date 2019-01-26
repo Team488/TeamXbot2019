@@ -8,6 +8,11 @@ import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
+import competition.subsystems.elevator.commands.LowerElevatorCommand;
+import competition.subsystems.elevator.commands.RaiseElevatorCommand;
+import competition.subsystems.elevator.commands.StopElevatorCommand;
+import xbot.common.controls.sensors.XJoystick;
+import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
@@ -44,8 +49,27 @@ public class OperatorCommandMap {
         
         rotate.setHeadingGoal(90, true);
         operatorInterface.gamepad.getifAvailable(1).whenPressed(rotate);
-
         operatorInterface.gamepad.getifAvailable(3).whenPressed(resetPose);
+
+    }
+    public void setupElevatorCommands(
+        OperatorInterface operatorInterface,
+        RaiseElevatorCommand raiseElevator,
+        LowerElevatorCommand lowerElevator,
+        StopElevatorCommand stopElevator,
+        XJoystick elevatorButtons   
+    )
+
+    {
+        AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
+        elevatorButtons.addAnalogButton(triggerRaise);
+        operatorInterface.gamepad.getAnalogIfAvailable(triggerRaise).whenPressed(raiseElevator);
+        
+        AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
+        elevatorButtons.addAnalogButton(triggerLower);
+        operatorInterface.gamepad.getAnalogIfAvailable(triggerLower).whenPressed(lowerElevator);
+        
+        operatorInterface.gamepad.getifAvailable(8).whenPressed(stopElevator);
     }
 
     @Inject
@@ -63,6 +87,7 @@ public class OperatorCommandMap {
         setPoseToCargoShipSix.setLandmark(FieldLandmark.CargoShipSix);
         setPoseToCargoShipSix.forceHeading(true);
         setPoseToCargoShipSix.includeOnSmartDashboard();
+
     }
     
 }
