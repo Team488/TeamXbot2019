@@ -15,5 +15,6 @@ public class RobotInitTest extends BaseCompetitionTest {
     @Test
     public void testRobotInit() {
         Robot robot = new Robot();
+        robot.close();
     }
 }
