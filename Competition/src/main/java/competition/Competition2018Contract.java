@@ -34,4 +34,24 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public DeviceInfo getRightDriveMasterEncoder() {
         return new DeviceInfo(0, false);
     }
+
+    @Override
+    public DeviceInfo getElevatorMasterMotor() {
+        return new DeviceInfo(-1, false);
+    }
+
+    @Override
+    public DeviceInfo getElevatorMasterEncoder() {
+        return new DeviceInfo(-1, false);
+    }
+
+    @Override
+    public DeviceInfo getElevatorCalibrationSensor() {
+        return new DeviceInfo(-1, false);
+    }
+
+    @Override
+    public boolean isElevatorReady() {
+        return false;
+    }
 }
