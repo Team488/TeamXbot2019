@@ -79,7 +79,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         habRightOneManager = clf.createFieldPosePropertyManager(getPrefix() + "HabRightOne", 204, 72, 90);
         landmarkToLocation.put(FieldLandmark.HabRightOne, habRightOneManager);
 
-        habTouchingRampRightManager = clf.createFieldPosePropertyManager(getPrefix() + "HabTouchingRamp", 204, 118, 90);
+        habTouchingRampRightManager = clf.createFieldPosePropertyManager(getPrefix() + "HabTouchingRampRight", 204, 118, 90);
         landmarkToLocation.put(FieldLandmark.HabTouchingRampRight, habTouchingRampRightManager);
 
         panelLoadRightManager = clf.createFieldPosePropertyManager(getPrefix() + "PanelLoadRight", 300, 23, 270);
@@ -89,26 +89,26 @@ public class PoseSubsystem extends BasePoseSubsystem {
         landmarkToLocation.put(FieldLandmark.RocketFrontRight, rocketFrontRightManager);
 
         //left side
-        cargoShipLeftThreeManager = clf.createFieldPosePropertyManager(getPrefix() + "CargoShipRightThree", 112, 262, 180);
-        landmarkToLocation.put(FieldLandmark.CargoShipRightThree, cargoShipRightThreeManager);
+        cargoShipLeftThreeManager = clf.createFieldPosePropertyManager(getPrefix() + "CargoShipLeftThree", 112, 262, 0);
+        landmarkToLocation.put(FieldLandmark.CargoShipLeftThree, cargoShipLeftThreeManager);
           
-        cargoShipFrontLeftManager= clf.createFieldPosePropertyManager(getPrefix() + "CargoShipFrontRight", 148, 208, 90);
-        landmarkToLocation.put(FieldLandmark.CargoShipFrontRight, cargoShipFrontRightManager);
+        cargoShipFrontLeftManager= clf.createFieldPosePropertyManager(getPrefix() + "CargoShipFrontLeft", 148, 208, 90);
+        landmarkToLocation.put(FieldLandmark.CargoShipFrontLeft, cargoShipFrontLeftManager);
 
-        habLeftTwoManager = clf.createFieldPosePropertyManager(getPrefix() + "HabRightTwo", 120, 22, 90);
-        landmarkToLocation.put(FieldLandmark.HabRightTwo, habRightTwoManager);
+        habLeftTwoManager = clf.createFieldPosePropertyManager(getPrefix() + "HabLeftTwo", 120, 22, 90);
+        landmarkToLocation.put(FieldLandmark.HabLeftTwo, habLeftTwoManager);
 
-        habLeftOneManager = clf.createFieldPosePropertyManager(getPrefix() + "HabRightOne", 120, 72, 90);
-        landmarkToLocation.put(FieldLandmark.HabRightOne, habRightOneManager);
+        habLeftOneManager = clf.createFieldPosePropertyManager(getPrefix() + "HabLeftOne", 120, 72, 90);
+        landmarkToLocation.put(FieldLandmark.HabLeftOne, habLeftOneManager);
 
-        habTouchingRampLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "HabTouchingRamp", 120, 118, 90);
-        landmarkToLocation.put(FieldLandmark.HabTouchingRampLeft, habTouchingRampRightManager);
+        habTouchingRampLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "HabTouchingRampLeft", 120, 118, 90);
+        landmarkToLocation.put(FieldLandmark.HabTouchingRampLeft, habTouchingRampLeftManager);
 
-        panelLoadLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "PanelLoadRight", 24, 23, 270);
-        landmarkToLocation.put(FieldLandmark.PanelLoadRight, panelLoadRightManager);
+        panelLoadLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "PanelLoadLeft", 24, 23, 270);
+        landmarkToLocation.put(FieldLandmark.PanelLoadLeft, panelLoadLeftManager);
 
-        rocketFrontLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "RocketFrontRight", 22, 197, 84);
-        landmarkToLocation.put(FieldLandmark.RocketFrontRight, rocketFrontRightManager);
+        rocketFrontLeftManager = clf.createFieldPosePropertyManager(getPrefix() + "RocketFrontLeft", 22, 197, 96);
+        landmarkToLocation.put(FieldLandmark.RocketFrontLeft, rocketFrontLeftManager);
 
     }
 
