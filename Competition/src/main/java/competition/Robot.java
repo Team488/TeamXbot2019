@@ -5,6 +5,7 @@ import competition.CompetitionModule.RobotPlatform;
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
 import competition.subsystems.pose.PoseSubsystem;
+import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseRobot;
 
 public class Robot extends BaseRobot {
@@ -16,6 +17,7 @@ public class Robot extends BaseRobot {
         this.injector.getInstance(OperatorCommandMap.class);
 
         registerPeriodicDataSource(this.injector.getInstance(PoseSubsystem.class));
+        registerPeriodicDataSource(this.injector.getInstance(VisionSubsystem.class));
     }
 
     @Override
