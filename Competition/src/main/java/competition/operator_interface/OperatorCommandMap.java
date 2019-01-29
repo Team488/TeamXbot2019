@@ -37,6 +37,9 @@ public class OperatorCommandMap {
             RotateToHeadingCommand rotate,
             CheesyQuickTurnCommand quickTurn,
             ConfigurablePurePursuitCommand pursuit,
+            ResetHeadingAndDistanceCommandGroup resetPose,
+            ConfigurablePurePursuitCommand forward,
+            ConfigurablePurePursuitCommand backward,
             ConfigurablePurePursuitCommand goFromHabTouchingRampToCargoShipFrontRight,
             ConfigurablePurePursuitCommand goFromHabTouchingRampToCargoShipRightThree,
             ConfigurablePurePursuitCommand goFromHabTouchingRampToRocketFrontRight,
@@ -45,7 +48,6 @@ public class OperatorCommandMap {
             ConfigurablePurePursuitCommand goFromHabTouchingRampToCargoShipLeftThree,
             ConfigurablePurePursuitCommand goFromHabTouchingRampToRocketFrontLeft,
             ConfigurablePurePursuitCommand goFromHabTouchingRampToPanelLoadLeft,
-            ResetHeadingAndDistanceCommandGroup resetPose,
             PoseSubsystem poseSubsystem)
     {
         operatorInterface.gamepad.getifAvailable(6).whileHeld(quickTurn);
@@ -96,7 +98,15 @@ public class OperatorCommandMap {
         operatorInterface.gamepad.getifAvailable(1).whenPressed(rotate);
         operatorInterface.gamepad.getifAvailable(3).whenPressed(resetPose);
 
+        forward.setMode(PointLoadingMode.Relative);
+        forward.addPoint(new RabbitPoint(0, 4*12, 90));
+        operatorInterface.gamepad.getifAvailable(7).whenPressed(forward);
+
+        backward.setMode(PointLoadingMode.Relative);
+        backward.addPoint(new RabbitPoint(0, -4*12, 90));
+        operatorInterface.gamepad.getifAvailable(8).whenPressed(backward);
     }
+    
     public void setupElevatorCommands(
         OperatorInterface operatorInterface,
         RaiseElevatorCommand raiseElevator,
