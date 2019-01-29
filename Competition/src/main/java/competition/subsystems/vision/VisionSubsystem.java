@@ -31,6 +31,8 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
     @Override
     public void updatePeriodicData() {
-        packetProp.set(recentPacket);
+        if (recentPacket != null) {
+            packetProp.set(recentPacket);
+        }
     }
 }
