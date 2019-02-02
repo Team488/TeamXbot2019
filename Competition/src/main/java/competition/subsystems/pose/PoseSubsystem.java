@@ -13,7 +13,6 @@ import xbot.common.math.FieldPose;
 import xbot.common.math.FieldPosePropertyManager;
 import xbot.common.math.XYPair;
 import xbot.common.properties.XPropertyManager;
-import xbot.common.subsystems.drive.RabbitPoint;
 import xbot.common.subsystems.pose.BasePoseSubsystem;
 
 @Singleton
@@ -131,4 +130,10 @@ public class PoseSubsystem extends BasePoseSubsystem {
             return new FieldPose(new XYPair(), new ContiguousHeading(90));
         }
     }
+
+    public static FieldPose flipFieldPose(FieldPose current) {
+        return new FieldPose(new XYPair((12*27)- current.getPoint().x, current.getPoint().y), new ContiguousHeading(180- current.getHeading().getValue()));
+    }
+    
+
 }
