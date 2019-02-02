@@ -13,7 +13,12 @@ public class Competition2018Contract extends ElectricalContract2019 {
     @Override
     public DeviceInfo getLeftDriveFollower() {
         return new DeviceInfo(35, true);
-    }    
+    }
+
+    @Override
+    public DeviceInfo getLeftDriveFollowerSecond(){
+        return new DeviceInfo(-5, false);
+    }
 
     @Override
     public DeviceInfo getLeftDriveMasterEncoder() {
@@ -31,13 +36,18 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
 
     @Override
+    public DeviceInfo getRightDriveFollowerSecond() {
+        return new DeviceInfo(-4, false);
+    }
+
+    @Override
     public DeviceInfo getRightDriveMasterEncoder() {
         return new DeviceInfo(0, false);
     }
 
     @Override
     public DeviceInfo getElevatorMasterMotor() {
-        return new DeviceInfo(-1, false);
+        return new DeviceInfo(-3, false);
     }
 
     @Override
@@ -47,11 +57,16 @@ public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorCalibrationSensor() {
-        return new DeviceInfo(-1, false);
+        return new DeviceInfo(-2, false);
     }
 
     @Override
     public boolean isElevatorReady() {
+        return false;
+    }
+
+    @Override
+    public boolean doesDriveHaveThreeMotors() {
         return false;
     }
 }

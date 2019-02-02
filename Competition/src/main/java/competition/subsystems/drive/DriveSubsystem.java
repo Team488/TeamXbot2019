@@ -31,8 +31,10 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
     public final XCANTalon leftMaster;
     public final XCANTalon leftFollower;
+    public final XCANTalon leftFollowerSecond;
     public final XCANTalon rightMaster;
     public final XCANTalon rightFollower;
+    public final XCANTalon rightFollowerSecond;
 
     private Map<XCANTalon, MotionRegistration> masterTalons;
 
@@ -41,21 +43,18 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     private final PIDManager rotateDecayPid;
 
     @Inject
-    public DriveSubsystem(
-        CommonLibFactory factory, 
-        XPropertyManager propManager, 
-        ElectricalContract2019 contract,
-        PIDFactory pf) {
+    public DriveSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract,
+            PIDFactory pf) {
         log.info("Creating DriveSubsystem");
 
-        positionalPid = pf.createPIDManager(getPrefix()+"Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
-        
-        rotateToHeadingPid = pf.createPIDManager(getPrefix()+"DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
+        positionalPid = pf.createPIDManager(getPrefix() + "Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
+
+        rotateToHeadingPid = pf.createPIDManager(getPrefix() + "DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
         rotateToHeadingPid.setEnableErrorThreshold(true);
         rotateToHeadingPid.setEnableDerivativeThreshold(true);
         rotateToHeadingPid.setEnableTimeThreshold(true);
 
-        rotateDecayPid = pf.createPIDManager(getPrefix()+"DriveDecay", 0, 0, 1);
+        rotateDecayPid = pf.createPIDManager(getPrefix() + "DriveDecay", 0, 0, 1);
 
         leftTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "leftDriveTicksPer5Feet", 100281);
         rightTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "rightDriveTicksPer5Feet", 100281);
@@ -64,6 +63,8 @@ public class DriveSubsystem extends BaseDriveSubsystem {
         this.leftFollower = factory.createCANTalon(contract.getLeftDriveFollower().channel);
         this.rightMaster = factory.createCANTalon(contract.getRightDriveMaster().channel);
         this.rightFollower = factory.createCANTalon(contract.getRightDriveFollower().channel);
+        this.leftFollowerSecond = factory.createCANTalon(contract.getLeftDriveFollowerSecond().channel);
+        this.rightFollowerSecond = factory.createCANTalon(contract.getRightDriveFollowerSecond().channel);
 
         XCANTalon.configureMotorTeam("LeftDrive", "LeftMaster", leftMaster, leftFollower,
                 contract.getLeftDriveMaster().inverted, contract.getLeftDriveFollower().inverted,
@@ -72,6 +73,11 @@ public class DriveSubsystem extends BaseDriveSubsystem {
         XCANTalon.configureMotorTeam("RightDrive", "RightMaster", rightMaster, rightFollower,
                 contract.getRightDriveMaster().inverted, contract.getRightDriveFollower().inverted,
                 contract.getRightDriveMasterEncoder().inverted);
+
+        if (contract.doesDriveHaveThreeMotors()) {
+            leftFollowerSecond.configureAsFollowerMotor(leftMaster, contract.getLeftDriveFollowerSecond().inverted);
+            rightFollowerSecond.configureAsFollowerMotor(rightMaster, contract.getRightDriveFollowerSecond().inverted);
+        }
 
         masterTalons = new HashMap<XCANTalon, BaseDriveSubsystem.MotionRegistration>();
         masterTalons.put(leftMaster, new MotionRegistration(0, 1, -1));

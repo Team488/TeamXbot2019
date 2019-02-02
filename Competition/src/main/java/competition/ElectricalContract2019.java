@@ -9,9 +9,13 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
 
     public abstract DeviceInfo getLeftDriveFollower();
 
+    public abstract DeviceInfo getLeftDriveFollowerSecond();
+
     public abstract DeviceInfo getRightDriveMaster();
 
     public abstract DeviceInfo getRightDriveFollower();
+
+    public abstract DeviceInfo getRightDriveFollowerSecond();
 
     public abstract DeviceInfo getLeftDriveMasterEncoder();
 
@@ -22,7 +26,8 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getElevatorMasterEncoder();
 
     public abstract DeviceInfo getElevatorCalibrationSensor();
-
+   
     public abstract boolean isElevatorReady();
-    
+
+    public abstract boolean doesDriveHaveThreeMotors();
 }
