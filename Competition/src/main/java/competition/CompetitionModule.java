@@ -32,6 +32,12 @@ public class CompetitionModule extends RobotModule {
             case Competition2018:
                 this.bind(ElectricalContract2019.class).to(Competition2018Contract.class);
                 break;
+            case Practice2019:
+                this.bind(ElectricalContract2019.class).to(Practice2019Contract.class);
+                break;
+            case Competition2019:
+                this.bind(ElectricalContract2019.class).to(Competition2019Contract.class);
+                break;
             default:
                 break;
         }
