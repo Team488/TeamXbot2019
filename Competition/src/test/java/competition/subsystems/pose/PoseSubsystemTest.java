@@ -26,7 +26,7 @@ public class PoseSubsystemTest extends BaseCompetitionTest {
 
     @Test
     public void getPathWithWaypoints() {
-        List<RabbitPoint> points = pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip);
+        List<RabbitPoint> points = pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false);
         assertEquals(3, points.size(), 0.001);
         
         assertEquals(PointTerminatingType.Continue, points.get(0).terminatingType);

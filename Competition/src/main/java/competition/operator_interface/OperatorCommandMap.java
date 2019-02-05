@@ -54,13 +54,13 @@ public class OperatorCommandMap {
 
         driveEverywhere.includeOnSmartDashboard();
 
-        goToRocket.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket));
+        goToRocket.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, false));
         goToRocket.includeOnSmartDashboard("Go To Rocket");
-        goToLoadingStation.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation));
+        goToLoadingStation.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, false));
         goToLoadingStation.includeOnSmartDashboard("Go To Loading Station");
-        goToFrontCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip));
+        goToFrontCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, false));
         goToFrontCargo.includeOnSmartDashboard("Go To Front Cargo");
-        goToNearCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip));
+        goToNearCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false));
         goToNearCargo.includeOnSmartDashboard("Go To Near Cargo");
 
         pursuit.setMode(PointLoadingMode.Relative);

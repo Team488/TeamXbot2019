@@ -25,6 +25,7 @@ import xbot.common.subsystems.pose.BasePoseSubsystem;
 public class PoseSubsystem extends BasePoseSubsystem {
 
     DriveSubsystem drive;
+    LowResField field;
 
     public enum Side {
         Left,
@@ -46,7 +47,6 @@ public class PoseSubsystem extends BasePoseSubsystem {
     }
 
     private final Map<String, FieldPosePropertyManager> landmarkToLocation;
-    private final Map<String, FieldPosePropertyManager> landmarkToWaypoint;
 
     // Some pre-computed interstitial points. Waypoints do not need headings.
     private final FieldPosePropertyManager leftNearRocketWaypoint;
@@ -57,13 +57,13 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private CommonLibFactory clf;
 
     @Inject
-    public PoseSubsystem(CommonLibFactory clf, XPropertyManager propManager, DriveSubsystem drive) {
+    public PoseSubsystem(CommonLibFactory clf, XPropertyManager propManager, DriveSubsystem drive, LowResField field) {
         super(clf, propManager);
         this.drive = drive;
         this.clf = clf;
+        this.field = field;
 
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
-        landmarkToWaypoint = new HashMap<String, FieldPosePropertyManager>();
         
         visionBackoffDistance = propManager.createPersistentProperty(getPrefix() + "VisionBackoffDistance", 36);
 
@@ -137,7 +137,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         return candidate;
     }
 
-    public List<RabbitPoint> getPathToLandmark(Side side, FieldLandmark landmark) {
+    public List<RabbitPoint> getPathToLandmark(Side side, FieldLandmark landmark, boolean automaticWaypoints) {
         var path = new ArrayList<RabbitPoint>();
         String landmarkKey = createLandmarkKey(side, landmark);
 
@@ -145,16 +145,24 @@ public class PoseSubsystem extends BasePoseSubsystem {
         if (!landmarkToLocation.containsKey(landmarkKey)) {
             log.warn("Tried to find a path to a landmark, but could not find it in the maps!");
             return path;
-        }
+        }        
         
         FieldPose finalPose = landmarkToLocation.get(landmarkKey).getPose();
         FieldPose visionPose = finalPose.getPointAlongPoseLine(-visionBackoffDistance.get());
-        FieldPose waypointPose = getWaypointForLandmark(side, landmark);
-        
-        RabbitPoint waypoint = new RabbitPoint(waypointPose, PointType.PositionOnly, PointTerminatingType.Continue);
         RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);
         RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
-        path.add(waypoint);
+        
+        if (automaticWaypoints) {
+            List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
+            for (RabbitPoint p : generatedPoints) {
+                path.add(p);
+            }
+        } else {
+            FieldPose waypointPose = getWaypointForLandmark(side, landmark);
+            RabbitPoint waypoint = new RabbitPoint(waypointPose, PointType.PositionOnly, PointTerminatingType.Continue);
+            path.add(waypoint);
+        }
+        
         path.add(visionPoint);
         path.add(finalPoint);
         return path;

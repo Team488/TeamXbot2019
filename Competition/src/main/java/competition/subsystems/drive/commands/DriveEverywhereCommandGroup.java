@@ -18,8 +18,8 @@ public class DriveEverywhereCommandGroup extends BaseCommandGroup {
         ConfigurablePurePursuitCommand goToFrontCargo,
         Provider<ConfigurablePurePursuitCommand> cppFactory)
         {
-        goToRocket.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.NearRocket));
-        goToFrontCargo.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip));
+        goToRocket.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, false));
+        goToFrontCargo.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, false));
 
         this.addSequential(goToFrontCargo);
         addReturnHome(pose, cppFactory);
@@ -39,13 +39,13 @@ public class DriveEverywhereCommandGroup extends BaseCommandGroup {
 
     private void addReturnHome(PoseSubsystem pose, Provider<ConfigurablePurePursuitCommand> cppFactory) {
         ConfigurablePurePursuitCommand backToLoadingStation = cppFactory.get();
-        backToLoadingStation.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation));
+        backToLoadingStation.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, false));
         this.addSequential(backToLoadingStation);
     }
 
     private void addGoToCargo(PoseSubsystem pose, Provider<ConfigurablePurePursuitCommand> cppFactory) {
         ConfigurablePurePursuitCommand goToCargo = cppFactory.get();
-        goToCargo.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip));
+        goToCargo.setPoints(pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false));
         this.addSequential(goToCargo);
     }
 }
