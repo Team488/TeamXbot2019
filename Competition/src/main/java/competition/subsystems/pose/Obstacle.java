@@ -1,6 +1,8 @@
 package competition.subsystems.pose;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import com.google.common.cache.Weigher;
 
@@ -10,10 +12,10 @@ public class Obstacle extends Rectangle2D.Double {
 
     private static final long serialVersionUID = 1L;
 
-    XYPair topLeft;
-    XYPair topRight;
-    XYPair bottomLeft;
-    XYPair bottomRight;
+    public XYPair topLeft;
+    public XYPair topRight;
+    public XYPair bottomLeft;
+    public XYPair bottomRight;
 
     public boolean topLeftAvailable = true;
     public boolean topRightAvailable = true;
@@ -49,6 +51,53 @@ public class Obstacle extends Rectangle2D.Double {
 
     public double getDistanceToCenter(XYPair other) {
         return new XYPair(this.getCenterX(), this.getCenterY()).getDistanceToPoint(other);
+    }
+
+    public XYPair getIntersectionAveragePoint(XYPair start, XYPair end) {
+        // test each of the four lines to get any intersection points, then average those points together.
+        XYPair topLine = getLineIntersectionPoint(start, end, topLeft, topRight);
+        XYPair bottomLine = getLineIntersectionPoint(start, end, bottomLeft, bottomRight);
+        XYPair leftLine = getLineIntersectionPoint(start, end, topLeft, bottomLeft);
+        XYPair rightLine = getLineIntersectionPoint(start, end, topRight, bottomRight);
+
+        XYPair combinedPoint = topLine.clone().add(bottomLine).add(leftLine).add(rightLine);
+        if (combinedPoint.getMagnitude() < 0.01) {
+            // No intersection points.
+            return null;
+        } else {
+            return combinedPoint.scale(0.5);
+        }
+    }
+
+    public XYPair getLineIntersectionPoint(XYPair lineA1, XYPair lineA2, XYPair lineB1, XYPair lineB2) {
+        XYPair candidate = new XYPair();
+
+        // quick check to see if the line segments cross
+        Line2D.Double l1 = new Line2D.Double(lineA1.x, lineA1.y, lineA2.x, lineA2.y);
+        Line2D.Double l2 = new Line2D.Double(lineB1.x, lineB1.y, lineB2.x, lineB2.y);
+
+        if (!l1.intersectsLine(l2)) {
+            return candidate;
+        }
+
+        double x1 = lineA1.x;
+        double y1 = lineA1.y;
+        double x2 = lineA2.x;
+        double y2 = lineA2.y;
+
+        double x3 = lineB1.x;
+        double y3 = lineB1.y;
+        double x4 = lineB2.x;
+        double y4 = lineB2.y;
+
+        double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+        if (d != 0) {
+            double xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
+            double yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
+
+            candidate = new XYPair(xi, yi);
+        }
+        return candidate;
     }
 
     public XYPair getClosestCornerToPoint(XYPair other) {

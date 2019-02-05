@@ -46,6 +46,10 @@ public class LowResField {
         obstacles.add(rightRocket);
     }
 
+    public List<Obstacle> getObstacles() {
+        return new ArrayList<Obstacle>(obstacles);
+    }
+
     public List<RabbitPoint> generatePath(FieldPose robotPose, RabbitPoint targetPoint) {
         var path = new ArrayList<RabbitPoint>();
         var rabbitStack = new Stack<RabbitPoint>();
@@ -75,9 +79,10 @@ public class LowResField {
                 if (o.intersectsLine(robotPose.getPoint().x, robotPose.getPoint().y, focalPoint.pose.getPoint().x, focalPoint.pose.getPoint().y)) {
                     // The line collidies with this obstacle!
                     collision = true;
+                    // find the average intersection point
+                    XYPair averageIntersection = o.getIntersectionAveragePoint(robotPose.getPoint(), focalPoint.pose.getPoint());
                     // find the nearest corner
-                    XYPair nearestCorner = o.getClosestCornerToPoint(new XYPair(focalPoint.pose.getPoint().x, focalPoint.pose.getPoint().y));
-
+                    XYPair nearestCorner = o.getClosestCornerToPoint(averageIntersection);
                     // turn that corner into a position-only point
                     RabbitPoint cornerPoint = 
                         new RabbitPoint(new FieldPose(nearestCorner.x, nearestCorner.y, 0), PointType.PositionOnly, PointTerminatingType.Continue);

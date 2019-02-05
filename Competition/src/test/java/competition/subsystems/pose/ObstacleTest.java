@@ -40,4 +40,16 @@ public class ObstacleTest extends BaseCompetitionTest {
         System.out.println(o.getCenterX() + "," + o.getCenterY());
         assertTrue(o.intersectsLine(15, 15, 290, 40));
     }
+
+    @Test
+    public void testLineIntersection() {
+        Obstacle o = new Obstacle(10, 10, 10, 10, "Test");
+        XYPair intersection = o.getLineIntersectionPoint(
+            new XYPair(0,0),
+            new XYPair(10,0),
+            new XYPair(5,10),
+            new XYPair(5,-10));
+        assertEquals(5, intersection.x, 0.001);
+        assertEquals(0, intersection.y, 0.001);
+    }
 }
