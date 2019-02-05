@@ -2,9 +2,6 @@ package competition.subsystems.pose;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-
-import com.google.common.cache.Weigher;
 
 import xbot.common.math.XYPair;
 
@@ -29,19 +26,30 @@ public class Obstacle extends Rectangle2D.Double {
 
     public String name;
 
-    
+    /**
+     * Creates an obstacle, represented by an Axis-Aligned Bounding Box.
+     * 
+     * @param x      CenterX of the obstacle
+     * @param y      CenterY of the obstacle
+     * @param width  width (x) of the obstacle
+     * @param height height (y) of the obstacle
+     * @param name   name
+     */
     public Obstacle(double x, double y, double width, double height, String name) {
-        super(x-width/2, y-height/2, width, height);
+        super(x - width / 2, y - height / 2, width, height);
         this.name = name;
-        // Put the points sliiiiightly outside the bounding box, so we don't collide with the true corners later.
-        topLeft = new XYPair(x-width/2*1.01, y+height/2*1.01);
-        topRight = new XYPair(x+width/2*1.01, y+height/2*1.01);
-        bottomLeft = new XYPair(x-width/2*1.01, y-height/2*1.01);
-        bottomRight = new XYPair(x+width/2*1.01, y-height/2*1.01);
-
-        resetCorners();
+        // Generate the corner points of the bounding box.
+        // We will put the points sliiiiightly outside the bounding box, so we don't
+        // collide with the true corners later.
+        topLeft = new XYPair(x - width / 2 * 1.01, y + height / 2 * 1.01);
+        topRight = new XYPair(x + width / 2 * 1.01, y + height / 2 * 1.01);
+        bottomLeft = new XYPair(x - width / 2 * 1.01, y - height / 2 * 1.01);
+        bottomRight = new XYPair(x + width / 2 * 1.01, y - height / 2 * 1.01);
     }
 
+    /**
+     * Sets the corners back to default availability.
+     */
     public void resetCorners() {
         topLeftAvailable = defaultTopLeft;
         topRightAvailable = defaultTopRight;
@@ -49,26 +57,58 @@ public class Obstacle extends Rectangle2D.Double {
         bottomRightAvailable = defaultBottomRight;
     }
 
+    /**
+     * Gets the distance between the center of this obstacle and a given point.
+     * 
+     * @param other The given point
+     * @return distance to that point from the center of the obstacle.
+     */
     public double getDistanceToCenter(XYPair other) {
         return new XYPair(this.getCenterX(), this.getCenterY()).getDistanceToPoint(other);
     }
 
+    /**
+     * Finds the two intersection points of a line that passes through this
+     * obstacle, and averages them together.
+     * 
+     * @param start Line x1,y1
+     * @param end   Line x2,y2
+     * @return The average intersection point, or null if there is no intersection
+     *         point.
+     */
     public XYPair getIntersectionAveragePoint(XYPair start, XYPair end) {
-        // test each of the four lines to get any intersection points, then average those points together.
+        // test each of the four lines to get any intersection points, then average
+        // those points together.
         XYPair topLine = getLineIntersectionPoint(start, end, topLeft, topRight);
         XYPair bottomLine = getLineIntersectionPoint(start, end, bottomLeft, bottomRight);
         XYPair leftLine = getLineIntersectionPoint(start, end, topLeft, bottomLeft);
         XYPair rightLine = getLineIntersectionPoint(start, end, topRight, bottomRight);
 
+        // We take advantage of the fact that getLineIntersectionPoint() returns 0,0 for
+        // no intersections,
+        // and just add all the points together and divide by two. If we still have 0,0,
+        // there probably
+        // wasn't an intersection at all.
         XYPair combinedPoint = topLine.clone().add(bottomLine).add(leftLine).add(rightLine);
         if (combinedPoint.getMagnitude() < 0.01) {
             // No intersection points.
             return null;
         } else {
+            // Average the two points by dividing x and y by 2.
             return combinedPoint.scale(0.5);
         }
     }
 
+    /**
+     * Calculates the intersection point of two line segments. Copied from
+     * https://stackoverflow.com/questions/40314303/java-find-intersection-of-line-and-rectangle
+     * 
+     * @param lineA1 Line A x1,y1
+     * @param lineA2 Line A x2,y2
+     * @param lineB1 Line B x1,y1
+     * @param lineB2 Line B x2,y2
+     * @return 0,0 if the segments do not intersect.
+     */
     public XYPair getLineIntersectionPoint(XYPair lineA1, XYPair lineA2, XYPair lineB1, XYPair lineB2) {
         XYPair candidate = new XYPair();
 
@@ -100,10 +140,18 @@ public class Obstacle extends Rectangle2D.Double {
         return candidate;
     }
 
+    /**
+     * Finds the closest available corner of this obstacle from a given point. Once
+     * it returns a point, that point is unavailable until resetCorners() is called.
+     * 
+     * @param other The point to measure from
+     * @return The closest corner, or 0,0 if no corner is found.
+     * @see competition.subsystems.pose.Obstacle#resetCorners()
+     */
     public XYPair getClosestCornerToPoint(XYPair other) {
         XYPair candidate = new XYPair();
         double minimumDistance = 100000;
-        
+
         if (topLeftAvailable) {
             double distance = topLeft.getDistanceToPoint(other);
             if (distance < minimumDistance) {
@@ -111,7 +159,6 @@ public class Obstacle extends Rectangle2D.Double {
                 minimumDistance = distance;
             }
         }
-
         if (topRightAvailable) {
             double distance = topRight.getDistanceToPoint(other);
             if (distance < minimumDistance) {
@@ -119,7 +166,6 @@ public class Obstacle extends Rectangle2D.Double {
                 minimumDistance = distance;
             }
         }
-
         if (bottomLeftAvailable) {
             double distance = bottomLeft.getDistanceToPoint(other);
             if (distance < minimumDistance) {
@@ -127,7 +173,6 @@ public class Obstacle extends Rectangle2D.Double {
                 minimumDistance = distance;
             }
         }
-
         if (bottomRightAvailable) {
             double distance = bottomRight.getDistanceToPoint(other);
             if (distance < minimumDistance) {
@@ -139,20 +184,16 @@ public class Obstacle extends Rectangle2D.Double {
         if (candidate == topLeft) {
             topLeftAvailable = false;
         }
-
         if (candidate == topRight) {
             topRightAvailable = false;
         }
-
         if (candidate == bottomLeft) {
             bottomLeftAvailable = false;
         }
-
         if (candidate == bottomRight) {
             bottomRightAvailable = false;
         }
-
-        return candidate;
+        return candidate.clone();
     }
 
 }

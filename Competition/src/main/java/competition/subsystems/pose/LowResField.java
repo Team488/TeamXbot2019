@@ -1,11 +1,14 @@
 package competition.subsystems.pose;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 
 import com.google.inject.Inject;
+
+import org.apache.log4j.Logger;
 
 import xbot.common.math.FieldPose;
 import xbot.common.math.XYPair;
@@ -13,9 +16,13 @@ import xbot.common.subsystems.drive.RabbitPoint;
 import xbot.common.subsystems.drive.RabbitPoint.PointTerminatingType;
 import xbot.common.subsystems.drive.RabbitPoint.PointType;
 
+/**
+ * Represents a simple version of the field, with Axis-Aligned Bounding Boxes representing no-go zones due to obstacles.
+ */
 public class LowResField {
 
     List<Obstacle> obstacles;
+    Logger log = Logger.getLogger(LowResField.class);
 
     @Inject
     public LowResField() {
@@ -50,12 +57,30 @@ public class LowResField {
         return new ArrayList<Obstacle>(obstacles);
     }
 
+    /**
+     * Generates a path between any two points on the field, avoiding known obstacles. Generated
+     * interstitial points will be Position-Only. Final target point will be unchanged.
+     * @param robotPose The robot's current position
+     * @param targetPoint The robot's destination. This better be outside the bounding boxes!
+     * @return List of waypoints, followed by the target point.
+     */
     public List<RabbitPoint> generatePath(FieldPose robotPose, RabbitPoint targetPoint) {
         var path = new ArrayList<RabbitPoint>();
         var rabbitStack = new Stack<RabbitPoint>();
         var sortedObstacles = new TreeMap<Double, Obstacle>();
         // Start from the final point, generate a path backwards.
         // Check to see if there are any intersections. 
+
+        // TODO: some part of this algorithm needs to be modified in case the robot
+        // or the target is currently inside a bounding box.
+        // In both cases, it would probalby be best to project those points slightly outside the 
+        // bounding boxes, then continue as usual.
+        
+        // Possible approaches if already inside:
+        // find the distance to each of the line segments, and keep the smallest one
+        // add that distance, plus 1%, in the proper direction
+
+        // For now, I recommend keeping the points outside.
         
         RabbitPoint focalPoint = targetPoint;
         boolean collision = true;
@@ -64,43 +89,63 @@ public class LowResField {
             o.resetCorners();
         }
 
+        // Iterate until no more collisions.
+        int escape = 0;
         while (collision) {
+            // The robot needs to be safe - anywhere we perform a while loop, we better
+            // have some sort of emergency escape.
+            escape++;
+            if (escape > 20) {
+                log.warn("Iterated more than 20 times! Something has gone wrong! Escaping this loop.");
+                return new ArrayList<RabbitPoint>(Arrays.asList(targetPoint));
+            }
+            
+            // Set collisions to false. Now, unless we find a collision, this will be the last time through the loop.
             collision = false;
-            // Sort all the obstacles by distance
+
+            // Sort all the obstacles by distance using a TreeMap. A cool feature of the TreeMap
+            // is that it automatically sorts the keys if they are sortable. That way, we can
+            // check for collisions from the closest obstacle to the furthest, and if we see a collision,
+            // we can immediately ignore all others.
             sortedObstacles.clear();
             for (Obstacle o : obstacles) {
                 double distance = o.getDistanceToCenter(focalPoint.pose.getPoint());
                 sortedObstacles.put(distance, o);
             }
-            // find the first intersection, if any
+            // Now, time to look for collisions.
             for (Double d : sortedObstacles.keySet()) {
                 Obstacle o = sortedObstacles.get(d);
                 
+                // First, check to see if the line between the robot and the focal point has any collisions.
                 if (o.intersectsLine(robotPose.getPoint().x, robotPose.getPoint().y, focalPoint.pose.getPoint().x, focalPoint.pose.getPoint().y)) {
-                    // The line collidies with this obstacle!
+                    // The line collidies with this obstacle! Set collision to true so we continue to iterate.
                     collision = true;
-                    // find the average intersection point
+                    // We want to find the closest corner of the bounding box that will create an optimal path.
+                    // If a line crosses a rectangle, then in nearly all cases, there will be two intersection points.
+                    // We find those, and average them together. Then, we get the corner closest to that average point.
                     XYPair averageIntersection = o.getIntersectionAveragePoint(robotPose.getPoint(), focalPoint.pose.getPoint());
-                    // find the nearest corner
                     XYPair nearestCorner = o.getClosestCornerToPoint(averageIntersection);
-                    // turn that corner into a position-only point
+                    // Now to transform that x,y coordinate into a waypoint. It becomes a RabbitPoint,
+                    // using PositionOnly so that we drive straight there (orientation doesn't matter).
                     RabbitPoint cornerPoint = 
                         new RabbitPoint(new FieldPose(nearestCorner.x, nearestCorner.y, 0), PointType.PositionOnly, PointTerminatingType.Continue);
-                    // Save the current point
+                    // Our current focal point needs to be saved in the final list.
                     rabbitStack.add(focalPoint);
-                    // Change the focus to the corner point
+                    // Change the focal point to the new corner point, and check for collisions again.
                     focalPoint = cornerPoint;
                     break;
                 }
             }
-            if (!collision) {
-                // Didn't hit anything! this is the last point.
-            }
         }
 
-        // create the path. Add the focal point, then pop all the other points.
+        // The iteration is complete, so it's time to build up the path.
+        // We don't need to add the robot's current position, so next we add the Focal Point.
+        // If there we no collisions, the focal point will be the targetPoint.
         path.add(focalPoint);
         while (rabbitStack.size() > 0) {
+            // If there were collisions, then we need to use the rabbitStack. The top contains generated waypoints, and 
+            // as we go down the stack, we get to generated waypoints further from the robot, finally ending in 
+            // the targetPoint.
             path.add(rabbitStack.pop());
         }       
         
