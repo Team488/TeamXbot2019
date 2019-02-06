@@ -52,4 +52,32 @@ public class ObstacleTest extends BaseCompetitionTest {
         assertEquals(5, intersection.x, 0.001);
         assertEquals(0, intersection.y, 0.001);
     }
+
+    @Test
+    public void testMovePointOutside() {
+        Obstacle o = new Obstacle(10, 10, 10, 10, "Test");
+        XYPair shouldNotMove = o.movePointOutsideOfBounds(new XYPair(3, 4));
+        assertEquals(3, shouldNotMove.x, 0.001);
+        assertEquals(4, shouldNotMove.y, 0.001);
+
+        // slide down
+        XYPair shouldMove =  o.movePointOutsideOfBounds(new XYPair(9, 7));
+        assertEquals(9, shouldMove.x, 0.2);
+        assertEquals(5, shouldMove.y, 0.2);
+
+        // slide left
+        shouldMove =  o.movePointOutsideOfBounds(new XYPair(6, 9));
+        assertEquals(5, shouldMove.x, 0.2);
+        assertEquals(9, shouldMove.y, 0.2);
+
+        // slide right
+        shouldMove =  o.movePointOutsideOfBounds(new XYPair(14, 7));
+        assertEquals(15, shouldMove.x, 0.2);
+        assertEquals(7, shouldMove.y, 0.2);
+
+        // slide up
+        shouldMove =  o.movePointOutsideOfBounds(new XYPair(9, 13));
+        assertEquals(9, shouldMove.x, 0.2);
+        assertEquals(15, shouldMove.y, 0.2);
+    }
 }

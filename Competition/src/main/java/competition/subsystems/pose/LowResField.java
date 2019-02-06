@@ -30,7 +30,7 @@ public class LowResField {
         // CargoShip
         obstacles.add(new Obstacle(162, 324, 84, 248, "CargoShip"));
         // Hab
-        Obstacle hab = new Obstacle(161, 47, 182, 47, "Hab");
+        Obstacle hab = new Obstacle(161, 47, 182, 94, "Hab");
         // Disable points next to the alliance station
         hab.defaultBottomLeft = false;
         hab.defaultBottomRight = false;
@@ -65,6 +65,9 @@ public class LowResField {
      * @return List of waypoints, followed by the target point.
      */
     public List<RabbitPoint> generatePath(FieldPose robotPose, RabbitPoint targetPoint) {
+        // We may need to modify the robot pose, so let's clone it to avoid any 
+        // side effects.
+        robotPose = robotPose.clone();
         var path = new ArrayList<RabbitPoint>();
         var rabbitStack = new Stack<RabbitPoint>();
         var sortedObstacles = new TreeMap<Double, Obstacle>();
@@ -87,6 +90,30 @@ public class LowResField {
 
         for (Obstacle o : obstacles) {
             o.resetCorners();
+            // Check to see if either the robot position or the final destination are
+            // inside, and if so, modify them for the purposes of all following calculations.
+            // We can directly change the robot pose
+
+            if (o.contains(robotPose.getPoint().x, robotPose.getPoint().y)) {
+                log.info("Robot is currently inside an obstacle. Shifting for calculations.");
+                // our original robot pose is inside, and needs to shift.
+                XYPair slidPoint = o.movePointOutsideOfBounds(robotPose.getPoint());
+                robotPose = new FieldPose(slidPoint, robotPose.getHeading());
+            }
+
+            if (o.contains(targetPoint.pose.getPoint().x, targetPoint.pose.getPoint().y)) {
+                log.info("Target is currently inside an obstacle.");
+                log.info("Adding an interstitial waypoint just outside the obstacle.");
+                // our target is inside - we need to change our focalPoint and save this one.
+                XYPair slidPoint = o.movePointOutsideOfBounds(targetPoint.pose.getPoint());
+                rabbitStack.push(targetPoint);
+                // create a new focal point that exactly mimics the final point, except it is out of bounds
+                focalPoint = new RabbitPoint(
+                    new FieldPose(slidPoint, targetPoint.pose.getHeading()), 
+                    targetPoint.pointType,
+                    PointTerminatingType.Continue,
+                    targetPoint.driveStyle);
+            }
         }
 
         // Iterate until no more collisions.
@@ -120,11 +147,24 @@ public class LowResField {
                 if (o.intersectsLine(robotPose.getPoint().x, robotPose.getPoint().y, focalPoint.pose.getPoint().x, focalPoint.pose.getPoint().y)) {
                     // The line collidies with this obstacle! Set collision to true so we continue to iterate.
                     collision = true;
+                    XYPair pointToSearchFrom = new XYPair();
                     // We want to find the closest corner of the bounding box that will create an optimal path.
                     // If a line crosses a rectangle, then in nearly all cases, there will be two intersection points.
                     // We find those, and average them together. Then, we get the corner closest to that average point.
                     XYPair averageIntersection = o.getIntersectionAveragePoint(robotPose.getPoint(), focalPoint.pose.getPoint());
-                    XYPair nearestCorner = o.getClosestCornerToPoint(averageIntersection);
+                    // However, if the line crosses parallel lines (e.g. left and right, or top and bottom)
+                    // this method doesn't work, as the average point will just be the exact center of the box,
+                    // so it's a coin flip as to which corner is chosen.
+                    // So, if the averageIntersection point's X or Y is the same as the center of the obstacle,
+                    // then we can go with a much simpler method - just take the corner closest to the focal point.
+                    if (o.doesPointLieAlongMidlines(averageIntersection)) {
+                       pointToSearchFrom = targetPoint.pose.getPoint();
+                    } else {
+                        pointToSearchFrom = averageIntersection;
+                    }
+
+                    XYPair nearestCorner = o.getClosestCornerToPoint(pointToSearchFrom);
+                    
                     // Now to transform that x,y coordinate into a waypoint. It becomes a RabbitPoint,
                     // using PositionOnly so that we drive straight there (orientation doesn't matter).
                     RabbitPoint cornerPoint = 

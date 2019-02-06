@@ -24,6 +24,11 @@ public class Obstacle extends Rectangle2D.Double {
     public boolean defaultBottomLeft = true;
     public boolean defaultBottomRight = true;
 
+    private Line2D.Double topLine;
+    private Line2D.Double bottomLine;
+    private Line2D.Double leftLine;
+    private Line2D.Double rightLine;
+
     public String name;
 
     /**
@@ -45,6 +50,11 @@ public class Obstacle extends Rectangle2D.Double {
         topRight = new XYPair(x + width / 2 * 1.01, y + height / 2 * 1.01);
         bottomLeft = new XYPair(x - width / 2 * 1.01, y - height / 2 * 1.01);
         bottomRight = new XYPair(x + width / 2 * 1.01, y - height / 2 * 1.01);
+
+        topLine = new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y);
+        bottomLine = new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y);
+        leftLine = new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
+        rightLine = new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
     }
 
     /**
@@ -140,6 +150,10 @@ public class Obstacle extends Rectangle2D.Double {
         return candidate;
     }
 
+    public boolean doesPointLieAlongMidlines(XYPair point) {
+        return (Math.abs(this.getCenterX()-point.x) < 1) || (Math.abs(this.getCenterY()-point.y) < 1);
+    }
+
     /**
      * Finds the closest available corner of this obstacle from a given point. Once
      * it returns a point, that point is unavailable until resetCorners() is called.
@@ -194,6 +208,52 @@ public class Obstacle extends Rectangle2D.Double {
             bottomRightAvailable = false;
         }
         return candidate.clone();
+    }
+
+    public XYPair movePointOutsideOfBounds(XYPair point) {
+        point = point.clone();
+        // Quick check - if the point is already outside of the obstacle,
+        // then nothing needs to be done.
+        if (!this.contains(point.x, point.y)) {
+            return point;
+        }
+
+        // Check each line segment, and prepare to shift the point accordingly.
+        double xDelta = 0;
+        double yDelta = 0;
+        double minDistance = 10000;
+
+        double topDistance = topLine.ptLineDist(point.x, point.y);
+        if (topDistance < minDistance && (topLeftAvailable || topRightAvailable)) {
+            minDistance = topDistance;
+            xDelta = 0;
+            yDelta = minDistance;
+        }
+        double bottomDistance = bottomLine.ptLineDist(point.x, point.y);
+        if (bottomDistance < minDistance && (bottomLeftAvailable || bottomRightAvailable)) {
+            minDistance = bottomDistance;
+            xDelta = 0;
+            yDelta = -minDistance;
+        }
+        double leftDistance = leftLine.ptLineDist(point.x, point.y);
+        if (leftDistance < minDistance && (topLeftAvailable || bottomLeftAvailable)) {
+            minDistance = leftDistance;
+            xDelta = -minDistance;
+            yDelta = 0;
+        }
+        double rightDistance = rightLine.ptLineDist(point.x, point.y);
+        if (rightDistance < minDistance && (topRightAvailable || bottomRightAvailable)) {
+            minDistance = rightDistance;
+            xDelta = minDistance;
+            yDelta = 0;
+        }
+
+        // put the point slightly outside the bounding box
+        xDelta *= 1.01;
+        yDelta *= 1.01;
+
+        point.add(new XYPair(xDelta, yDelta));
+        return point;
     }
 
 }
