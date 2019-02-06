@@ -45,6 +45,7 @@ public class OperatorCommandMap {
             ConfigurablePurePursuitCommand goToLoadingStation,
             ConfigurablePurePursuitCommand goToFrontCargo,
             ConfigurablePurePursuitCommand goToNearCargo,
+            ConfigurablePurePursuitCommand goToFarLoadingStation,
             PoseSubsystem poseSubsystem)
     {
         operatorInterface.gamepad.getifAvailable(6).whileHeld(quickTurn);
@@ -54,13 +55,15 @@ public class OperatorCommandMap {
 
         driveEverywhere.includeOnSmartDashboard();
 
-        goToRocket.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, false));
+        goToRocket.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, false));
         goToRocket.includeOnSmartDashboard("Go To Rocket");
-        goToLoadingStation.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, false));
+        goToLoadingStation.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, false));
         goToLoadingStation.includeOnSmartDashboard("Go To Loading Station");
-        goToFrontCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, false));
+        goToFarLoadingStation.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
+        goToFarLoadingStation.includeOnSmartDashboard("Go To Far Loading Station");
+        goToFrontCargo.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, false));
         goToFrontCargo.includeOnSmartDashboard("Go To Front Cargo");
-        goToNearCargo.setPoints(poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false));
+        goToNearCargo.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false));
         goToNearCargo.includeOnSmartDashboard("Go To Near Cargo");
 
         pursuit.setMode(PointLoadingMode.Relative);
@@ -107,7 +110,11 @@ public class OperatorCommandMap {
     ) {
         // Start with a smaller set of commands, we can build up from there.
         setPoseToLeftHabLevelZero.setLandmark(Side.Left, FieldLandmark.HabLevelZero);
+        setPoseToLeftHabLevelZero.forceHeading(true);
+        setPoseToLeftHabLevelZero.includeOnSmartDashboard("Set Pose to Left Level 0");
         setPoseToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
+        setPoseToLeftLoadingStation.forceHeading(true);
+        setPoseToLeftLoadingStation.includeOnSmartDashboard("Set pose to Left Loading Station");
     }    
 }
 

@@ -29,7 +29,8 @@ public class SetPoseToFieldLandmarkCommand extends BaseCommand {
     }
 
     public void setLandmark(Side side, FieldLandmark landmark) {
-        chosenLandmark = landmark;
+        this.chosenLandmark = landmark;
+        this.side = side;
     }
 
     @Override

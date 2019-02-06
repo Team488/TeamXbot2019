@@ -29,12 +29,12 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
     private static Logger log = Logger.getLogger(DriveSubsystem.class);
 
-    public final XCANTalon leftMaster;
-    public final XCANTalon leftFollower;
-    public final XCANTalon leftFollowerSecond;
-    public final XCANTalon rightMaster;
-    public final XCANTalon rightFollower;
-    public final XCANTalon rightFollowerSecond;
+    public XCANTalon leftMaster;
+    public XCANTalon leftFollower;
+    public XCANTalon leftFollowerSecond;
+    public XCANTalon rightMaster;
+    public XCANTalon rightFollower;
+    public XCANTalon rightFollowerSecond;
 
     private Map<XCANTalon, MotionRegistration> masterTalons;
 
@@ -63,9 +63,11 @@ public class DriveSubsystem extends BaseDriveSubsystem {
         this.leftFollower = factory.createCANTalon(contract.getLeftDriveFollower().channel);
         this.rightMaster = factory.createCANTalon(contract.getRightDriveMaster().channel);
         this.rightFollower = factory.createCANTalon(contract.getRightDriveFollower().channel);
-        this.leftFollowerSecond = factory.createCANTalon(contract.getLeftDriveFollowerSecond().channel);
-        this.rightFollowerSecond = factory.createCANTalon(contract.getRightDriveFollowerSecond().channel);
-
+        
+        if (contract.doesDriveHaveThreeMotors()) {
+            this.leftFollowerSecond = factory.createCANTalon(contract.getLeftDriveFollowerSecond().channel);
+            this.rightFollowerSecond = factory.createCANTalon(contract.getRightDriveFollowerSecond().channel);
+        }
         XCANTalon.configureMotorTeam("LeftDrive", "LeftMaster", leftMaster, leftFollower,
                 contract.getLeftDriveMaster().inverted, contract.getLeftDriveFollower().inverted,
                 contract.getLeftDriveMasterEncoder().inverted);

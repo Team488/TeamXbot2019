@@ -2,7 +2,7 @@
   "tabPane": [
     {
       "title": "SmartDashboard",
-      "autoPopulate": false,
+      "autoPopulate": true,
       "autoPopulatePrefix": "SmartDashboard/",
       "widgetPane": {
         "gridSize": 128.0,
@@ -379,11 +379,22 @@
             ],
             "content": {
               "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance X",
+              "_title": "PoseSubsystem/Total distance X"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PoseSubsystem/PanelLoadRight/Y",
               "_title": "PoseSubsystem/PanelLoadRight/Y"
             }
           },
-          "3,3": {
+          "4,3": {
             "size": [
               1,
               1
@@ -394,7 +405,7 @@
               "_title": "PoseSubsystem/PanelLoadRight/X"
             }
           },
-          "4,3": {
+          "5,3": {
             "size": [
               1,
               1
@@ -403,17 +414,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/LeftDriveLeftMaster/ current",
               "_title": "LeftDriveLeftMaster/ current"
-            }
-          },
-          "5,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance X",
-              "_title": "PoseSubsystem/Total distance X"
             }
           },
           "6,3": {
@@ -619,6 +619,18 @@
                   "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [34]",
                   "_title": "Talon SRX [34]",
                   "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [-4]",
+                  "_title": "Talon SRX [-4]",
+                  "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [-5]",
+                  "_title": "Talon SRX [-5]",
+                  "Visuals/Orientation": "HORIZONTAL"
                 }
               ]
             }
@@ -648,12 +660,25 @@
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
+          },
+          "6,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/VisionSubsystem",
+              "_title": "VisionSubsystem",
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
           }
         }
       }
     },
     {
-      "title": "Tab 3",
+      "title": "Field Navigation",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -661,14 +686,147 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
-        "tiles": {}
+        "tiles": {
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Go To Front Cargo",
+              "_title": "/SmartDashboard/Go To Front Cargo"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Go To Loading Station",
+              "_title": "/SmartDashboard/Go To Loading Station"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Go To Near Cargo",
+              "_title": "/SmartDashboard/Go To Near Cargo"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Go To Rocket",
+              "_title": "/SmartDashboard/Go To Rocket"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/CurrentHeading",
+              "_title": "/SmartDashboard/PoseSubsystem/CurrentHeading"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance X",
+              "_title": "/SmartDashboard/PoseSubsystem/Total distance X"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance Y",
+              "_title": "/SmartDashboard/PoseSubsystem/Total distance Y"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Set Pose to Left Level 0",
+              "_title": "/SmartDashboard/Set Pose to Left Level 0"
+            }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Set pose to Left Loading Station",
+              "_title": "/SmartDashboard/Set pose to Left Loading Station"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/ConfigurablePurePursuitCommand/Rabbit distance threshold",
+              "_title": "/Preferences/ConfigurablePurePursuitCommand/Rabbit distance threshold"
+            }
+          },
+          "9,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/ConfigurablePurePursuitCommand/Rabbit lookahead (in)",
+              "_title": "/Preferences/ConfigurablePurePursuitCommand/Rabbit lookahead (in)"
+            }
+          },
+          "5,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Go To Far Loading Station",
+              "_title": "/SmartDashboard/Go To Far Loading Station"
+            }
+          }
+        }
       }
     }
   ],
   "windowGeometry": {
-    "x": -7.199999809265137,
-    "y": -7.199999809265137,
-    "width": 1550.4000244140625,
-    "height": 838.4000244140625
+    "x": -6.400000095367432,
+    "y": 1.600000023841858,
+    "width": 1547.199951171875,
+    "height": 828.7999877929688
   }
 }

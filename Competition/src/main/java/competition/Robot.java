@@ -34,11 +34,14 @@ public class Robot extends BaseRobot {
 
     private RobotPlatform getRobotPlatform() {
         if (is2018Robot()) {
+            System.out.println("Robot is 2018 robot.");
             return RobotPlatform.Competition2018;
         }
         if (isPracticeRobot()) {
+            System.out.println("Robot is 2019 Practice Robot.");
             return RobotPlatform.Practice2019;
         }
+        System.out.println("Robot is 2019 COMPETITION ROBOT.");
         return RobotPlatform.Competition2019;
     }
 
