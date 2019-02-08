@@ -4,42 +4,42 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getLeftDriveMaster() {
-        return new DeviceInfo(33, true);
+        return new DeviceInfo(33, false);
     }
 
     @Override
     public DeviceInfo getLeftDriveFollower() {
-        return new DeviceInfo(34, true);
+        return new DeviceInfo(34, false);
     }
 
     @Override
     public DeviceInfo getLeftDriveFollowerSecond() {
-        return new DeviceInfo(32, true);
+        return new DeviceInfo(32, false);
     }
 
     @Override
     public DeviceInfo getRightDriveMaster() {
-        return new DeviceInfo(22, false);
+        return new DeviceInfo(22, true);
     }
 
     @Override
     public DeviceInfo getRightDriveFollower() {
-        return new DeviceInfo(21, false);
+        return new DeviceInfo(21, true);
     }
 
     @Override
     public DeviceInfo getRightDriveFollowerSecond() {
-        return new DeviceInfo(23, false);
+        return new DeviceInfo(23, true);
     }
 
     @Override
     public DeviceInfo getLeftDriveMasterEncoder() {
-        return null;
+        return new DeviceInfo(0, false);
     }
 
     @Override
     public DeviceInfo getRightDriveMasterEncoder() {
-        return null;
+        return new DeviceInfo(0, false);
     }
 
     @Override
