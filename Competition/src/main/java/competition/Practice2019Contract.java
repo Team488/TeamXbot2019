@@ -67,6 +67,21 @@ public class Practice2019Contract extends ElectricalContract2019 {
         return true;
     }
 
+    @Override
+    public DeviceInfo getGripperSolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getGripperSensor() {
+        return null;
+    }
+
+    @Override
+    public boolean isGripperReady() {
+        return false;
+    }
+
 
 
 }

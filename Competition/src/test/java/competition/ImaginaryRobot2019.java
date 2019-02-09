@@ -7,11 +7,11 @@ public class ImaginaryRobot2019 extends Competition2018Contract {
     }
 
     @Override
+    public boolean isGripperReady() {
+        return true;
+    }
+    
     public boolean doesDriveHaveThreeMotors() {
         return true;
     }
-
-    
-
-    
 }

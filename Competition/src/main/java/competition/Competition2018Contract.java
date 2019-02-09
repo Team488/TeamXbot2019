@@ -46,16 +46,31 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
 
     @Override
+    public DeviceInfo getGripperSolenoid() {
+        return new DeviceInfo(-1, false);
+    }
+
+    @Override
+    public DeviceInfo getGripperSensor() {
+        return new DeviceInfo(-1, false);
+    }
+
     public DeviceInfo getElevatorMasterMotor() {
         return new DeviceInfo(-3, false);
     }
 
     @Override
     public DeviceInfo getElevatorMasterEncoder() {
+
         return new DeviceInfo(-1, false);
     }
 
     @Override
+
+    public boolean isGripperReady() {
+        return false;
+    }
+
     public DeviceInfo getElevatorCalibrationSensor() {
         return new DeviceInfo(-2, false);
     }
