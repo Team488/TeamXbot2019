@@ -34,12 +34,12 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getLeftDriveMasterEncoder() {
-        return new DeviceInfo(0, false);
+        return new DeviceInfo(0, true);
     }
 
     @Override
     public DeviceInfo getRightDriveMasterEncoder() {
-        return new DeviceInfo(0, false);
+        return new DeviceInfo(0, true);
     }
 
     @Override

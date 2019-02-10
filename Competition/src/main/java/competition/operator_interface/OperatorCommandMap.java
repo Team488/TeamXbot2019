@@ -7,6 +7,7 @@ import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
+import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
@@ -39,30 +40,41 @@ public class OperatorCommandMap {
             CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
             ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
             ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
-            ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
-            ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
-            ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
+            HumanAssistedPurePursuitCommand goToRocket, HumanAssistedPurePursuitCommand goToLoadingStation,
+            HumanAssistedPurePursuitCommand goToFrontCargo, HumanAssistedPurePursuitCommand goToNearCargo,
+            HumanAssistedPurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
         operatorInterface.gamepad.getifAvailable(6).whileHeld(quickTurn);
-        operatorInterface.gamepad.getPovIfAvailable(0).whenPressed(tank);
+        operatorInterface.gamepad.getPovIfAvailable(0).whenPressed(arcade);
         operatorInterface.gamepad.getPovIfAvailable(90).whenPressed(arcade);
+        operatorInterface.gamepad.getPovIfAvailable(270).whenPressed(arcade);
         operatorInterface.gamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
 
         driveEverywhere.includeOnSmartDashboard();
 
-        goToRocket.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, false));
+        goToRocket.setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearRocket, true));
+        goToRocket.setDotProductDrivingEnabled(true);
         goToRocket.includeOnSmartDashboard("Go To Rocket");
+
         goToLoadingStation.setPointSupplier(
-                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, false));
+                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        goToLoadingStation.setDotProductDrivingEnabled(true);
         goToLoadingStation.includeOnSmartDashboard("Go To Loading Station");
+
         goToFarLoadingStation.setPointSupplier(
                 () -> poseSubsystem.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
+        goToFarLoadingStation.setDotProductDrivingEnabled(true);
         goToFarLoadingStation.includeOnSmartDashboard("Go To Far Loading Station");
+
         goToFrontCargo.setPointSupplier(
-                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, false));
+                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, true));
+        goToFrontCargo.setDotProductDrivingEnabled(true);
         goToFrontCargo.includeOnSmartDashboard("Go To Front Cargo");
+
         goToNearCargo
-                .setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false));
+                .setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, true));
+        goToNearCargo.setDotProductDrivingEnabled(true);
         goToNearCargo.includeOnSmartDashboard("Go To Near Cargo");
+        
 
         pursuit.setMode(PointLoadingMode.Relative);
         pursuit.addPoint(new RabbitPoint(3 * 12, 3 * 12, 0));

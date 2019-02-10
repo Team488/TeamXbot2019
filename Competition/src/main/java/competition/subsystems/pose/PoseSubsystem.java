@@ -96,7 +96,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         // Loading Stations
         createLandmarks(FieldLandmark.LoadingStation, 24, 23, 270);
         // Front Rocket
-        createLandmarks(FieldLandmark.NearRocket, 22, 197, 96);
+        createLandmarks(FieldLandmark.NearRocket, 22, 197, 103);
         // Far Rocket
         createLandmarks(FieldLandmark.FarRocket, 22, 264, 180);
     }
