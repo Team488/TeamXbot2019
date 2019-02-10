@@ -12,7 +12,7 @@ import xbot.common.subsystems.drive.control_logic.HeadingModule;
 public class RotateToHeadingCommand extends BaseCommand {
 
     DriveSubsystem drive;
-    PoseSubsystem pose;
+    protected PoseSubsystem pose;
     double goal;
     double givenGoal;
     boolean relative;

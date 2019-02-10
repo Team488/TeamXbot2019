@@ -5,10 +5,12 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.command.PeriodicDataSource;
+import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.networking.OffboardCommunicationClient;
 import xbot.common.properties.StringProperty;
 import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.DoubleProperty;
 
 @Singleton
 public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource {
@@ -16,18 +18,55 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     OffboardCommunicationClient client;
     final StringProperty packetProp;
     private String recentPacket;
+    double lastCalledTime;
+    double angleToTarget;
+    double parsedAngle;
+    boolean isCalled;
+    boolean numberIsTooBig;
+    boolean cannotParseNumber;
+    boolean beenTooLong;
+    final DoubleProperty differenceBetweenTime;
 
     @Inject
     public VisionSubsystem(XPropertyManager propMan, CommonLibFactory clf) {
         this.client = clf.createZeromqListener("tcp://localhost:5556", "");
+        differenceBetweenTime = propMan.createPersistentProperty(getPrefix() + "differenceBetweenTime", 1);
         packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", "");
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
     }
 
-    private void handlePacket(String packet) {
+    public void handlePacket(String packet) {
         recentPacket = packet;
+        lastCalledTime = XTimer.getFPGATimestamp();
+
+        try {
+            parsedAngle = Double.parseDouble(recentPacket);
+            cannotParseNumber = false;
+        } catch (NumberFormatException e) {
+            cannotParseNumber = true;
+            parsedAngle = 0.0;
+        }
+
+        if (parsedAngle > 180.0 || parsedAngle < -180.0) {
+            numberIsTooBig = true;
+            parsedAngle = 0.0;
+        } else {
+            numberIsTooBig = false;
+        }
+    }
+
+    public boolean isTargetInView() {
+        beenTooLong = ((XTimer.getFPGATimestamp() - lastCalledTime) > differenceBetweenTime.get());
+        if (beenTooLong || numberIsTooBig || cannotParseNumber) {
+            return false;
+        }
+        return true;
+    }
+
+    public double getAngleToTarget() {
+        return parsedAngle;
     }
 
     @Override

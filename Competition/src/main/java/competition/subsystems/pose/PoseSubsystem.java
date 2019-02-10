@@ -81,6 +81,10 @@ public class PoseSubsystem extends BasePoseSubsystem {
         
         // Near CargoShip
         createLandmarks(FieldLandmark.NearCargoShip, 112, 262, 0);
+        // Mid CargoShip
+        createLandmarks(FieldLandmark.MidCargoShip, 112, 283, 0);
+        // Far CargoShip
+        createLandmarks(FieldLandmark.FarCargoShip, 112, 305, 0);
         // Front CargoShip
         createLandmarks(FieldLandmark.FrontCargoShip, 148, 208, 90);
         // Hab Level Two
@@ -93,6 +97,8 @@ public class PoseSubsystem extends BasePoseSubsystem {
         createLandmarks(FieldLandmark.LoadingStation, 24, 23, 270);
         // Front Rocket
         createLandmarks(FieldLandmark.NearRocket, 22, 197, 96);
+        // Far Rocket
+        createLandmarks(FieldLandmark.FarRocket, 22, 264, 180);
     }
 
     private void createLandmarks(FieldLandmark landmark, double x, double y, double heading) {
@@ -118,7 +124,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
                 candidate = leftCargoShipWaypoint.getPose();
                 break;
             case LoadingStation:
-            case FrontCargoShip:
+            case FrontCargoShip: 
             case NearRocket:
                 candidate = leftNearRocketWaypoint.getPose();
                 break;

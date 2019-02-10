@@ -38,5 +38,7 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
    
     public abstract boolean isElevatorReady();
 
+    public abstract boolean isElevatorLimitSwitchReady();
+
     public abstract boolean doesDriveHaveThreeMotors();
 }

@@ -7,13 +7,11 @@ import com.google.inject.Singleton;
 import org.apache.log4j.Logger;
 
 import competition.ElectricalContract2019;
-import edu.wpi.first.wpilibj.PIDController;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.controls.sensors.XDigitalInput;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
-import xbot.common.math.PID;
 import xbot.common.math.PIDFactory;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -87,7 +85,7 @@ public class ElevatorSubsystem extends BaseSubsystem {
     }
 
     private void setPower(double power) {
-        if (contract.isElevatorReady()) {
+        if (contract.isElevatorReady() && contract.isElevatorLimitSwitchReady()) {
             if (isCalibrationSensorPressed()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
                 calibrate();

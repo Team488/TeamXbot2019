@@ -16,7 +16,7 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
 
     @Override
-    public DeviceInfo getLeftDriveFollowerSecond(){
+    public DeviceInfo getLeftDriveFollowerSecond() {
         return new DeviceInfo(-5, false);
     }
 
@@ -86,6 +86,10 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
 
     @Override
+    public boolean isElevatorLimitSwitchReady() {
+        return false;
+    }
+    
     public DeviceInfo getGripperExtensionSolenoid() {
         return null;
     }

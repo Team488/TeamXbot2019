@@ -47,7 +47,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
         return new DeviceInfo(25, false);
     }
 
-    @Override 
+    @Override
     public DeviceInfo getElevatorMasterEncoder() {
         return new DeviceInfo(5, false);
     }
@@ -63,11 +63,15 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     @Override
+    public boolean isElevatorLimitSwitchReady() {
+        return false;
+    }
+
+    @Override
     public boolean doesDriveHaveThreeMotors() {
         return true;
     }
 
-    @Override
     public DeviceInfo getGripperDiscSolenoid() {
         return new DeviceInfo(0, false);
     }
