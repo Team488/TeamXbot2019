@@ -21,9 +21,10 @@ public class ElevatorSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(ElevatorSubsystem.class);
 
     public XCANTalon master;
+    public XCANTalon follower;
     public XDigitalInput calibrationSensor;
     private final DoubleProperty currentCalibrationSensorPosition;
-    private boolean isCalibrated; 
+    private boolean isCalibrated;
     private double power;
     private final DoubleProperty elevatorStandardPower;
     private final DoubleProperty distanceBetweenLevels;
@@ -40,13 +41,16 @@ public class ElevatorSubsystem extends BaseSubsystem {
         this.contract = contract;
         if (contract.isElevatorReady()) {
             this.master = factory.createCANTalon(contract.getElevatorMasterMotor().channel);
-            master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+            this.follower = factory.createCANTalon(contract.getElevatorFollowerMotor().channel);
+            XCANTalon.configureMotorTeam(getPrefix(), "ElevatorMaster", master, follower,
+                    contract.getElevatorMasterMotor().inverted, contract.getElevatorFollowerMotor().inverted,
+                    contract.getElevatorMasterEncoder().inverted);
             this.calibrationSensor = factory.createDigitalInput(contract.getElevatorCalibrationSensor().channel);
         }
         elevatorStandardPower = propManager.createPersistentProperty(getPrefix() + "StandardPower", 1);
         distanceBetweenLevels = propManager.createPersistentProperty(getPrefix() + "DistanceBetweenLevels", 1);
-        currentCalibrationSensorPosition = propManager.createPersistentProperty(getPrefix()
-        + "CalibrationSensorPosition", -1);
+        currentCalibrationSensorPosition = propManager
+                .createPersistentProperty(getPrefix() + "CalibrationSensorPosition", -1);
     }
 
     public void stop() {
@@ -105,8 +109,8 @@ public class ElevatorSubsystem extends BaseSubsystem {
         } else if (level == HatchLevel.Medium) {
             return currentCalibrationSensorPosition.get() + distanceBetweenLevels.get();
         } else {
-            return currentCalibrationSensorPosition.get() + distanceBetweenLevels.get()*2;
+            return currentCalibrationSensorPosition.get() + distanceBetweenLevels.get() * 2;
         }
-    }   
+    }
 
 }

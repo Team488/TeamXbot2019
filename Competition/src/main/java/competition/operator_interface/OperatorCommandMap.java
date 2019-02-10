@@ -20,6 +20,8 @@ import competition.subsystems.gripper.commands.RetractGripperCommand;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
+import competition.subsystems.vision.VisionSubsystem;
+import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import xbot.common.controls.sensors.XJoystick;
@@ -124,5 +126,12 @@ public class OperatorCommandMap {
         setPoseToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
         setPoseToLeftLoadingStation.forceHeading(true);
         setPoseToLeftLoadingStation.includeOnSmartDashboard("Set pose to Left Loading Station");
+    }
+
+    @Inject
+    public void setUpVisionCommands(OperatorInterface operatorInterface, 
+    RotateToVisionTargetCommand rotateToVisionTargetCommand){
+            
+        rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
 }

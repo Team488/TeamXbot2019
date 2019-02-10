@@ -55,8 +55,14 @@ public class Competition2018Contract extends ElectricalContract2019 {
         return new DeviceInfo(-1, false);
     }
 
+    @Override
     public DeviceInfo getElevatorMasterMotor() {
         return new DeviceInfo(-3, false);
+    }
+
+    @Override
+    public DeviceInfo getElevatorFollowerMotor(){
+        return new DeviceInfo(-10, false);
     }
 
     @Override

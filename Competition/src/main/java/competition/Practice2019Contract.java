@@ -48,6 +48,11 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     @Override
+    public DeviceInfo getElevatorFollowerMotor() {
+        return new DeviceInfo(50, false);
+    }
+
+    @Override
     public DeviceInfo getElevatorMasterEncoder() {
         return new DeviceInfo(5, false);
     }
