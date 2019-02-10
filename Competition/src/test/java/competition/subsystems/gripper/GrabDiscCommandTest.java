@@ -21,12 +21,12 @@ public class GrabDiscCommandTest extends BaseCompetitionTest {
 
     @Test
     public void testGrabDisc() {
-        gripperSubsystem.gripperPiston.setOn(false);
-        assertFalse("grabHatchet is false", gripperSubsystem.gripperPiston.getAdjusted());
+        gripperSubsystem.gripperDiscPiston.setOn(false);
+        assertFalse("grabHatchet is false", gripperSubsystem.gripperDiscPiston.getAdjusted());
 
         grabDisc.initialize();
 
-        assertTrue("grabHatchet is true", gripperSubsystem.gripperPiston.getAdjusted());
+        assertTrue("grabHatchet is true", gripperSubsystem.gripperDiscPiston.getAdjusted());
     }
 
 

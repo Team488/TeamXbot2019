@@ -12,8 +12,10 @@ import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
 import competition.subsystems.elevator.commands.RaiseElevatorCommand;
 import competition.subsystems.elevator.commands.StopElevatorCommand;
+import competition.subsystems.gripper.commands.ExtendGripperCommand;
 import competition.subsystems.gripper.commands.GrabDiscCommand;
 import competition.subsystems.gripper.commands.ReleaseDiscCommand;
+import competition.subsystems.gripper.commands.RetractGripperCommand;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
@@ -81,9 +83,11 @@ public class OperatorCommandMap {
 
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
-            GrabDiscCommand grabDisc) {
+            GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract) {
         operatorInterface.gamepad.getifAvailable(1).whenPressed(grabDisc);
         operatorInterface.gamepad.getifAvailable(2).whenPressed(releaseDisc);
+        operatorInterface.gamepad.getifAvailable(3).whenPressed(extend);
+        operatorInterface.gamepad.getifAvailable(4).whenPressed(retract);
     }
 
     @Inject

@@ -54,7 +54,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorCalibrationSensor() {
-        return null;
+        return new DeviceInfo(10, false);
     }
 
     @Override
@@ -68,20 +68,22 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     @Override
-    public DeviceInfo getGripperSolenoid() {
-        return null;
+    public DeviceInfo getGripperDiscSolenoid() {
+        return new DeviceInfo(0, false);
     }
 
     @Override
     public DeviceInfo getGripperSensor() {
-        return null;
+        return new DeviceInfo(1, false);
     }
 
     @Override
     public boolean isGripperReady() {
-        return false;
+        return true;
     }
 
-
-
+    @Override
+    public DeviceInfo getGripperExtensionSolenoid() {
+        return new DeviceInfo(1, false);
+    }
 }

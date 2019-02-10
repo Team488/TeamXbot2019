@@ -11,7 +11,8 @@ import xbot.common.injection.wpi_factories.CommonLibFactory;
 
 @Singleton
 public class GripperSubsystem extends BaseSubsystem {
-    public XSolenoid gripperPiston;
+    public XSolenoid gripperDiscPiston;
+    public XSolenoid gripperExtensionPiston;
     public XDigitalInput diskSensor;
     public boolean gripperReady;
 
@@ -20,26 +21,32 @@ public class GripperSubsystem extends BaseSubsystem {
         gripperReady = contract.isGripperReady();
 
         if (gripperReady) {
-            gripperPiston = clf.createSolenoid(contract.getGripperSolenoid().channel);
-            gripperPiston.setInverted(contract.getGripperSolenoid().inverted);
+            gripperDiscPiston = clf.createSolenoid(contract.getGripperDiscSolenoid().channel);
+            gripperDiscPiston.setInverted(contract.getGripperDiscSolenoid().inverted);
         
             diskSensor = clf.createDigitalInput(contract.getGripperSensor().channel);
             diskSensor.setInverted(contract.getGripperSensor().inverted);
+
+            gripperExtensionPiston = clf.createSolenoid(contract.getGripperExtensionSolenoid().channel);
+            gripperExtensionPiston.setInverted(contract.getGripperExtensionSolenoid().inverted);
         }
-        
     }
 
     public void grabHatch(){
         if (gripperReady)
         {
-            gripperPiston.setOn(true);
+            gripperDiscPiston.setOn(true);
         } 
     }
     public void releaseHatch(){
         if (gripperReady)
         {
-            gripperPiston.setOn(false);
+            gripperDiscPiston.setOn(false);
         } 
+    }
+
+    public void setExtension(boolean extend) {
+        gripperExtensionPiston.setOn(extend);
     }
 
     public boolean currentlyHasDisk()

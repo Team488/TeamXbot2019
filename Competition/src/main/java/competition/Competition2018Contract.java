@@ -46,7 +46,7 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
 
     @Override
-    public DeviceInfo getGripperSolenoid() {
+    public DeviceInfo getGripperDiscSolenoid() {
         return new DeviceInfo(-1, false);
     }
 
@@ -83,5 +83,10 @@ public class Competition2018Contract extends ElectricalContract2019 {
     @Override
     public boolean doesDriveHaveThreeMotors() {
         return false;
+    }
+
+    @Override
+    public DeviceInfo getGripperExtensionSolenoid() {
+        return null;
     }
 }

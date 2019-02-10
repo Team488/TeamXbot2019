@@ -22,7 +22,9 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getRightDriveMasterEncoder();
 
 
-    public abstract DeviceInfo getGripperSolenoid();
+    public abstract DeviceInfo getGripperDiscSolenoid();
+
+    public abstract DeviceInfo getGripperExtensionSolenoid();
 
     public abstract DeviceInfo getGripperSensor();
 
