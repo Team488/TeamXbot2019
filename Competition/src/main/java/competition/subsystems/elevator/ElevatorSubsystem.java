@@ -1,6 +1,5 @@
 package competition.subsystems.elevator;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -94,8 +93,8 @@ public class ElevatorSubsystem extends BaseSubsystem {
                 power = MathUtils.constrainDouble(power, 0, 1);
                 calibrate();
             }
-            master.simpleSet(power);
         }
+        master.simpleSet(power);
     }
 
     public double getPower() {

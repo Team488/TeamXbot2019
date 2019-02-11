@@ -107,13 +107,18 @@ public class OperatorCommandMap {
     @Inject
     public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
             LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator) {
+        
+        // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.gamepad.addAnalogButton(triggerRaise);
-        operatorInterface.gamepad.getAnalogIfAvailable(triggerRaise).whenPressed(raiseElevator);
+        operatorInterface.gamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
+        //operatorInterface.gamepad.getifAvailable(10).whileHeld(raiseElevator);
 
+        //Left Down
         AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
         operatorInterface.gamepad.addAnalogButton(triggerLower);
-        operatorInterface.gamepad.getAnalogIfAvailable(triggerLower).whenPressed(lowerElevator);
+        operatorInterface.gamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
+        //operatorInterface.gamepad.getifAvailable(9).whileHeld(lowerElevator);
     }
 
     @Inject
