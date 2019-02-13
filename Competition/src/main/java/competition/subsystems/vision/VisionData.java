@@ -1,19 +1,19 @@
 package competition.subsystems.vision;
 
 public class VisionData {
-    protected int targetYaw;
+    protected Double targetYaw;
 
     /**
      * @return the targetYaw
      */
-    public int getTargetYaw() {
+    public Double getTargetYaw() {
         return targetYaw;
     }
 
     /**
      * @param targetYaw the targetYaw to set
      */
-    public void setTargetYaw(int targetYaw) {
+    public void setTargetYaw(Double targetYaw) {
         this.targetYaw = targetYaw;
     }
 }

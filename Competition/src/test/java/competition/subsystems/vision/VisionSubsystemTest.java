@@ -21,16 +21,16 @@ public class VisionSubsystemTest extends BaseCompetitionTest {
     }
     @org.junit.Test
     public void testHandleNormalNumbersPacket() {
-        visionSubsystem.handlePacket("100");
+        visionSubsystem.handlePacket("{\"targetYaw\":100}");
         assertTrue(visionSubsystem.isTargetInView());
         assertEquals(100, visionSubsystem.getAngleToTarget(), 0.001);      
-        visionSubsystem.handlePacket("-100");  
+        visionSubsystem.handlePacket("{\"targetYaw\":-100}");  
         assertTrue(visionSubsystem.isTargetInView());
         assertEquals(-100, visionSubsystem.getAngleToTarget(), 0.001);   
-        visionSubsystem.handlePacket("-181");
+        visionSubsystem.handlePacket("{\"targetYaw\":-181}");
         assertFalse(visionSubsystem.isTargetInView());
         assertEquals(0, visionSubsystem.getAngleToTarget(), 0.001); 
-        visionSubsystem.handlePacket("181");
+        visionSubsystem.handlePacket("{\"targetYaw\":181}");
         assertFalse(visionSubsystem.isTargetInView());
         assertEquals(0, visionSubsystem.getAngleToTarget(), 0.001);
     }

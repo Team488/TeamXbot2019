@@ -47,7 +47,7 @@ public class RotateToVisionTargetCommandTest extends BaseCompetitionTest {
     public void testExecute() {
         assertEquals(0.0, rotateToVisionTargetCommand.rotation, 0.001);
         assertEquals(0.0, visionSubsytem.getAngleToTarget(), 0.001);
-        visionSubsytem.handlePacket("100");
+        visionSubsytem.handlePacket("{ \"targetYaw\":100 }");
         visionSubsytem.isTargetInView();
         rotateToVisionTargetCommand.execute();
         assertEquals(1, rotateToVisionTargetCommand.rotation, 0.001);

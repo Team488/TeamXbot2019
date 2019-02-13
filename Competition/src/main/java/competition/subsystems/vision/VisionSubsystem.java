@@ -1,5 +1,8 @@
 package competition.subsystems.vision;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.jr.ob.JSON;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -40,11 +43,12 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     public void handlePacket(String packet) {
         recentPacket = packet;
         lastCalledTime = XTimer.getFPGATimestamp();
-
+        VisionData newData;
         try {
-            parsedAngle = Double.parseDouble(recentPacket);
+            newData = JSON.std.beanFrom(VisionData.class, recentPacket);
+            parsedAngle = newData.getTargetYaw().intValue();
             cannotParseNumber = false;
-        } catch (NumberFormatException e) {
+        } catch (IOException e) {
             cannotParseNumber = true;
             parsedAngle = 0.0;
         }
