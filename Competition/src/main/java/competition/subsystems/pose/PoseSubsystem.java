@@ -52,7 +52,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private final FieldPosePropertyManager leftNearRocketWaypoint;
     private final FieldPosePropertyManager leftFarRocketWaypoint;
     private final FieldPosePropertyManager leftCargoShipWaypoint; // all side cargo locations use the same waypoint
-    
+    private final DoubleProperty distanceFromCenterOfRobot;
     private final DoubleProperty visionBackoffDistance;
     private CommonLibFactory clf;
 
@@ -64,7 +64,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         this.field = field;
 
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
-        
+        distanceFromCenterOfRobot = propManager.createPersistentProperty(getPrefix() + "DistanceFromCenterOfBot", 18);
         visionBackoffDistance = propManager.createPersistentProperty(getPrefix() + "VisionBackoffDistance", 36);
 
         // New definitions for each landmark:
@@ -154,10 +154,13 @@ public class PoseSubsystem extends BasePoseSubsystem {
         }        
         
         FieldPose finalPose = landmarkToLocation.get(landmarkKey).getPose();
-        FieldPose visionPose = finalPose.getPointAlongPoseLine(-visionBackoffDistance.get());
-        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);
-        RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+        FieldPose robotFlushPose = finalPose.getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
+        FieldPose visionPose = robotFlushPose.getPointAlongPoseLine(-visionBackoffDistance.get());
         
+        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);        
+       // RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+        RabbitPoint robotFlushPoint = new RabbitPoint(robotFlushPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+
         if (automaticWaypoints) {
             List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
             for (RabbitPoint p : generatedPoints) {
@@ -170,7 +173,9 @@ public class PoseSubsystem extends BasePoseSubsystem {
         }
         
         path.add(visionPoint);
-        path.add(finalPoint);
+        path.add(robotFlushPoint);
+
+      // path.add(finalPoint);
         return path;
     }
 
