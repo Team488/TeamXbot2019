@@ -148,6 +148,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
     }
 
     public List<RabbitPoint> getPathToLandmark(Side side, FieldLandmark landmark, boolean automaticWaypoints) {
+        log.info("Starting Pose: " + this.getCurrentFieldPose().toString());
         var path = new ArrayList<RabbitPoint>();
         String landmarkKey = createLandmarkKey(side, landmark);
 
@@ -179,7 +180,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         path.add(visionPoint);
         path.add(robotFlushPoint);
 
-      // path.add(finalPoint);
+        log.info("Goal Pose: " + robotFlushPoint.toString());
         return path;
     }
 

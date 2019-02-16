@@ -32,9 +32,10 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
     @Inject
     public VisionSubsystem(XPropertyManager propMan, CommonLibFactory clf) {
-        this.client = clf.createZeromqListener("tcp://localhost:5556", "");
+        this.client = clf.createZeromqListener("tcp://10.4.88.12:5801", "");
         differenceBetweenTime = propMan.createPersistentProperty(getPrefix() + "differenceBetweenTime", 1);
-        packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", "");
+        recentPacket = "no packets yet";
+        packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", recentPacket);        
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();

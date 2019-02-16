@@ -6,6 +6,11 @@ import com.google.inject.Singleton;
 public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
+    public boolean isDriveReady() {
+        return true;
+    }
+    
+    @Override
     public DeviceInfo getLeftDriveMaster() {
         return new DeviceInfo(34, true);
     }

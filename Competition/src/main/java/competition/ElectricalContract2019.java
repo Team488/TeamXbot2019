@@ -5,6 +5,8 @@ import xbot.common.injection.ElectricalContract;
 public abstract class ElectricalContract2019 extends ElectricalContract {
 
     // Drive motors
+    public abstract boolean isDriveReady();
+
     public abstract DeviceInfo getLeftDriveMaster();
 
     public abstract DeviceInfo getLeftDriveFollower();

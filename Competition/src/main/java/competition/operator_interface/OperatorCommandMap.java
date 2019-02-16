@@ -7,7 +7,6 @@ import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
-import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
@@ -20,11 +19,9 @@ import competition.subsystems.gripper.commands.RetractGripperCommand;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
-import competition.subsystems.vision.VisionSubsystem;
-import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
+import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
-import xbot.common.controls.sensors.XJoystick;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
 import xbot.common.subsystems.drive.PurePursuitCommand.PointLoadingMode;
 import xbot.common.subsystems.drive.RabbitPoint;
@@ -42,14 +39,13 @@ public class OperatorCommandMap {
             CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
             ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
             ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
-            HumanAssistedPurePursuitCommand goToRocket, HumanAssistedPurePursuitCommand goToLoadingStation,
-            HumanAssistedPurePursuitCommand goToFrontCargo, HumanAssistedPurePursuitCommand goToNearCargo,
-            HumanAssistedPurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
-        operatorInterface.gamepad.getifAvailable(6).whileHeld(quickTurn);
-        operatorInterface.gamepad.getPovIfAvailable(0).whenPressed(arcade);
-        operatorInterface.gamepad.getPovIfAvailable(90).whenPressed(arcade);
-        operatorInterface.gamepad.getPovIfAvailable(270).whenPressed(arcade);
-        operatorInterface.gamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
+            ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
+            ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
+            ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
+        operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
+        operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(tank);
+        operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
+        operatorInterface.driverGamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
 
         driveEverywhere.includeOnSmartDashboard();
 
@@ -88,20 +84,20 @@ public class OperatorCommandMap {
 
         forward.setMode(PointLoadingMode.Relative);
         forward.addPoint(new RabbitPoint(0, 4 * 12, 90));
-        operatorInterface.gamepad.getifAvailable(7).whenPressed(forward);
+        forward.includeOnSmartDashboard("Move Forward");
 
         backward.setMode(PointLoadingMode.Relative);
         backward.addPoint(new RabbitPoint(0, -4 * 12, 90));
-        operatorInterface.gamepad.getifAvailable(8).whenPressed(backward);
+        backward.includeOnSmartDashboard("Move Backward");
     }
 
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract) {
-        operatorInterface.gamepad.getifAvailable(1).whenPressed(grabDisc);
-        operatorInterface.gamepad.getifAvailable(2).whenPressed(releaseDisc);
-        operatorInterface.gamepad.getifAvailable(3).whenPressed(extend);
-        operatorInterface.gamepad.getifAvailable(4).whenPressed(retract);
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
+        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
+        operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
+        operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
 
     @Inject
@@ -110,15 +106,15 @@ public class OperatorCommandMap {
         
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
-        operatorInterface.gamepad.addAnalogButton(triggerRaise);
-        operatorInterface.gamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
-        //operatorInterface.gamepad.getifAvailable(10).whileHeld(raiseElevator);
+        operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
+        operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
 
         //Left Down
         AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
-        operatorInterface.gamepad.addAnalogButton(triggerLower);
-        operatorInterface.gamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
-        //operatorInterface.gamepad.getifAvailable(9).whileHeld(lowerElevator);
+        operatorInterface.operatorGamepad.addAnalogButton(triggerLower);
+        operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
+
+        operatorInterface.operatorGamepad.getifAvailable(8).whenPressed(stopElevator);
     }
 
     @Inject
@@ -134,9 +130,9 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setUpVisionCommands(OperatorInterface operatorInterface, 
+    public void setupVisionCommands(OperatorInterface operatorInterface, 
     RotateToVisionTargetCommand rotateToVisionTargetCommand){
-            
+        operatorInterface.operatorGamepad.getifAvailable(6).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
 }

@@ -23,6 +23,6 @@ public class HumanAssistedPurePursuitCommand extends ConfigurablePurePursuitComm
     @Override
     public void execute() {
         RabbitChaseInfo chaseData = evaluateCurrentPoint();
-        drive.drive(new XYPair(0, oi.gamepad.getLeftVector().y*chaseData.translation), chaseData.rotation);
+        drive.drive(new XYPair(0, oi.driverGamepad.getLeftVector().y*chaseData.translation), chaseData.rotation);
     }
 }

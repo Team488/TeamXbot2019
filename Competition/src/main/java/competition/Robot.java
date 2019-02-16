@@ -23,13 +23,18 @@ public class Robot extends BaseRobot {
     }
 
     private boolean isPracticeRobot() {
-        File practiceRobotFlag = new File("/home/lvuser/practicerobot.txt");
-        return practiceRobotFlag.exists();
+        File robotFlag = new File("/home/lvuser/practicerobot.txt");
+        return robotFlag.exists();
     }
 
     private boolean is2018Robot() {
-        File practiceRobotFlag = new File("/home/lvuser/2018robot.txt");
-        return practiceRobotFlag.exists();
+        File robotFlag = new File("/home/lvuser/2018robot.txt");
+        return robotFlag.exists();
+    }
+
+    private boolean isRobox() {
+        File robotFlag = new File("/home/lvuser/robox.txt");
+        return robotFlag.exists();
     }
 
     private RobotPlatform getRobotPlatform() {
@@ -40,6 +45,9 @@ public class Robot extends BaseRobot {
         if (isPracticeRobot()) {
             System.out.println("Robot is 2019 Practice Robot.");
             return RobotPlatform.Practice2019;
+        }
+        if (isRobox()) {
+            return RobotPlatform.Robox;
         }
         System.out.println("Robot is 2019 COMPETITION ROBOT.");
         return RobotPlatform.Competition2019;

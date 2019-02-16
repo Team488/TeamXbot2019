@@ -3,6 +3,11 @@ package competition;
 public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
+    public boolean isDriveReady() {
+        return true;
+    }
+
+    @Override
     public DeviceInfo getLeftDriveMaster() {
         return new DeviceInfo(33, false);
     }
