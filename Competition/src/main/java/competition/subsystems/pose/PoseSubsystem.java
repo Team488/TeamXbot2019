@@ -79,26 +79,29 @@ public class PoseSubsystem extends BasePoseSubsystem {
         leftFarRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftFarRocketWaypoint", 70, 260, 0);
         leftCargoShipWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftCargoShipWaypoint", 80, 200, 0);
         
+        // First value X, Second value Y, Third value angle
+        // X
         // Near CargoShip
-        createLandmarks(FieldLandmark.NearCargoShip, 112, 262, 0);
+        createLandmarks(FieldLandmark.NearCargoShip, 134.13, 261.69, 0);
         // Mid CargoShip
-        createLandmarks(FieldLandmark.MidCargoShip, 112, 283, 0);
+        createLandmarks(FieldLandmark.MidCargoShip, 134.13, 282.81, 0);
         // Far CargoShip
-        createLandmarks(FieldLandmark.FarCargoShip, 112, 305, 0);
+        createLandmarks(FieldLandmark.FarCargoShip, 134.13, 303.94, 0);
         // Front CargoShip
-        createLandmarks(FieldLandmark.FrontCargoShip, 148, 208, 90);
+        createLandmarks(FieldLandmark.FrontCargoShip, 147.79, 219.25, 90);
         // Hab Level Two
-        createLandmarks(FieldLandmark.HabLevelTwo, 120, 22, 90);
+        createLandmarks(FieldLandmark.HabLevelTwo, 118.00, 48.00, 90);
         // Hab Level One
-        createLandmarks(FieldLandmark.HabLevelOne, 120, 72, 90);
-        // Hab Level Zero
-        createLandmarks(FieldLandmark.HabLevelZero, 120, 118, 90);
+        createLandmarks(FieldLandmark.HabLevelOne, 118.00, 95.10, 90);
         // Loading Stations
-        createLandmarks(FieldLandmark.LoadingStation, 24, 23, 270);
+        createLandmarks(FieldLandmark.LoadingStation, 22.75, 0.00, 270);
         // Near Rocket
-        createLandmarks(FieldLandmark.NearRocket, 22, 197, 103);
+        createLandmarks(FieldLandmark.NearRocket, 9.45, 215.53, 103);
         // Far Rocket
-        createLandmarks(FieldLandmark.FarRocket, 22, 264, 180);
+        createLandmarks(FieldLandmark.FarRocket, 9.45, 240.46, 157);
+
+        // Hab Level Zero, don't use this.
+        // createLandmarks(FieldLandmark.HabLevelZero, 120, 118, 90);
 
     }
 
