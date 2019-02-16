@@ -38,8 +38,8 @@ public class ArcadeDriveWithJoysticksCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        double translation = oi.gamepad.getLeftVector().y;
-        double rotation = MathUtils.squareAndRetainSign(oi.gamepad.getRightVector().x);
+        double translation = oi.driverGamepad.getLeftVector().y;
+        double rotation = MathUtils.squareAndRetainSign(oi.driverGamepad.getRightVector().x);
 
         rotation = ham.calculateHeadingPower(rotation);
 

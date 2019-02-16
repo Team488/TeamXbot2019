@@ -53,6 +53,6 @@ public class RotateToVisionTargetCommand extends BaseCommand {
             double goal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
             rotation = hm.calculateHeadingPower(goal);
         }
-        drive.drive(new XYPair(0, oi.gamepad.getLeftVector().y), rotation);
+        drive.drive(new XYPair(0, oi.operatorGamepad.getLeftVector().y), rotation);
     }
 }

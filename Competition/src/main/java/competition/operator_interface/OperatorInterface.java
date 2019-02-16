@@ -13,13 +13,20 @@ import xbot.common.logging.RobotAssertionManager;
  */
 @Singleton
 public class OperatorInterface {
-    public XFTCGamepad gamepad;
+    public XFTCGamepad driverGamepad;
+    public XFTCGamepad operatorGamepad;
 
     @Inject
     public OperatorInterface(CommonLibFactory factory, RobotAssertionManager assertionManager) {
-        gamepad = factory.createGamepad(0, 12);
-        gamepad.setLeftStickYInversion(true);
-        gamepad.setRightStickYInversion(true);
-        gamepad.setRightStickXInversion(true);
+        driverGamepad = factory.createGamepad(0, 10);
+        driverGamepad.setLeftStickYInversion(true);
+        driverGamepad.setRightStickYInversion(true);
+        driverGamepad.setRightStickXInversion(true);
+
+        operatorGamepad = factory.createGamepad(1, 10);
+        operatorGamepad.setLeftStickYInversion(true);
+        operatorGamepad.setRightStickYInversion(true);
+
     }
+
 }
