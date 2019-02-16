@@ -13,7 +13,8 @@ public class CompetitionModule extends RobotModule {
     public enum RobotPlatform {
         Competition2018,
         Competition2019,
-        Practice2019
+        Practice2019,
+        Robox
     }
     
     public CompetitionModule(RobotPlatform platform) {
@@ -35,6 +36,9 @@ public class CompetitionModule extends RobotModule {
             case Competition2019:
                 this.bind(ElectricalContract2019.class).to(Competition2019Contract.class);
                 break;
+            case Robox:
+                this.bind(ElectricalContract2019.class).to(RoboxContract.class);
+                break;  
             default:
                 break;
         }
