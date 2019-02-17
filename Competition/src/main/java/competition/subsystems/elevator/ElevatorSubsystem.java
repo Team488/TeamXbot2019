@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import competition.ElectricalContract2019;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
+import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
@@ -19,14 +20,15 @@ import xbot.common.properties.XPropertyManager;
 public class ElevatorSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(ElevatorSubsystem.class);
 
-    public XCANTalon master;
-    public XCANTalon follower;
-    public XDigitalInput calibrationSensor;
-    private final DoubleProperty currentCalibrationSensorPosition;
+    public final XCANTalon master;
+    public final XCANTalon follower;
+    public final XDigitalInput calibrationSensor;
+    public final XSolenoid allowElevatorMotionSolenoid;
     private boolean isCalibrated;
-    private double power;
+    private final DoubleProperty currentCalibrationSensorPosition;
     private final DoubleProperty elevatorStandardPower;
     private final DoubleProperty distanceBetweenLevels;
+    protected final DoubleProperty brakePowerLimit;
     private ElectricalContract2019 contract;
 
     public enum HatchLevel {
@@ -38,16 +40,25 @@ public class ElevatorSubsystem extends BaseSubsystem {
             PIDFactory pd) {
         log.info("Creating ElevatorSubsystem");
         this.contract = contract;
+        this.allowElevatorMotionSolenoid = factory.createSolenoid(contract.getBrakeSolenoid().channel);
         if (contract.isElevatorReady()) {
             this.master = factory.createCANTalon(contract.getElevatorMasterMotor().channel);
             this.follower = factory.createCANTalon(contract.getElevatorFollowerMotor().channel);
             XCANTalon.configureMotorTeam(getPrefix(), "ElevatorMaster", master, follower,
                     contract.getElevatorMasterMotor().inverted, contract.getElevatorFollowerMotor().inverted,
                     contract.getElevatorMasterEncoder().inverted);
+        } else {
+            this.master = null;
+            this.follower = null;
+        }
+        if (contract.isElevatorLimitSwitchReady()) {
             this.calibrationSensor = factory.createDigitalInput(contract.getElevatorCalibrationSensor().channel);
+        } else {
+            this.calibrationSensor = null;
         }
         elevatorStandardPower = propManager.createPersistentProperty(getPrefix() + "StandardPower", 1);
         distanceBetweenLevels = propManager.createPersistentProperty(getPrefix() + "DistanceBetweenLevels", 1);
+        brakePowerLimit = propManager.createPersistentProperty(getPrefix() + "BrakePowerLimit", .05);
         currentCalibrationSensorPosition = propManager
                 .createPersistentProperty(getPrefix() + "CalibrationSensorPosition", -1);
     }
@@ -87,18 +98,23 @@ public class ElevatorSubsystem extends BaseSubsystem {
         return currentCalibrationSensorPosition.get();
     }
 
-    private void setPower(double power) {
-        if (contract.isElevatorReady() && contract.isElevatorLimitSwitchReady()) {
-            if (isCalibrationSensorPressed()) {
+    protected void setPower(double power) {
+        if (contract.isElevatorReady()) {
+            if (contract.isElevatorLimitSwitchReady() && isCalibrationSensorPressed()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
                 calibrate();
             }
+            if (Math.abs(power) > brakePowerLimit.get()) {
+                allowElevatorMotionSolenoid.setOn(true);
+            } else {
+                allowElevatorMotionSolenoid.setOn(false);
+            }
+            master.simpleSet(power);
         }
-        master.simpleSet(power);
     }
 
-    public double getPower() {
-        return power;
+    public double getMasterPower() {
+        return master.getMotorOutputPercent();
     }
 
     private double getTickHeightForLevel(HatchLevel level) {
@@ -111,5 +127,4 @@ public class ElevatorSubsystem extends BaseSubsystem {
             return currentCalibrationSensorPosition.get() + distanceBetweenLevels.get() * 2;
         }
     }
-
 }

@@ -67,6 +67,10 @@ public class Practice2019Contract extends ElectricalContract2019 {
         return new DeviceInfo(10, false);
     }
 
+    public DeviceInfo getBrakeSolenoid() {
+        return new DeviceInfo(49, false);
+    }
+
     @Override
     public boolean isElevatorReady() {
         return true;

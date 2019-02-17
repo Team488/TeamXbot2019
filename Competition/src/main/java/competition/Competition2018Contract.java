@@ -72,12 +72,15 @@ public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorMasterEncoder() {
-
         return new DeviceInfo(-1, false);
     }
 
     @Override
+    public DeviceInfo getBrakeSolenoid() {
+        return new DeviceInfo(-49, false);
+    }
 
+    @Override
     public boolean isGripperReady() {
         return false;
     }

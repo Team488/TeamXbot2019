@@ -88,15 +88,20 @@ public class RoboxContract extends ElectricalContract2019 {
     }
 
     @Override
+    public DeviceInfo getBrakeSolenoid() {
+        return null;
+    }
+
+    @Override
     public boolean isElevatorReady() {
         return false;
-    }
+    } 
 
     @Override
     public boolean isElevatorLimitSwitchReady() {
         return false;
     }
-
+    
     @Override
     public boolean doesDriveHaveThreeMotors() {
         return false;
