@@ -1056,7 +1056,7 @@
       }
     },
     {
-      "title": "Tab 5",
+      "title": "Vision",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -1073,7 +1073,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/VisionSubsystem/Packet",
-              "_title": "/SmartDashboard/VisionSubsystem/Packet"
+              "_title": "SmartDashboard/VisionSubsystem/Packet"
             }
           },
           "6,1": {
@@ -1084,7 +1084,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/VisionSubsystem/NumPackets",
-              "_title": "/SmartDashboard/VisionSubsystem/NumPackets"
+              "_title": "SmartDashboard/VisionSubsystem/NumPackets"
             }
           }
         }
@@ -1092,9 +1092,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.400000095367432,
-    "y": 1.600000023841858,
-    "width": 1547.199951171875,
-    "height": 828.7999877929688
+    "x": 12.0,
+    "y": 8.800000190734863,
+    "width": 1550.4000244140625,
+    "height": 560.7999877929688
   }
 }

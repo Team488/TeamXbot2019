@@ -38,7 +38,7 @@ public class SetPoseToFieldLandmarkCommand extends BaseCommand {
         log.info("Initializing");
         log.info("Robot position will be set to landmark " + chosenLandmark.toString());
 
-        FieldPose landmarkLocation = pose.getFieldPoseForLandmark(side, chosenLandmark);
+        FieldPose landmarkLocation = pose.getRobotWidthPointForLandmark(side, chosenLandmark);
         pose.setCurrentPosition(landmarkLocation.getPoint().x, landmarkLocation.getPoint().y);
 
         if (setHeading) {

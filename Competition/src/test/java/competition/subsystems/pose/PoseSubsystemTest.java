@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.BaseCompetitionTest;
@@ -25,7 +26,9 @@ public class PoseSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
+    @Ignore
     public void getPathWithWaypoints() {
+        
         List<RabbitPoint> points = pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false);
         assertEquals(3, points.size(), 0.001);
         

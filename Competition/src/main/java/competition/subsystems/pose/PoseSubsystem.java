@@ -158,13 +158,9 @@ public class PoseSubsystem extends BasePoseSubsystem {
             return path;
         }        
         
-        FieldPose finalPose = landmarkToLocation.get(landmarkKey).getPose();
-        FieldPose robotFlushPose = finalPose.getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
-        FieldPose visionPose = robotFlushPose.getPointAlongPoseLine(-visionBackoffDistance.get());
+        FieldPose visionPose = getVisionPointForLandmark(side, landmark);
         
-        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);        
-       // RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
-        RabbitPoint robotFlushPoint = new RabbitPoint(robotFlushPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Stop);        
 
         if (automaticWaypoints) {
             List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
@@ -178,9 +174,8 @@ public class PoseSubsystem extends BasePoseSubsystem {
         }
         
         path.add(visionPoint);
-        path.add(robotFlushPoint);
 
-        log.info("Goal Pose: " + robotFlushPoint.toString());
+        log.info("Goal Pose: " + visionPoint.pose.toString());
         return path;
     }
 
@@ -203,6 +198,16 @@ public class PoseSubsystem extends BasePoseSubsystem {
             log.warn("Could not find a location for landmark " + landmark.toString() + "! Returning 0, 0, 90");
             return new FieldPose(new XYPair(), new ContiguousHeading(90));
         }
+    }
+
+    public FieldPose getRobotWidthPointForLandmark(Side side, FieldLandmark landmark) {
+        FieldPose landmarkLocation = getFieldPoseForLandmark(side, landmark);
+        return landmarkLocation.getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
+    }
+
+    public FieldPose getVisionPointForLandmark(Side side, FieldLandmark landmark) {
+        FieldPose landmarkLocation = getRobotWidthPointForLandmark(side, landmark);
+        return landmarkLocation.getPointAlongPoseLine(-visionBackoffDistance.get());
     }
 
     private String createLandmarkKey(Side side, FieldLandmark landmark) {

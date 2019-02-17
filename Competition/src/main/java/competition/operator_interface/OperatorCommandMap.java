@@ -97,6 +97,8 @@ public class OperatorCommandMap {
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract) {
         operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
+        operatorInterface.driverGamepad.getifAvailable(1).whenPressed(grabDisc);
+        operatorInterface.driverGamepad.getifAvailable(2).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
