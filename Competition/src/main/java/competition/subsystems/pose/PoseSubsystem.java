@@ -52,7 +52,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private final FieldPosePropertyManager leftNearRocketWaypoint;
     private final FieldPosePropertyManager leftFarRocketWaypoint;
     private final FieldPosePropertyManager leftCargoShipWaypoint; // all side cargo locations use the same waypoint
-    
+    private final DoubleProperty distanceFromCenterOfRobot;
     private final DoubleProperty visionBackoffDistance;
     private CommonLibFactory clf;
 
@@ -64,7 +64,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         this.field = field;
 
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
-        
+        distanceFromCenterOfRobot = propManager.createPersistentProperty(getPrefix() + "DistanceFromCenterOfBot", 18);
         visionBackoffDistance = propManager.createPersistentProperty(getPrefix() + "VisionBackoffDistance", 36);
 
         // New definitions for each landmark:
@@ -79,26 +79,30 @@ public class PoseSubsystem extends BasePoseSubsystem {
         leftFarRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftFarRocketWaypoint", 70, 260, 0);
         leftCargoShipWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftCargoShipWaypoint", 80, 200, 0);
         
+        // First value X, Second value Y, Third value angle
+        // X
         // Near CargoShip
-        createLandmarks(FieldLandmark.NearCargoShip, 112, 262, 0);
+        createLandmarks(FieldLandmark.NearCargoShip, 134.13, 261.69, 0);
         // Mid CargoShip
-        createLandmarks(FieldLandmark.MidCargoShip, 112, 283, 0);
+        createLandmarks(FieldLandmark.MidCargoShip, 134.13, 282.81, 0);
         // Far CargoShip
-        createLandmarks(FieldLandmark.FarCargoShip, 112, 305, 0);
+        createLandmarks(FieldLandmark.FarCargoShip, 134.13, 303.94, 0);
         // Front CargoShip
-        createLandmarks(FieldLandmark.FrontCargoShip, 148, 208, 90);
+        createLandmarks(FieldLandmark.FrontCargoShip, 147.79, 219.25, 90);
         // Hab Level Two
-        createLandmarks(FieldLandmark.HabLevelTwo, 120, 22, 90);
+        createLandmarks(FieldLandmark.HabLevelTwo, 118.00, 48.00, 90);
         // Hab Level One
-        createLandmarks(FieldLandmark.HabLevelOne, 120, 72, 90);
-        // Hab Level Zero
-        createLandmarks(FieldLandmark.HabLevelZero, 120, 118, 90);
+        createLandmarks(FieldLandmark.HabLevelOne, 118.00, 95.10, 90);
         // Loading Stations
-        createLandmarks(FieldLandmark.LoadingStation, 24, 23, 270);
-        // Front Rocket
-        createLandmarks(FieldLandmark.NearRocket, 22, 197, 103);
+        createLandmarks(FieldLandmark.LoadingStation, 22.75, 0.00, 270);
+        // Near Rocket
+        createLandmarks(FieldLandmark.NearRocket, 9.45, 215.53, 112.7);
         // Far Rocket
-        createLandmarks(FieldLandmark.FarRocket, 22, 264, 180);
+        createLandmarks(FieldLandmark.FarRocket, 9.45, 240.46, 247.3);
+
+        // Hab Level Zero, don't use this.
+        // createLandmarks(FieldLandmark.HabLevelZero, 120, 118, 90);
+
     }
 
     private void createLandmarks(FieldLandmark landmark, double x, double y, double heading) {
@@ -155,10 +159,13 @@ public class PoseSubsystem extends BasePoseSubsystem {
         }        
         
         FieldPose finalPose = landmarkToLocation.get(landmarkKey).getPose();
-        FieldPose visionPose = finalPose.getPointAlongPoseLine(-visionBackoffDistance.get());
-        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);
-        RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+        FieldPose robotFlushPose = finalPose.getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
+        FieldPose visionPose = robotFlushPose.getPointAlongPoseLine(-visionBackoffDistance.get());
         
+        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Continue);        
+       // RabbitPoint finalPoint = new RabbitPoint(finalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+        RabbitPoint robotFlushPoint = new RabbitPoint(robotFlushPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
+
         if (automaticWaypoints) {
             List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
             for (RabbitPoint p : generatedPoints) {
@@ -171,8 +178,9 @@ public class PoseSubsystem extends BasePoseSubsystem {
         }
         
         path.add(visionPoint);
-        path.add(finalPoint);
-        log.info("Goal Pose: " + finalPoint.toString());
+        path.add(robotFlushPoint);
+
+        log.info("Goal Pose: " + robotFlushPoint.toString());
         return path;
     }
 
