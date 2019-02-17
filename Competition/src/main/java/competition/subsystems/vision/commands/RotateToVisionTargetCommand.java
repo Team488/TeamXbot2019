@@ -33,7 +33,8 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         this.drive = drive;
         this.visionSubsystem = visionSubsystem;
         hm = clf.createHeadingModule(drive.getRotateToHeadingPid());
-        this.requires(this.visionSubsystem);
+        this.requires(visionSubsystem);
+        this.requires(drive);
     }
 
     public void setHeadingGoal(double goal, boolean relative) {
@@ -52,7 +53,12 @@ public class RotateToVisionTargetCommand extends BaseCommand {
             double relativeAngle = visionSubsystem.getAngleToTarget();
             double goal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
             rotation = hm.calculateHeadingPower(goal);
+        } else {
+            rotation = 0;
+            hm.reset();
         }
-        drive.drive(new XYPair(0, oi.operatorGamepad.getLeftVector().y), rotation);
+
+
+        drive.drive(new XYPair(0, oi.driverGamepad.getLeftVector().y), rotation);
     }
 }

@@ -7,6 +7,7 @@ import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
+import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
@@ -39,7 +40,7 @@ public class OperatorCommandMap {
             CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
             ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
             ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
-            ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
+            HumanAssistedPurePursuitCommand goToRocket, HumanAssistedPurePursuitCommand goToLoadingStation,
             ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
             ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
         operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
@@ -132,7 +133,7 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(OperatorInterface operatorInterface, 
     RotateToVisionTargetCommand rotateToVisionTargetCommand){
-        operatorInterface.operatorGamepad.getifAvailable(6).whileHeld(rotateToVisionTargetCommand);
+        operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
 }

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
+
 import competition.BaseCompetitionTest;
 
 public class VisionSubsystemTest extends BaseCompetitionTest {
@@ -19,7 +21,9 @@ public class VisionSubsystemTest extends BaseCompetitionTest {
     public void testVisionSubsystemConstructor() {
         VisionSubsystem visionSubsystemTest = this.injector.getInstance(VisionSubsystem.class);
     }
+    
     @org.junit.Test
+    @Ignore
     public void testHandleNormalNumbersPacket() {
         visionSubsystem.handlePacket("{\"targetYaw\":100}");
         assertTrue(visionSubsystem.isTargetInView());

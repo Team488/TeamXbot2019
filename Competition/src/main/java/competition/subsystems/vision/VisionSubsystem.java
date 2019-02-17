@@ -29,6 +29,7 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     boolean cannotParseNumber;
     boolean beenTooLong;
     final DoubleProperty differenceBetweenTime;
+    final DoubleProperty packetNumberProp;
 
     @Inject
     public VisionSubsystem(XPropertyManager propMan, CommonLibFactory clf) {
@@ -36,6 +37,7 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         differenceBetweenTime = propMan.createPersistentProperty(getPrefix() + "differenceBetweenTime", 1);
         recentPacket = "no packets yet";
         packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", recentPacket);        
+        packetNumberProp = propMan.createEphemeralProperty(getPrefix() + "NumPackets", 0);
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -44,12 +46,14 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     public void handlePacket(String packet) {
         recentPacket = packet;
         lastCalledTime = XTimer.getFPGATimestamp();
-        VisionData newData;
+        packetNumberProp.set(packetNumberProp.get() + 1);
+        //VisionData newData;
         try {
-            newData = JSON.std.beanFrom(VisionData.class, recentPacket);
-            parsedAngle = newData.getTargetYaw().intValue();
+            //newData = JSON.std.beanFrom(VisionData.class, recentPacket);
+            //parsedAngle = newData.getTargetYaw().intValue();
+            parsedAngle = Double.parseDouble(packet);
             cannotParseNumber = false;
-        } catch (IOException e) {
+        } catch (NumberFormatException e) {
             cannotParseNumber = true;
             parsedAngle = 0.0;
         }
