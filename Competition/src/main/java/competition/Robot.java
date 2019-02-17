@@ -20,6 +20,7 @@ public class Robot extends BaseRobot {
 
         registerPeriodicDataSource(this.injector.getInstance(PoseSubsystem.class));
         registerPeriodicDataSource(this.injector.getInstance(VisionSubsystem.class));
+        registerPeriodicDataSource(this.injector.getInstance(RumbleManager.class));
     }
 
     private boolean isPracticeRobot() {
