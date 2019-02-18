@@ -1,8 +1,7 @@
 package competition;
 
-import javax.inject.Singleton;
-
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import competition.operator_interface.OperatorInterface;
 import edu.wpi.first.wpilibj.GenericHID;
