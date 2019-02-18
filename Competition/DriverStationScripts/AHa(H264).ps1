@@ -1,0 +1,1 @@
+& C:\gstreamer\1.0\x86_64\bin\gst-launch-1.0.exe -vvv udpsrc port=554 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! d3dvideosink sync=false async=false -e
