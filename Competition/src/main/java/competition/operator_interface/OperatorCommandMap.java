@@ -3,6 +3,10 @@ package competition.operator_interface;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.commandgroups.GoToLoadingStationCommandGroup;
+import competition.commandgroups.ScoreOnFrontCargoCommandGroup;
+import competition.commandgroups.ScoreOnMidCargoCommandGroup;
+import competition.commandgroups.ScoreOnNearCargoCommandGroup;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
@@ -97,8 +101,6 @@ public class OperatorCommandMap {
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract) {
         operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
-        operatorInterface.driverGamepad.getifAvailable(1).whenPressed(grabDisc);
-        operatorInterface.driverGamepad.getifAvailable(2).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
@@ -112,7 +114,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
 
-        //Left Down
+        //Left Down 
         AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerLower);
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
@@ -122,7 +124,8 @@ public class OperatorCommandMap {
 
     @Inject
     public void setupPoseCommands(SetPoseToFieldLandmarkCommand setPoseToLeftHabLevelZero,
-            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation) {
+            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation, OperatorInterface operatorInterface,
+            SetPoseToFieldLandmarkCommand setPositionToLeftLoadingStation) {
         // Start with a smaller set of commands, we can build up from there.
         setPoseToLeftHabLevelZero.setLandmark(Side.Left, FieldLandmark.HabLevelZero);
         setPoseToLeftHabLevelZero.forceHeading(true);
@@ -130,6 +133,10 @@ public class OperatorCommandMap {
         setPoseToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
         setPoseToLeftLoadingStation.forceHeading(true);
         setPoseToLeftLoadingStation.includeOnSmartDashboard("Set pose to Left Loading Station");
+
+        setPositionToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
+        setPositionToLeftLoadingStation.forceHeading(false);
+        operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
     }
 
     @Inject
@@ -137,5 +144,21 @@ public class OperatorCommandMap {
     RotateToVisionTargetCommand rotateToVisionTargetCommand){
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
+    }
+
+    @Inject
+    public void setupDriverCommandGroups(OperatorInterface operatorInterface, 
+    ScoreOnMidCargoCommandGroup mid, ScoreOnFrontCargoCommandGroup front, 
+    ScoreOnNearCargoCommandGroup near, GoToLoadingStationCommandGroup loading){
+        front.includeOnSmartDashboard("Score on Front Cargo");
+        near.includeOnSmartDashboard("Score on Near Cargo");
+        mid.includeOnSmartDashboard("Score on Mid Cargo");
+        loading.includeOnSmartDashboard("Go to Loading Station");
+
+        operatorInterface.driverGamepad.getifAvailable(4).whenPressed(front);
+        operatorInterface.driverGamepad.getifAvailable(3).whenPressed(loading);
+        operatorInterface.driverGamepad.getifAvailable(2).whenPressed(mid);
+        operatorInterface.driverGamepad.getifAvailable(1).whenPressed(near);
+
     }
 }

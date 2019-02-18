@@ -695,6 +695,13 @@
                   "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [50]",
                   "_title": "Talon SRX [50]",
                   "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,5]/Value",
+                  "_title": "/LiveWindow/Ungrouped/Solenoid[0,5]/Value",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
                 }
               ]
             }
@@ -1086,15 +1093,72 @@
               "_source0": "network_table:///SmartDashboard/VisionSubsystem/NumPackets",
               "_title": "SmartDashboard/VisionSubsystem/NumPackets"
             }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/VisionBackoffDistance",
+              "_title": "/SmartDashboard/PoseSubsystem/VisionBackoffDistance"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Pose",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet",
+              "_title": "/SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet",
+              "_title": "/SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Reset Pose to 0 0 90",
+              "_title": "/SmartDashboard/Reset Pose to 0 0 90"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": 12.0,
-    "y": 8.800000190734863,
-    "width": 1550.4000244140625,
-    "height": 560.7999877929688
+    "x": -6.400000095367432,
+    "y": 0.800000011920929,
+    "width": 1548.800048828125,
+    "height": 752.7999877929688
   }
 }

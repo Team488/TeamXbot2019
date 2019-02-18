@@ -68,7 +68,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     public DeviceInfo getBrakeSolenoid() {
-        return new DeviceInfo(49, false);
+        return new DeviceInfo(5, false);
     }
 
     @Override
