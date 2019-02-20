@@ -44,7 +44,7 @@ public class OperatorCommandMap {
             CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
             ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
             ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
-            HumanAssistedPurePursuitCommand goToRocket, HumanAssistedPurePursuitCommand goToLoadingStation,
+            ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
             ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
             ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
         operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
