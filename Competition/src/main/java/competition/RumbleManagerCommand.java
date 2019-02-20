@@ -11,13 +11,14 @@ import xbot.common.properties.XPropertyManager;
 public class RumbleManagerCommand extends BaseCommand {
 
     final VisionSubsystem visionSubsystem;
-    final RumbleManager rumble; 
+    final RumbleManager rumble;
     final DoubleProperty rumbleIntensity;
     final DoubleProperty rumbleLength;
+    protected boolean wasTargetInView;
 
     @Inject
-    public RumbleManagerCommand(VisionSubsystem visionSubsystem, RumbleManager rumble, 
-    XPropertyManager propManager, RumbleSubsystem rumbleSubsystem) {
+    public RumbleManagerCommand(VisionSubsystem visionSubsystem, RumbleManager rumble, XPropertyManager propManager,
+            RumbleSubsystem rumbleSubsystem) {
         this.requires(rumbleSubsystem);
         this.visionSubsystem = visionSubsystem;
         this.rumble = rumble;
@@ -32,10 +33,9 @@ public class RumbleManagerCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        if (visionSubsystem.isTargetInView()){
+        wasTargetInView = visionSubsystem.isTargetInView();
+        if (visionSubsystem.isTargetInView() && wasTargetInView == false) {
             rumble.rumbleDriverGamepad(rumbleIntensity.get(), rumbleLength.get());
-        }
-
+        } 
     }
-
 }

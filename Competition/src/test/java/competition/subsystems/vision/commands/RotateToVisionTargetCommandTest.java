@@ -14,14 +14,14 @@ import competition.subsystems.vision.VisionSubsystem;
 public class RotateToVisionTargetCommandTest extends BaseCompetitionTest {
     RotateToVisionTargetCommand rotateToVisionTargetCommand;
     DriveSubsystem driveSubsystem;
-    VisionSubsystem visionSubsytem;
+    VisionSubsystem visionSubsystem;
 
     @Override
     public void setUp() {
         super.setUp();
         rotateToVisionTargetCommand = injector.getInstance(RotateToVisionTargetCommand.class);
         driveSubsystem = injector.getInstance(DriveSubsystem.class);
-        visionSubsytem = injector.getInstance(VisionSubsystem.class);
+        visionSubsystem = injector.getInstance(VisionSubsystem.class);
     }
     @Test
     public void testSetHeadingGoal() {
@@ -48,12 +48,12 @@ public class RotateToVisionTargetCommandTest extends BaseCompetitionTest {
     @Ignore
     public void testExecute() {
         assertEquals(0.0, rotateToVisionTargetCommand.rotation, 0.001);
-        assertEquals(0.0, visionSubsytem.getAngleToTarget(), 0.001);
-        visionSubsytem.handlePacket("{ \"targetYaw\":100 }");
-        visionSubsytem.isTargetInView();
+        assertEquals(0.0, visionSubsystem.getAngleToTarget(), 0.001);
+        visionSubsystem.handlePacket("{ \"targetYaw\":100 }");
+        visionSubsystem.isTargetInView();
         rotateToVisionTargetCommand.execute();
         assertEquals(1, rotateToVisionTargetCommand.rotation, 0.001);
-        assertEquals(100.0, visionSubsytem.getAngleToTarget(), 0.001);
+        assertEquals(100.0, visionSubsystem.getAngleToTarget(), 0.001);
     }
 
 }
