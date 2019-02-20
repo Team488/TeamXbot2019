@@ -107,4 +107,29 @@ public class RoboxContract extends ElectricalContract2019 {
         return false;
     }
 
+    @Override 
+    public boolean isClimberReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getFrontDeploySolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFrontRetractSolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getBackDeploySolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getBackRetractSolenoid() {
+        return null;
+    }
+
 }

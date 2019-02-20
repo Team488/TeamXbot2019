@@ -23,7 +23,6 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
 
     public abstract DeviceInfo getRightDriveMasterEncoder();
 
-
     public abstract DeviceInfo getGripperDiscSolenoid();
 
     public abstract DeviceInfo getGripperExtensionSolenoid();
@@ -47,4 +46,17 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract boolean isElevatorLimitSwitchReady();
 
     public abstract boolean doesDriveHaveThreeMotors();
+
+    public abstract boolean isClimberReady();
+
+    public abstract DeviceInfo getFrontDeploySolenoid();
+
+    public abstract DeviceInfo getFrontRetractSolenoid();
+
+    public abstract DeviceInfo getBackDeploySolenoid();
+
+    public abstract DeviceInfo getBackRetractSolenoid();
+
+
+    
 }

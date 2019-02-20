@@ -3,10 +3,13 @@ package competition.operator_interface;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import competition.commandgroups.GoToLoadingStationCommandGroup;
-import competition.commandgroups.ScoreOnFrontCargoCommandGroup;
-import competition.commandgroups.ScoreOnMidCargoCommandGroup;
-import competition.commandgroups.ScoreOnNearCargoCommandGroup;
+import competition.commandgroups.drivecommandgroups.GoToLoadingStationCommandGroup;
+import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGroup;
+import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
+import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup;
+import competition.subsystems.climber.commands.DeployAllClimberLegsCommand;
+import competition.subsystems.climber.commands.RetractBackCommand;
+import competition.subsystems.climber.commands.RetractFrontCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
@@ -58,8 +61,8 @@ public class OperatorCommandMap {
         goToRocket.setDotProductDrivingEnabled(true);
         goToRocket.includeOnSmartDashboard("Go To Rocket");
 
-        goToLoadingStation.setPointSupplier(
-                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        goToLoadingStation
+                .setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
         goToLoadingStation.setDotProductDrivingEnabled(true);
         goToLoadingStation.includeOnSmartDashboard("Go To Loading Station");
 
@@ -68,8 +71,8 @@ public class OperatorCommandMap {
         goToFarLoadingStation.setDotProductDrivingEnabled(true);
         goToFarLoadingStation.includeOnSmartDashboard("Go To Far Loading Station");
 
-        goToFrontCargo.setPointSupplier(
-                () -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, true));
+        goToFrontCargo
+                .setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.FrontCargoShip, true));
         goToFrontCargo.setDotProductDrivingEnabled(true);
         goToFrontCargo.includeOnSmartDashboard("Go To Front Cargo");
 
@@ -77,7 +80,6 @@ public class OperatorCommandMap {
                 .setPointSupplier(() -> poseSubsystem.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, true));
         goToNearCargo.setDotProductDrivingEnabled(true);
         goToNearCargo.includeOnSmartDashboard("Go To Near Cargo");
-        
 
         pursuit.setMode(PointLoadingMode.Relative);
         pursuit.addPoint(new RabbitPoint(3 * 12, 3 * 12, 0));
@@ -108,13 +110,13 @@ public class OperatorCommandMap {
     @Inject
     public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
             LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator) {
-        
+
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
 
-        //Left Down 
+        // Left Down
         AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerLower);
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
@@ -140,16 +142,16 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupVisionCommands(OperatorInterface operatorInterface, 
-    RotateToVisionTargetCommand rotateToVisionTargetCommand){
+    public void setupVisionCommands(OperatorInterface operatorInterface,
+            RotateToVisionTargetCommand rotateToVisionTargetCommand) {
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
 
     @Inject
-    public void setupDriverCommandGroups(OperatorInterface operatorInterface, 
-    ScoreOnMidCargoCommandGroup mid, ScoreOnFrontCargoCommandGroup front, 
-    ScoreOnNearCargoCommandGroup near, GoToLoadingStationCommandGroup loading){
+    public void setupDriverCommandGroups(OperatorInterface operatorInterface, ScoreOnMidCargoCommandGroup mid,
+            ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
+            GoToLoadingStationCommandGroup loading) {
         front.includeOnSmartDashboard("Score on Front Cargo");
         near.includeOnSmartDashboard("Score on Near Cargo");
         mid.includeOnSmartDashboard("Score on Mid Cargo");
@@ -160,5 +162,15 @@ public class OperatorCommandMap {
         operatorInterface.driverGamepad.getifAvailable(2).whenPressed(mid);
         operatorInterface.driverGamepad.getifAvailable(1).whenPressed(near);
 
+    }
+
+    @Inject
+    public void setUpClimberCommands(OperatorInterface operatorInterface, DeployAllClimberLegsCommand climb,
+            RetractBackCommand retractBack, RetractFrontCommand retractFront) {
+        operatorInterface.operatorGamepad.getifAvailable(9).whenPressed(climb);
+        climb.includeOnSmartDashboard("Climb");
+
+        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(retractBack);
+        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractFront);
     }
 }

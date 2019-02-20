@@ -85,6 +85,7 @@ public class Competition2018Contract extends ElectricalContract2019 {
         return false;
     }
 
+    @Override
     public DeviceInfo getElevatorCalibrationSensor() {
         return new DeviceInfo(-2, false);
     }
@@ -105,6 +106,30 @@ public class Competition2018Contract extends ElectricalContract2019 {
     }
     
     public DeviceInfo getGripperExtensionSolenoid() {
+        return null;
+    }
+
+    public boolean isClimberReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getFrontDeploySolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFrontRetractSolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getBackDeploySolenoid() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getBackRetractSolenoid() {
         return null;
     }
 }

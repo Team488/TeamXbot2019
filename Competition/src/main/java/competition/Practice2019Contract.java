@@ -68,7 +68,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     public DeviceInfo getBrakeSolenoid() {
-        return new DeviceInfo(5, false);
+        return new DeviceInfo(6, false);
     }
 
     @Override
@@ -104,4 +104,30 @@ public class Practice2019Contract extends ElectricalContract2019 {
     public DeviceInfo getGripperExtensionSolenoid() {
         return new DeviceInfo(1, false);
     }
+
+    @Override
+    public boolean isClimberReady() {
+        return true;
+    }
+
+    @Override
+    public DeviceInfo getFrontDeploySolenoid() {
+        return new DeviceInfo(2, false);
+    }
+
+    @Override
+    public DeviceInfo getFrontRetractSolenoid() {
+        return new DeviceInfo(3, false);
+    }
+
+    @Override
+    public DeviceInfo getBackDeploySolenoid() {
+        return new DeviceInfo(4, false);
+    }
+
+    @Override
+    public DeviceInfo getBackRetractSolenoid() {
+        return new DeviceInfo(5, false);
+    }
+
 }

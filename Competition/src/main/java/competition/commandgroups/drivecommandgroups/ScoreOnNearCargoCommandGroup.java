@@ -1,4 +1,4 @@
-package competition.commandgroups;
+package competition.commandgroups.drivecommandgroups;
 
 import com.google.inject.Inject;
 
