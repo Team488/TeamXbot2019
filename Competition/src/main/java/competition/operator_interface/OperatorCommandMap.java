@@ -13,6 +13,7 @@ import competition.subsystems.climber.commands.RetractFrontCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
+import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
 import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
@@ -109,13 +110,9 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupElevatorCommands(
-        OperatorInterface operatorInterface,
-        RaiseElevatorCommand raiseElevator,
-        LowerElevatorCommand lowerElevator,
-        StopElevatorCommand stopElevator,
-        SetElevatorTickGoalCommand setElevatorTickGoal
-    ) {
+    public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
+            LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
+            SetElevatorTickGoalCommand setElevatorTickGoal) {
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
@@ -177,5 +174,10 @@ public class OperatorCommandMap {
 
         operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(retractBack);
         operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractFront);
+    }
+
+    @Inject
+    public void setupConfigureDriveSubsystemCommands(ConfigureDriveSubsystemCommand setDriveTalonParameters) {
+        setDriveTalonParameters.includeOnSmartDashboard("Set Drive Talon Parameters");
     }
 }
