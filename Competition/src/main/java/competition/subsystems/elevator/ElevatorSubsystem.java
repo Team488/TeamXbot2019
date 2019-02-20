@@ -6,7 +6,7 @@ import com.google.inject.Singleton;
 import org.apache.log4j.Logger;
 
 import competition.ElectricalContract2019;
-import xbot.common.command.BaseSubsystem;
+import xbot.common.command.BaseSetpointSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
@@ -17,15 +17,16 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 @Singleton
-public class ElevatorSubsystem extends BaseSubsystem {
+public class ElevatorSubsystem extends BaseSetpointSubsystem {
     private static Logger log = Logger.getLogger(ElevatorSubsystem.class);
 
-    public final XCANTalon master;
-    public final XCANTalon follower;
-    public final XDigitalInput calibrationSensor;
+    private double tickGoal;
+    public XCANTalon master;
+    public XCANTalon follower;
+    public XDigitalInput calibrationSensor;
+    private final DoubleProperty currentCalibrationSensorPosition;
     public final XSolenoid allowElevatorMotionSolenoid;
     private boolean isCalibrated;
-    private final DoubleProperty currentCalibrationSensorPosition;
     private final DoubleProperty elevatorStandardPower;
     private final DoubleProperty distanceBetweenLevels;
     protected final DoubleProperty brakePowerLimit;
@@ -98,7 +99,7 @@ public class ElevatorSubsystem extends BaseSubsystem {
         return currentCalibrationSensorPosition.get();
     }
 
-    protected void setPower(double power) {
+    public void setPower(double power) {
         if (contract.isElevatorReady()) {
             if (contract.isElevatorLimitSwitchReady() && isCalibrationSensorPressed()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
@@ -127,4 +128,13 @@ public class ElevatorSubsystem extends BaseSubsystem {
             return currentCalibrationSensorPosition.get() + distanceBetweenLevels.get() * 2;
         }
     }
+
+    public void setTickGoal(double value) {
+        tickGoal = value;
+    }
+
+    public double getTickGoal() {
+        return tickGoal;
+    }
+
 }

@@ -19,6 +19,7 @@ import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
 import competition.subsystems.elevator.commands.RaiseElevatorCommand;
+import competition.subsystems.elevator.commands.SetElevatorTickGoalCommand;
 import competition.subsystems.elevator.commands.StopElevatorCommand;
 import competition.subsystems.gripper.commands.ExtendGripperCommand;
 import competition.subsystems.gripper.commands.GrabDiscCommand;
@@ -108,9 +109,13 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
-            LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator) {
-
+    public void setupElevatorCommands(
+        OperatorInterface operatorInterface,
+        RaiseElevatorCommand raiseElevator,
+        LowerElevatorCommand lowerElevator,
+        StopElevatorCommand stopElevator,
+        SetElevatorTickGoalCommand setElevatorTickGoal
+    ) {
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);

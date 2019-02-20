@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import competition.BaseCompetitionTest;
 import edu.wpi.first.wpilibj.MockDigitalInput;
-import edu.wpi.first.wpilibj.MockSolenoid;
 import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
 
 public class ElevatorSubsystemTest extends BaseCompetitionTest {
@@ -111,6 +110,4 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         assertFalse(elevatorSubsystem.getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
-
-
 }
