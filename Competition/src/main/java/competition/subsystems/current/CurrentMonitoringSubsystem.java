@@ -5,17 +5,20 @@ import com.google.inject.Singleton;
 
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
+import xbot.common.controls.actuators.XCompressor;
 
 @Singleton
 public class CurrentMonitoringSubsystem {
 
     DriveSubsystem drive;
     ElevatorSubsystem elevator;
+    XCompressor compressor;
 
     @Inject
-    public CurrentMonitoringSubsystem(DriveSubsystem drive, ElevatorSubsystem elevator) {
+    public CurrentMonitoringSubsystem(DriveSubsystem drive, ElevatorSubsystem elevator, XCompressor compressor) {
         this.drive = drive;
         this.elevator = elevator;
+        this.compressor = compressor;
     }
    
     public double getDriveCurrent(){
@@ -34,4 +37,7 @@ public class CurrentMonitoringSubsystem {
         return Math.abs(getArmCurrent()) + Math.abs(getDriveCurrent());
     }
 
+    public double getCompressorCurrent() {
+        return Math.abs(compressor.getCompressorCurrent());
+    }
 }

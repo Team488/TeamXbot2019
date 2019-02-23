@@ -7,13 +7,17 @@ import org.junit.Test;
 import competition.BaseCompetitionTest;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.MockCompressor;
+import xbot.common.controls.actuators.XCompressor;
 import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
+import xbot.common.controls.actuators.wpi_adapters.CompressorWPIAdapter;
 
 public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
 
     CurrentMonitoringSubsystem currentMonitoring;
     DriveSubsystem drive;
     ElevatorSubsystem elevator;
+    MockCompressor compressor;
 
     @Override
     public void setUp() {
@@ -21,7 +25,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
         this.drive = injector.getInstance(DriveSubsystem.class);
         this.elevator = injector.getInstance(ElevatorSubsystem.class);
         this.currentMonitoring = injector.getInstance(CurrentMonitoringSubsystem.class);
-
+        this.compressor = (MockCompressor)injector.getInstance(XCompressor.class);
     }
 
     @Test
@@ -133,6 +137,15 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
         assertEquals(27.0, currentMonitoring.getDriveCurrent(), 0.01);
         assertEquals(10.0, currentMonitoring.getArmCurrent(), 0.01);
         assertEquals(37.0, currentMonitoring.getTotalCurrent(), 0.01);
+    }
+
+    @Test
+    public void CompressorTest()
+    {
+        
+        compressor.setCompressorCurrent(2.0);
+        
+        assertEquals(2.0, compressor.getCompressorCurrent(), 0.01);
     }
 
 }
