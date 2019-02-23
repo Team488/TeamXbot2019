@@ -7,7 +7,6 @@ import org.junit.Test;
 import competition.BaseCompetitionTest;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
-import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
 
 public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
@@ -73,7 +72,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-2.0);
         //something wrong with rightFollower negative
-        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(3.0); 
+        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(-3.0); 
         ((MockCANTalon)(drive.rightFollowerSecond)).setOutputCurrent(-4.0);
         ((MockCANTalon)(drive.leftMaster)).setOutputCurrent(-5.0); 
         ((MockCANTalon)(drive.leftFollower)).setOutputCurrent(-6.0);
@@ -81,8 +80,54 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
 
         //setting elevator motors
         //something wrong with negative master
+        ((MockCANTalon)(elevator.master)).setOutputCurrent(-9.0);
+        ((MockCANTalon)(elevator.follower)).setOutputCurrent(-1.0);
+
+        
+        assertEquals(27.0, currentMonitoring.getDriveCurrent(), 0.01);
+        assertEquals(10.0, currentMonitoring.getArmCurrent(), 0.01);
+        assertEquals(37.0, currentMonitoring.getTotalCurrent(), 0.01);
+    }
+
+    @Test
+    public void EveryOtherMotorNegative()
+    {
+        //setting drive motors
+        ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-2.0);
+        //something wrong with rightFollower negative
+        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(3.0); 
+        ((MockCANTalon)(drive.rightFollowerSecond)).setOutputCurrent(-4.0);
+        ((MockCANTalon)(drive.leftMaster)).setOutputCurrent(5.0); 
+        ((MockCANTalon)(drive.leftFollower)).setOutputCurrent(-6.0);
+        ((MockCANTalon)(drive.leftFollowerSecond)).setOutputCurrent(-7.0);
+
+        //setting elevator motors
+        //something wrong with negative master
         ((MockCANTalon)(elevator.master)).setOutputCurrent(9.0);
         ((MockCANTalon)(elevator.follower)).setOutputCurrent(-1.0);
+
+        
+        assertEquals(27.0, currentMonitoring.getDriveCurrent(), 0.01);
+        assertEquals(10.0, currentMonitoring.getArmCurrent(), 0.01);
+        assertEquals(37.0, currentMonitoring.getTotalCurrent(), 0.01);
+    }
+
+    @Test
+    public void ThreeAndNineNegative()
+    {
+        //setting drive motors
+        ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(2.0);
+        //something wrong with rightFollower negative
+        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(-3.0); 
+        ((MockCANTalon)(drive.rightFollowerSecond)).setOutputCurrent(4.0);
+        ((MockCANTalon)(drive.leftMaster)).setOutputCurrent(5.0); 
+        ((MockCANTalon)(drive.leftFollower)).setOutputCurrent(6.0);
+        ((MockCANTalon)(drive.leftFollowerSecond)).setOutputCurrent(7.0);
+
+        //setting elevator motors
+        //something wrong with negative master
+        ((MockCANTalon)(elevator.master)).setOutputCurrent(-9.0);
+        ((MockCANTalon)(elevator.follower)).setOutputCurrent(1.0);
 
         
         assertEquals(27.0, currentMonitoring.getDriveCurrent(), 0.01);

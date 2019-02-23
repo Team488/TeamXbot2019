@@ -17,25 +17,21 @@ public class CurrentMonitoringSubsystem {
         this.drive = drive;
         this.elevator = elevator;
     }
-
-    public double getDriveCurrent() {
-        return Math.abs(drive.rightMaster.getOutputCurrent()) + Math.abs(drive.rightFollower.getOutputCurrent()
+   
+    public double getDriveCurrent(){
+        return Math.abs(drive.rightMaster.getOutputCurrent()) + Math.abs(drive.rightFollower.getOutputCurrent())
                 + Math.abs(drive.rightFollowerSecond.getOutputCurrent()) + Math.abs(drive.leftMaster.getOutputCurrent())
                 + Math.abs(drive.leftFollower.getOutputCurrent())
-                + Math.abs(drive.leftFollowerSecond.getOutputCurrent()));
-        
+                + Math.abs(drive.leftFollowerSecond.getOutputCurrent());
     }
-
+   
     public double getArmCurrent() {
-        return Math.abs(elevator.master.getOutputCurrent() + Math.abs(elevator.follower.getOutputCurrent()));
+        return Math.abs(elevator.master.getOutputCurrent()) + Math.abs(elevator.follower.getOutputCurrent());
     }
 
     public double getTotalCurrent() {
-        return Math.abs(drive.rightMaster.getOutputCurrent()) + Math.abs(drive.rightFollower.getOutputCurrent()
-                + Math.abs(drive.rightFollowerSecond.getOutputCurrent()) + Math.abs(drive.leftMaster.getOutputCurrent())
-                + Math.abs(drive.leftFollower.getOutputCurrent())
-                + Math.abs(drive.leftFollowerSecond.getOutputCurrent()))
-                + Math.abs(elevator.master.getOutputCurrent() + Math.abs(elevator.follower.getOutputCurrent()));
+        
+        return Math.abs(getArmCurrent()) + Math.abs(getDriveCurrent());
     }
 
 }
