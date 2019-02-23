@@ -34,10 +34,10 @@ public class CurrentMonitoringSubsystem {
 
     public double getTotalCurrent() {
         
-        return Math.abs(getArmCurrent()) + Math.abs(getDriveCurrent());
+        return Math.abs(getArmCurrent()) + Math.abs(getDriveCurrent()) + Math.abs(getCompressorCurrentFromMoniter());
     }
 
-    public double getCompressorCurrent() {
+    public double getCompressorCurrentFromMoniter() {
         return Math.abs(compressor.getCompressorCurrent());
     }
 }

@@ -10,7 +10,6 @@ import competition.subsystems.elevator.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.MockCompressor;
 import xbot.common.controls.actuators.XCompressor;
 import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
-import xbot.common.controls.actuators.wpi_adapters.CompressorWPIAdapter;
 
 public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
 
@@ -148,4 +147,64 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
         assertEquals(2.0, compressor.getCompressorCurrent(), 0.01);
     }
 
+    @Test
+    public void AllNegativeCompressorTest()
+    {
+        
+        compressor.setCompressorCurrent(-2.0);
+        
+        assertEquals(2.0, currentMonitoring.getCompressorCurrentFromMoniter(), 0.01);
+    }
+
+    @Test
+    public void AllSubsytems()
+    {
+        //setting drive motors
+        ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(1.0);
+        //something wrong with rightFollower negative
+        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(1.0); 
+        ((MockCANTalon)(drive.rightFollowerSecond)).setOutputCurrent(1.0);
+        ((MockCANTalon)(drive.leftMaster)).setOutputCurrent(1.0); 
+        ((MockCANTalon)(drive.leftFollower)).setOutputCurrent(1.0);
+        ((MockCANTalon)(drive.leftFollowerSecond)).setOutputCurrent(1.0);
+
+        //setting elevator motors
+        //something wrong with negative master
+        ((MockCANTalon)(elevator.master)).setOutputCurrent(1.0);
+        ((MockCANTalon)(elevator.follower)).setOutputCurrent(1.0);
+
+        //setting current
+        compressor.setCompressorCurrent(1.0);
+        
+        assertEquals(6.0, currentMonitoring.getDriveCurrent(), 0.01);
+        assertEquals(2.0, currentMonitoring.getArmCurrent(), 0.01);
+        assertEquals(1.0, currentMonitoring.getCompressorCurrentFromMoniter(), 0.01);
+        assertEquals(9.0, currentMonitoring.getTotalCurrent(), 0.01);
+    }
+
+    @Test
+    public void AllSubsytemsNegative()
+    {
+        //setting drive motors
+        ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-1.0);
+        //something wrong with rightFollower negative
+        ((MockCANTalon)(drive.rightFollower)).setOutputCurrent(-1.0); 
+        ((MockCANTalon)(drive.rightFollowerSecond)).setOutputCurrent(-1.0);
+        ((MockCANTalon)(drive.leftMaster)).setOutputCurrent(-1.0); 
+        ((MockCANTalon)(drive.leftFollower)).setOutputCurrent(-1.0);
+        ((MockCANTalon)(drive.leftFollowerSecond)).setOutputCurrent(-1.0);
+
+        //setting elevator motors
+        //something wrong with negative master
+        ((MockCANTalon)(elevator.master)).setOutputCurrent(-1.0);
+        ((MockCANTalon)(elevator.follower)).setOutputCurrent(-1.0);
+
+        //setting current
+        compressor.setCompressorCurrent(1.0);
+        
+        assertEquals(6.0, currentMonitoring.getDriveCurrent(), 0.01);
+        assertEquals(2.0, currentMonitoring.getArmCurrent(), 0.01);
+        assertEquals(1.0, currentMonitoring.getCompressorCurrentFromMoniter(), 0.01);
+        assertEquals(9.0, currentMonitoring.getTotalCurrent(), 0.01);
+    }
 }
