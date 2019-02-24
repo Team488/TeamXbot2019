@@ -28,7 +28,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllMotorsSetTo1()
+    public void allMotorsSetTo1()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(1.0);
@@ -49,7 +49,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllMotorsSetToPositive()
+    public void allMotorsSetToPositive()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(2.0);
@@ -70,7 +70,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllMotorsSetToNegative()
+    public void allMotorsSetToNegative()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-2.0);
@@ -93,7 +93,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void EveryOtherMotorNegative()
+    public void everyOtherMotorNegative()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-2.0);
@@ -116,7 +116,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void ThreeAndNineNegative()
+    public void threeAndNineNegative()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(2.0);
@@ -139,7 +139,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void CompressorTest()
+    public void compressorTest()
     {
         
         compressor.setCompressorCurrent(2.0);
@@ -148,7 +148,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllNegativeCompressorTest()
+    public void allNegativeCompressorTest()
     {
         
         compressor.setCompressorCurrent(-2.0);
@@ -157,7 +157,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllSubsytems()
+    public void allSubsytems()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(1.0);
@@ -183,7 +183,7 @@ public class CurrentMonitoringSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void AllSubsytemsNegative()
+    public void allSubsytemsNegative()
     {
         //setting drive motors
         ((MockCANTalon)(drive.rightMaster)).setOutputCurrent(-1.0);

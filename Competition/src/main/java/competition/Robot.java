@@ -6,6 +6,7 @@ import java.io.File;
 import competition.CompetitionModule.RobotPlatform;
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
+import competition.subsystems.current.CurrentMonitoringSubsystem;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.vision.VisionSubsystem;
@@ -23,6 +24,7 @@ public class Robot extends BaseRobot {
         registerPeriodicDataSource(this.injector.getInstance(VisionSubsystem.class));
         registerPeriodicDataSource(this.injector.getInstance(RumbleManager.class));
         registerPeriodicDataSource(this.injector.getInstance(DriveSubsystem.class));
+        registerPeriodicDataSource(this.injector.getInstance(CurrentMonitoringSubsystem.class));
     }
 
     private boolean isPracticeRobot() {

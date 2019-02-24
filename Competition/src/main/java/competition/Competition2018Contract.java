@@ -52,7 +52,7 @@ public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getGripperDiscSolenoid() {
-        return new DeviceInfo(-1, false);
+        return new DeviceInfo(1, false);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Competition2018Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getBrakeSolenoid() {
-        return new DeviceInfo(-49, false);
+        return new DeviceInfo(7, false);
     }
 
     @Override
