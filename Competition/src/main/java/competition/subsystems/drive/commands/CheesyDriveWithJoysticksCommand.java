@@ -4,32 +4,40 @@ import com.google.inject.Inject;
 
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
-import xbot.common.command.BaseCommand;
+import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
+import xbot.common.properties.XPropertyManager;
 
-public class CheesyDriveWithJoysticksCommand extends BaseCommand {
+public class CheesyDriveWithJoysticksCommand extends HeadingControlledDriveCommand {
 
-    final DriveSubsystem driveSubsystem;
     final OperatorInterface oi;
 
     @Inject
-    public CheesyDriveWithJoysticksCommand(OperatorInterface oi, DriveSubsystem driveSubsystem) {
+    public CheesyDriveWithJoysticksCommand(CommonLibFactory clf, XPropertyManager propMan, OperatorInterface oi, DriveSubsystem driveSubsystem) {
+        super(clf, driveSubsystem, propMan);
         this.oi = oi;
-        this.driveSubsystem = driveSubsystem;
-        this.requires(this.driveSubsystem);
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         log.info("Initializing");
     }
 
     @Override
-    public void execute() {
-        double translation = oi.driverGamepad.getLeftVector().y;
-        double rotation = MathUtils.squareAndRetainSign(oi.driverGamepad.getRightVector().x);
-
-        driveSubsystem.cheesyDrive(translation, rotation);
+    protected double getHumanTranslationInput() {
+        return oi.driverGamepad.getLeftVector().y;
     }
+
+    @Override
+    protected double getHumanRotationInput() {
+        return MathUtils.squareAndRetainSign(oi.driverGamepad.getRightVector().x);
+    }
+
+    @Override
+    public void execute() {
+        drive.cheesyDrive(getTranslation(), getRotation());
+    }
+
 
 }
