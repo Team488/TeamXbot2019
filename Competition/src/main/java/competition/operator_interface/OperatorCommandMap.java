@@ -15,7 +15,6 @@ import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
-import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
@@ -30,6 +29,7 @@ import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
+import competition.subsystems.vision.VisionSubsystem;
 import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
@@ -44,14 +44,15 @@ public class OperatorCommandMap {
     // Example for setting up a command to fire when a button is pressed:
 
     @Inject
-    public void setupDriveCommands(OperatorInterface operatorInterface, CheesyDriveWithJoysticksCommand cheesyDrive,
+    public void setupDriveCommands(OperatorInterface operatorInterface, VisionSubsystem vision, CheesyDriveWithJoysticksCommand cheesyDrive,
             ArcadeDriveWithJoysticksCommand arcade, TankDriveWithJoysticksCommand tank, RotateToHeadingCommand rotate,
             CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
             ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
             ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
             ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
             ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
-            ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem) {
+            ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem,
+            ConfigurablePurePursuitCommand goToVisionTarget) {
         operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
         operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(tank);
         operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
@@ -98,6 +99,11 @@ public class OperatorCommandMap {
         backward.setMode(PointLoadingMode.Relative);
         backward.addPoint(new RabbitPoint(0, -4 * 12, 90));
         backward.includeOnSmartDashboard("Move Backward");
+
+        goToVisionTarget.setMode(PointLoadingMode.Relative);
+        goToVisionTarget.setDotProductDrivingEnabled(true);
+        goToVisionTarget.setPointSupplier(() -> vision.getVisionTargetRelativePosition());
+        operatorInterface.driverGamepad.getifAvailable(7).whenPressed(goToVisionTarget);
     }
 
     @Inject
