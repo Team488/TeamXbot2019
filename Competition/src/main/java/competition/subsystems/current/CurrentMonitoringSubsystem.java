@@ -66,5 +66,7 @@ public class CurrentMonitoringSubsystem implements PeriodicDataSource {
     
     public String getName(){
         return "CurrentMonitoring";
+        
+        //imaginary contract
     }
 }
