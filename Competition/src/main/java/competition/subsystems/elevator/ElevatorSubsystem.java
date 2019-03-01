@@ -14,7 +14,7 @@ import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
 import xbot.common.math.PIDFactory;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 
 @Singleton
 public class ElevatorSubsystem extends BaseSetpointSubsystem {
@@ -37,15 +37,16 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
     }
 
     @Inject
-    public ElevatorSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract,
+    public ElevatorSubsystem(CommonLibFactory factory, PropertyFactory propManager, ElectricalContract2019 contract,
             PIDFactory pd) {
         log.info("Creating ElevatorSubsystem");
+        propManager.setPrefix(this.getPrefix());
         this.contract = contract;
         this.allowElevatorMotionSolenoid = factory.createSolenoid(contract.getBrakeSolenoid().channel);
         if (contract.isElevatorReady()) {
             this.master = factory.createCANTalon(contract.getElevatorMasterMotor().channel);
             this.follower = factory.createCANTalon(contract.getElevatorFollowerMotor().channel);
-            XCANTalon.configureMotorTeam(getPrefix(), "ElevatorMaster", master, follower,
+            XCANTalon.configureMotorTeam(this.getPrefix(), "ElevatorMaster", master, follower,
                     contract.getElevatorMasterMotor().inverted, contract.getElevatorFollowerMotor().inverted,
                     contract.getElevatorMasterEncoder().inverted);
         } else {
@@ -57,11 +58,11 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
         } else {
             this.calibrationSensor = null;
         }
-        elevatorStandardPower = propManager.createPersistentProperty(getPrefix() + "StandardPower", 1);
-        distanceBetweenLevels = propManager.createPersistentProperty(getPrefix() + "DistanceBetweenLevels", 1);
-        brakePowerLimit = propManager.createPersistentProperty(getPrefix() + "BrakePowerLimit", .05);
+        elevatorStandardPower = propManager.createPersistentProperty("StandardPower", 1);
+        distanceBetweenLevels = propManager.createPersistentProperty("DistanceBetweenLevels", 1);
+        brakePowerLimit = propManager.createPersistentProperty("BrakePowerLimit", .05);
         currentCalibrationSensorPosition = propManager
-                .createPersistentProperty(getPrefix() + "CalibrationSensorPosition", -1);
+                .createPersistentProperty("CalibrationSensorPosition", -1);
     }
 
     public void stop() {

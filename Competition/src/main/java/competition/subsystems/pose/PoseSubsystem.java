@@ -15,7 +15,7 @@ import xbot.common.math.FieldPose;
 import xbot.common.math.FieldPosePropertyManager;
 import xbot.common.math.XYPair;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.RabbitPoint;
 import xbot.common.subsystems.drive.RabbitPoint.PointTerminatingType;
 import xbot.common.subsystems.drive.RabbitPoint.PointType;
@@ -57,15 +57,16 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private CommonLibFactory clf;
 
     @Inject
-    public PoseSubsystem(CommonLibFactory clf, XPropertyManager propManager, DriveSubsystem drive, LowResField field) {
+    public PoseSubsystem(CommonLibFactory clf, PropertyFactory propManager, DriveSubsystem drive, LowResField field) {
         super(clf, propManager);
         this.drive = drive;
         this.clf = clf;
         this.field = field;
-
+        propManager.setPrefix(this.getPrefix());
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
-        distanceFromCenterOfRobot = propManager.createPersistentProperty(getPrefix() + "DistanceFromCenterOfBot", 18);
-        visionBackoffDistance = propManager.createPersistentProperty(getPrefix() + "VisionBackoffDistance", 36);
+        
+        visionBackoffDistance = propManager.createPersistentProperty("VisionBackoffDistance", 36);
+        distanceFromCenterOfRobot = propManager.createPersistentProperty("DistanceFromCenterOfBot", 18);
 
         // New definitions for each landmark:
         // <Side> <RelativeLocation> <Entity>
@@ -75,9 +76,9 @@ public class PoseSubsystem extends BasePoseSubsystem {
         // The two left side Rocket hatches would be as follows: LeftNearRocket, LeftFarRocket (and LeftMidRocket if you are doing cargo)
 
         // These waypoints represent good places to navigate to on the field before doing a final approach. 
-        leftNearRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftNearRocketWaypoint", 40, 135, 0);
-        leftFarRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftFarRocketWaypoint", 70, 260, 0);
-        leftCargoShipWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftCargoShipWaypoint", 80, 200, 0);
+        leftNearRocketWaypoint = clf.createFieldPosePropertyManager("LeftNearRocketWaypoint", 40, 135, 0);
+        leftFarRocketWaypoint = clf.createFieldPosePropertyManager("LeftFarRocketWaypoint", 70, 260, 0);
+        leftCargoShipWaypoint = clf.createFieldPosePropertyManager("LeftCargoShipWaypoint", 80, 200, 0);
         
         // First value X, Second value Y, Third value angle
         // X
@@ -109,7 +110,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         FieldPose leftPose = new FieldPose(x, y, heading);
         String leftName = createLandmarkKey(Side.Left, landmark);
         String rightName = createLandmarkKey(Side.Right, landmark);
-        FieldPosePropertyManager left = clf.createFieldPosePropertyManager(getPrefix() +  leftName, leftPose);
+        FieldPosePropertyManager left = clf.createFieldPosePropertyManager(getPrefix() + leftName, leftPose);
         FieldPosePropertyManager right = clf.createFieldPosePropertyManager(getPrefix() + rightName, flipFieldPose(leftPose));
         landmarkToLocation.put(leftName, left);
         landmarkToLocation.put(rightName, right);

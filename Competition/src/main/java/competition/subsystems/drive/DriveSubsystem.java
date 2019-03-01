@@ -14,7 +14,7 @@ import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.PIDFactory;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.BaseDriveSubsystem;
 
 @Singleton
@@ -45,21 +45,22 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     private final ElectricalContract2019 contract;
 
     @Inject
-    public DriveSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract,
+    public DriveSubsystem(CommonLibFactory factory, PropertyFactory propManager, ElectricalContract2019 contract,
             PIDFactory pf) {
         log.info("Creating DriveSubsystem");
+        propManager.setPrefix(this.getPrefix());
         this.contract = contract;
-        positionalPid = pf.createPIDManager(getPrefix() + "Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
+        positionalPid = pf.createPIDManager("Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
 
-        rotateToHeadingPid = pf.createPIDManager(getPrefix() + "DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
+        rotateToHeadingPid = pf.createPIDManager("DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
         rotateToHeadingPid.setEnableErrorThreshold(true);
         rotateToHeadingPid.setEnableDerivativeThreshold(true);
         rotateToHeadingPid.setEnableTimeThreshold(true);
 
-        rotateDecayPid = pf.createPIDManager(getPrefix() + "DriveDecay", 0, 0, 1);
+        rotateDecayPid = pf.createPIDManager("DriveDecay", 0, 0, 1);
 
-        leftTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "leftDriveTicksPer5Feet", 100281);
-        rightTicksPerFiveFeet = propManager.createPersistentProperty(getPrefix() + "rightDriveTicksPer5Feet", 100281);
+        leftTicksPerFiveFeet = propManager.createPersistentProperty("leftDriveTicksPer5Feet", 100281);
+        rightTicksPerFiveFeet = propManager.createPersistentProperty("rightDriveTicksPer5Feet", 100281);
 
         if (contract.isDriveReady()) {
             this.leftMaster = factory.createCANTalon(contract.getLeftDriveMaster().channel);

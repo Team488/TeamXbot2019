@@ -12,8 +12,8 @@ import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.networking.OffboardCommunicationClient;
 import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.properties.StringProperty;
-import xbot.common.properties.XPropertyManager;
 import xbot.common.subsystems.drive.RabbitPoint;
 import xbot.common.subsystems.drive.RabbitPoint.PointTerminatingType;
 import xbot.common.subsystems.drive.RabbitPoint.PointType;
@@ -35,12 +35,13 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     final DoubleProperty packetNumberProp;
 
     @Inject
-    public VisionSubsystem(XPropertyManager propMan, CommonLibFactory clf) {
+    public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
         this.client = clf.createZeromqListener("tcp://10.4.88.12:5801", "");
-        differenceBetweenTime = propMan.createPersistentProperty(getPrefix() + "differenceBetweenTime", 1);
+        propMan.setPrefix(this.getPrefix());
+        differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
         recentPacket = "no packets yet";
-        packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", recentPacket);        
-        packetNumberProp = propMan.createEphemeralProperty(getPrefix() + "NumPackets", 0);
+        packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
+        packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();

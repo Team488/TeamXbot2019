@@ -6,31 +6,46 @@ import org.junit.Test;
 
 import competition.BaseCompetitionTest;
 import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
-import xbot.common.properties.XPropertyManager;
-import xbot.common.subsystems.drive.BaseDriveSubsystem;
+import xbot.common.controls.actuators.XCANTalon;
+import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
 
 public class ConfigureDriveSubsystemTest extends BaseCompetitionTest {
     
-    BaseDriveSubsystem baseDrive;
+    DriveSubsystem drive;
     ConfigureDriveSubsystemCommand command;
-    XPropertyManager propManager;
 
     @Override
     public void setUp() {
         super.setUp();
-        baseDrive = this.injector.getInstance(BaseDriveSubsystem.class);
+        drive = this.injector.getInstance(DriveSubsystem.class);
         command = this.injector.getInstance(ConfigureDriveSubsystemCommand.class);
-        propManager = this.injector.getInstance(XPropertyManager.class);
     }
 
     @Test
     public void testConfigureDriveSubsystem() {
-        assertEquals(39, command.getMaxAmps(), 0.001);
-        assertEquals(0.2, command.getSeconds(), 0.001);
+        command.setMaxAmps(10);
+        command.setSecondsFromNeutralToFull(5);
+
+        command.initialize();
         command.execute();
-        propManager.randomAccessStore.setDouble(command.getPrefix() + "Max Current In Amps", 37);
-        propManager.randomAccessStore.setDouble(command.getPrefix() + "Seconds From Neutral To Full", 0.1);
-        assertEquals(37, command.getMaxAmps(), 0.001);
-        assertEquals(0.1, command.getSeconds(), 0.001);
+
+        verifyMotorParameters(drive.leftMaster, 10, 5);
+        verifyMotorParameters(drive.rightMaster, 10, 5);
+
+        command.setMaxAmps(40);
+        command.setSecondsFromNeutralToFull(0);
+
+        command.initialize();
+        command.execute();
+
+        verifyMotorParameters(drive.leftMaster, 40, 0);
+        verifyMotorParameters(drive.rightMaster, 40, 0);
+    }
+
+    private void verifyMotorParameters(XCANTalon talon, int maxCurrent, double timeToFull) {
+        MockCANTalon mock = (MockCANTalon)talon;
+
+        assertEquals(maxCurrent, mock.getContinuousCurrentLimit());
+        assertEquals(timeToFull, mock.getOpenLoopRamp(), 0.001);
     }
 }

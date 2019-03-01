@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.BaseDriveSubsystem;
 
 public class ConfigureDriveSubsystemCommand extends BaseCommand {
@@ -15,11 +15,11 @@ public class ConfigureDriveSubsystemCommand extends BaseCommand {
     private final DoubleProperty secondsFromNeutralToFull;
 
     @Inject
-    public ConfigureDriveSubsystemCommand(BaseDriveSubsystem baseDrive, XPropertyManager propManager) {
+    public ConfigureDriveSubsystemCommand(BaseDriveSubsystem baseDrive, PropertyFactory propFactory) {
         this.baseDrive = baseDrive;
-        maxAmps = propManager.createPersistentProperty(getPrefix() +"Max Current In Amps", 39);
-        secondsFromNeutralToFull = propManager.createPersistentProperty(getPrefix() +"Seconds From Neutral To Full",
-                0.2);
+        propFactory.setPrefix(this);
+        maxAmps = propFactory.createPersistentProperty("Max Current In Amps", 39);
+        secondsFromNeutralToFull = propFactory.createPersistentProperty("Seconds From Neutral To Full", 0.2);
     }
 
     @Override
@@ -34,12 +34,11 @@ public class ConfigureDriveSubsystemCommand extends BaseCommand {
         baseDrive.setVoltageRamp(secondsFromNeutralToFull.get());
     }
 
-    public double getMaxAmps() {
-        return maxAmps.get();
+    public void setMaxAmps(int amps) {
+        maxAmps.set(amps);
     }
 
-    public double getSeconds() {
-        return secondsFromNeutralToFull.get();
+    public void setSecondsFromNeutralToFull(double value) {
+        secondsFromNeutralToFull.set(value);
     }
-
 }

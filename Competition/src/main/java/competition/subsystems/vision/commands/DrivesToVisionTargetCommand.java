@@ -5,7 +5,7 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 
 public class DrivesToVisionTargetCommand extends BaseCommand {
 
@@ -17,13 +17,14 @@ public class DrivesToVisionTargetCommand extends BaseCommand {
 
     public DrivesToVisionTargetCommand(OperatorInterface oi, 
     VisionSubsystem visionSubsystem, DriveSubsystem driveSubsystem, 
-    DoubleProperty power, XPropertyManager propManager) {
+    DoubleProperty power, PropertyFactory propManager) {
         this.driveSubsystem = driveSubsystem;
         this.oi = oi;
         this.visionSubsystem = visionSubsystem;
         this.requires(this.visionSubsystem);
-        leftPower = propManager.createPersistentProperty(getPrefix() + "leftPower", 1);       
-        rightPower = propManager.createPersistentProperty(getPrefix() + "rightPower", 1);
+        propManager.setPrefix(this);
+        leftPower = propManager.createPersistentProperty("leftPower", 1);       
+        rightPower = propManager.createPersistentProperty("rightPower", 1);
 
     }
 

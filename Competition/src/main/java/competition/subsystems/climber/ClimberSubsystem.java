@@ -9,7 +9,6 @@ import competition.ElectricalContract2019;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
-import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class ClimberSubsystem extends BaseSubsystem {
@@ -21,8 +20,7 @@ public class ClimberSubsystem extends BaseSubsystem {
     public final XSolenoid backRetractSolenoid;
 
     @Inject
-    public ClimberSubsystem(CommonLibFactory clf, XPropertyManager propManager, ElectricalContract2019 contract) {
-
+    public ClimberSubsystem(CommonLibFactory clf, ElectricalContract2019 contract) {
         log.info("Creating Climber Subsystem");
         if (contract.isClimberReady()) {
             this.frontDeploySolenoid = clf.createSolenoid(contract.getFrontDeploySolenoid().channel);

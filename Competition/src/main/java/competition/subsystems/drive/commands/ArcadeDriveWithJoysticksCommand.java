@@ -6,7 +6,7 @@ import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 
 public class ArcadeDriveWithJoysticksCommand extends HeadingControlledDriveCommand {
 
@@ -14,8 +14,8 @@ public class ArcadeDriveWithJoysticksCommand extends HeadingControlledDriveComma
 
     @Inject
     public ArcadeDriveWithJoysticksCommand(OperatorInterface oi, DriveSubsystem drive, 
-            XPropertyManager propMan, CommonLibFactory clf) {
-        super(clf, drive, propMan);
+            PropertyFactory propFactory, CommonLibFactory clf) {
+        super(clf, drive, propFactory);        
         this.oi = oi;
     }
     
