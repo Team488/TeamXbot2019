@@ -12,8 +12,7 @@ import xbot.common.injection.wpi_factories.CommonLibFactory;
 
 @Singleton
 public class ClimberSubsystem extends BaseSubsystem {
-
-    private static Logger log = Logger.getLogger(ClimberSubsystem.class);
+    
     public final XSolenoid frontDeploySolenoid;
     public final XSolenoid frontRetractSolenoid;
     public final XSolenoid backDeploySolenoid;

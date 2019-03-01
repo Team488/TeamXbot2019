@@ -56,7 +56,10 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getBackDeploySolenoid();
 
     public abstract DeviceInfo getBackRetractSolenoid();
-
-
     
+    public abstract boolean isFourBarReady();
+
+    public abstract DeviceInfo getFourBarMaster();
+
+    public abstract DeviceInfo getFourBarFollower();
 }

@@ -39,7 +39,7 @@ public abstract class HeadingControlledDriveCommand extends BaseCommand {
 
         propFactory.setPrefix(this);
         deadbandProp = propFactory.createPersistentProperty("Deadband", 0.05);
-
+        
         ham = clf.createHeadingAssistModule(
             clf.createHeadingModule(drive.getRotateToHeadingPid()),
             clf.createHeadingModule(drive.getRotateDecayPid()));

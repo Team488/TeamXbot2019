@@ -132,4 +132,19 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public DeviceInfo getBackRetractSolenoid() {
         return null;
     }
+
+    @Override
+    public boolean isFourBarReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getFourBarMaster() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFourBarFollower() {
+        return null;
+    }
 }

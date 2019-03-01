@@ -132,4 +132,19 @@ public class RoboxContract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public boolean isFourBarReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getFourBarMaster() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFourBarFollower() {
+        return null;
+    }
+
 }
