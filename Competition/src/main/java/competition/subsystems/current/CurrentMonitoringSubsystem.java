@@ -8,7 +8,6 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
 import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.actuators.XCompressor;
-import xbot.common.injection.ElectricalContract;
 
 @Singleton
 public class CurrentMonitoringSubsystem implements PeriodicDataSource {
