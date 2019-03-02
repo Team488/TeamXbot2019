@@ -59,8 +59,8 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
         rotateDecayPid = pf.createPIDManager("DriveDecay", 0, 0, 1);
 
-        leftTicksPerFiveFeet = propManager.createPersistentProperty("leftDriveTicksPer5Feet", 100281);
-        rightTicksPerFiveFeet = propManager.createPersistentProperty("rightDriveTicksPer5Feet", 100281);
+        leftTicksPerFiveFeet = propManager.createPersistentProperty("leftDriveTicksPer5Feet", 12348.8);
+        rightTicksPerFiveFeet = propManager.createPersistentProperty("rightDriveTicksPer5Feet", 12348.8);
 
         if (contract.isDriveReady()) {
             this.leftMaster = factory.createCANTalon(contract.getLeftDriveMaster().channel);
