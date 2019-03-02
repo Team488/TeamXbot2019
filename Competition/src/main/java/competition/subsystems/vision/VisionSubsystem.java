@@ -1,10 +1,13 @@
 package competition.subsystems.vision;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import com.fasterxml.jackson.jr.ob.JSON;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.command.PeriodicDataSource;
@@ -24,12 +27,8 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     OffboardCommunicationClient client;
     final StringProperty packetProp;
     private String recentPacket;
+    VisionData visionData;
     double lastCalledTime;
-    double angleToTarget;
-    double parsedAngle;
-    boolean isCalled;
-    boolean numberIsTooBig;
-    boolean cannotParseNumber;
     boolean beenTooLong;
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
@@ -51,35 +50,41 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         recentPacket = packet;
         lastCalledTime = XTimer.getFPGATimestamp();
         packetNumberProp.set(packetNumberProp.get() + 1);
-        //VisionData newData;
         try {
-            //newData = JSON.std.beanFrom(VisionData.class, recentPacket);
-            //parsedAngle = newData.getTargetYaw().intValue();
-            parsedAngle = Double.parseDouble(packet);
-            cannotParseNumber = false;
-        } catch (NumberFormatException e) {
-            cannotParseNumber = true;
-            parsedAngle = 0.0;
-        }
+            visionData = JSON.std.beanFrom(VisionData.class, recentPacket);
+            // validate the data
+            boolean isDataValid = true;
+            if(visionData.getYaw() != null) {
+                double angle = visionData.getYaw().doubleValue();
+                if (angle > 180.0 || angle < -180.0) {
+                    isDataValid = false;
+                }
+            } else {
+                isDataValid = false;
+            }
 
-        if (parsedAngle > 180.0 || parsedAngle < -180.0) {
-            numberIsTooBig = true;
-            parsedAngle = 0.0;
-        } else {
-            numberIsTooBig = false;
+            if(!isDataValid) {
+                visionData = null;
+            }
+        } catch (IOException e) {
+            visionData = null;
         }
     }
 
     public boolean isTargetInView() {
         beenTooLong = ((XTimer.getFPGATimestamp() - lastCalledTime) > differenceBetweenTime.get());
-        if (beenTooLong || numberIsTooBig || cannotParseNumber) {
+        if(beenTooLong || visionData == null) {
             return false;
+        } else {
+            return visionData.hasTarget;
         }
-        return true;
     }
 
     public double getAngleToTarget() {
-        return parsedAngle;
+        if(isTargetInView()) {
+            return visionData.getYaw().doubleValue();
+        }
+        return 0.0;
     }
 
     public List<RabbitPoint> getVisionTargetRelativePosition() {

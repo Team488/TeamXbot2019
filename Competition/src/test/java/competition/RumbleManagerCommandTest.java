@@ -3,6 +3,7 @@ package competition;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.subsystems.vision.VisionSubsystem;
@@ -21,9 +22,10 @@ public class RumbleManagerCommandTest extends BaseCompetitionTest {
 
     @Test
     public void testExecute() {
+        vision.handlePacket("{\"hasTarget\":true, \"yaw\": 10}");
         assertTrue(vision.isTargetInView());
         assertFalse(rumbleCommand.wasTargetInView);
-        vision.handlePacket("190");
+        vision.handlePacket("{\"hasTarget\":false, \"yaw\": 10}");
         rumbleCommand.execute();
     }
 
