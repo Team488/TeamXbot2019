@@ -25,4 +25,8 @@ public class ImaginaryRobot2019 extends Competition2019Contract {
     public boolean doesDriveHaveThreeMotors() {
         return true;
     }
+    @Override
+    public boolean isFourBarReady() {
+        return true;
+    }
 }

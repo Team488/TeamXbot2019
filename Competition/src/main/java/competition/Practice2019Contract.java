@@ -137,12 +137,12 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getFourBarMaster() {
-        return null;
+        return new DeviceInfo(35, false);
     }
 
     @Override
     public DeviceInfo getFourBarFollower() {
-        return null;
+        return new DeviceInfo(20, false);
     }
 
 }

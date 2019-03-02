@@ -13,10 +13,14 @@ import xbot.common.properties.PropertyFactory;
 @Singleton
 public class FourBarSubsystem extends BaseSubsystem {
 
-    public final XCANTalon master;
-    public final XCANTalon follower;
-    public final DoubleProperty fourBarPower;
+    protected XCANTalon master;
+    protected XCANTalon follower;
     private final ElectricalContract2019 contract;
+    public final DoubleProperty fourBarPower;
+    public final DoubleProperty fourBarMaxHeight;
+    public double startingPos;
+    public int upperLimit;
+    public int lowerLimit;
 
     @Inject
     public FourBarSubsystem(CommonLibFactory clf, PropertyFactory propFactory, ElectricalContract2019 contract) {
@@ -26,22 +30,20 @@ public class FourBarSubsystem extends BaseSubsystem {
         if (contract.isFourBarReady()) {
             this.master = clf.createCANTalon(contract.getFourBarMaster().channel);
             this.follower = clf.createCANTalon(contract.getFourBarFollower().channel);
-        } else {
-            this.master = null;
-            this.follower = null;
         }
         fourBarPower = propFactory.createPersistentProperty("Standard Four Bar Power", 1);
+        fourBarMaxHeight = propFactory.createPersistentProperty("Maxiumum movement for Four Bar", 1000);
+        enableSoftLimit();
+        configSoftLimit();
     }
-
-    public void raiseFourBar() {
+    public void deploy() {
         setPower(fourBarPower.get());
     }
-
-    public void lowerFourBar() {
+    public void retract() {
         setPower(-fourBarPower.get());
     }
 
-    public void stopFourBar() {
+    public void stop() {
         setPower(0);
     }
 
@@ -50,5 +52,31 @@ public class FourBarSubsystem extends BaseSubsystem {
             master.simpleSet(power);
         }
     }
+
+    public double getStartPos() {
+        startingPos = master.getSelectedSensorPosition(0);
+        return startingPos;
+    }
+
+    public void configSoftLimit() {
+        upperLimit = (int)startingPos + (int)fourBarMaxHeight.get();
+        lowerLimit = (int)startingPos;
+
+        master.configForwardSoftLimitThreshold(upperLimit, 0);
+        master.configReverseSoftLimitThreshold(lowerLimit, 0);
+    }
+
+    private void enableSoftLimit() {
+        master.configForwardSoftLimitEnable(true, 0);
+        master.configReverseSoftLimitEnable(true, 0);
+    }
+
+    private void disableSoftLimit() {
+        master.configForwardSoftLimitEnable(false, 0);
+        master.configReverseSoftLimitEnable(false, 0);
+    }
+
+
+    
 
 }
