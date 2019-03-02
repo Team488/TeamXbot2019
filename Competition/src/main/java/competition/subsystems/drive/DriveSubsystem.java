@@ -50,9 +50,9 @@ public class DriveSubsystem extends BaseDriveSubsystem {
         log.info("Creating DriveSubsystem");
         propManager.setPrefix(this.getPrefix());
         this.contract = contract;
-        positionalPid = pf.createPIDManager("Drive to position", 0.1, 0, 0, 0, 0.75, -0.75, 3, 1, 0.5);
+        positionalPid = pf.createPIDManager("Drive to position", 0.1, 0, 0.3, 0, 0.75, -0.75, 3, 1, 0.5);
 
-        rotateToHeadingPid = pf.createPIDManager("DriveHeading", 0.02, 0, 0, 0, 1, -1, 0.02, 1, 0.5);
+        rotateToHeadingPid = pf.createPIDManager("DriveHeading", 0.005, 0, 0.08, 0, 1, -1, 0.02, 1, 0.5);
         rotateToHeadingPid.setEnableErrorThreshold(true);
         rotateToHeadingPid.setEnableDerivativeThreshold(true);
         rotateToHeadingPid.setEnableTimeThreshold(true);
