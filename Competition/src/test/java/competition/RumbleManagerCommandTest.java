@@ -21,12 +21,17 @@ public class RumbleManagerCommandTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void testExecute() {
+    public void test() {
+        // TODO: Add abilty to test RumbleManager so we can see if the rumble command is sent
+        // correctly or not
+        rumbleCommand.initialize();
+        assertFalse(vision.isTargetInView());
+        rumbleCommand.execute();
+        assertFalse(rumbleCommand.wasTargetInView);
         vision.handlePacket("{\"hasTarget\":true, \"yaw\": 10}");
         assertTrue(vision.isTargetInView());
-        assertFalse(rumbleCommand.wasTargetInView);
-        vision.handlePacket("{\"hasTarget\":false, \"yaw\": 10}");
         rumbleCommand.execute();
+        assertTrue(rumbleCommand.wasTargetInView);
     }
 
 }

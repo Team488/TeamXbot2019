@@ -30,13 +30,15 @@ public class RumbleManagerCommand extends BaseCommand {
     @Override
     public void initialize() {
         log.info("Initializing");
+        wasTargetInView = false;
     }
 
     @Override
     public void execute() {
-        wasTargetInView = visionSubsystem.isTargetInView();
+        boolean isTargetInView = visionSubsystem.isTargetInView();
         if (visionSubsystem.isTargetInView() && wasTargetInView == false) {
             rumble.rumbleDriverGamepad(rumbleIntensity.get(), rumbleLength.get());
         } 
+        wasTargetInView = isTargetInView;
     }
 }
