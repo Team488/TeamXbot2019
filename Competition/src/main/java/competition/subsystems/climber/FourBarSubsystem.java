@@ -72,13 +72,16 @@ public class FourBarSubsystem extends BaseSubsystem {
     }
 
     private void enableSoftLimit() {
-        master.configForwardSoftLimitEnable(true, 0);
-        master.configReverseSoftLimitEnable(true, 0);
+        if (master != null) {
+            master.configForwardSoftLimitEnable(true, 0);
+            master.configReverseSoftLimitEnable(true, 0);
+        }
     }
 
     private void disableSoftLimit() {
-        master.configForwardSoftLimitEnable(false, 0);
-        master.configReverseSoftLimitEnable(false, 0);
+        if (master != null) {
+            master.configForwardSoftLimitEnable(false, 0);
+            master.configReverseSoftLimitEnable(false, 0);
+        }
     }
-
 }
