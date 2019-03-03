@@ -32,7 +32,9 @@ public class StopElevatorCommandTest extends BaseCompetitionTest {
     @Test
     public void testStopElevatorExecute() {
         assertEquals(0, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
-        elevatorSubsystem.raiseElevator();
+        elevatorSubsystem.raise();
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.raise();
         assertEquals(1, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
         stopElevatorCommand.execute();
         assertEquals(0, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);

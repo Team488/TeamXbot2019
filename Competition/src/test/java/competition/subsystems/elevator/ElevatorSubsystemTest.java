@@ -28,7 +28,9 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testStopElevator() {
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
-        elevatorSubsystem.raiseElevator();
+        elevatorSubsystem.raise();
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.raise();
         assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
         elevatorSubsystem.stop();
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
@@ -37,14 +39,16 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testRaiseElevator() {
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
-        elevatorSubsystem.raiseElevator();
+        elevatorSubsystem.raise();
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.raise();
         assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
     }
 
     @Test
     public void testLowerElevator() {
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
-        elevatorSubsystem.lowerElevator();
+        elevatorSubsystem.lower();
         assertEquals(-1, elevatorSubsystem.getMasterPower(), 0.001);
     }
 
@@ -78,20 +82,21 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorSubsystem.calibrate();
         assertEquals(0, elevatorSubsystem.getCalibrationHeight(), 0.001);
     }
+
     @Test
     public void testSetPowerIntial() {
         assertEquals(0.0, elevatorSubsystem.getMasterPower(), 0.001);
-        assertTrue(contract.isElevatorReady());
-        assertTrue(contract.isElevatorLimitSwitchReady());
+        elevatorReady();
         testIsCalibrationSensorPressed();
-        assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());    
+        assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
 
     @Test
     public void testSetPowerOne() {
         elevatorSubsystem.setPower(1);
-        assertTrue(contract.isElevatorReady());
-        assertTrue(contract.isElevatorLimitSwitchReady());
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.setPower(1);
+        elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
         assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
@@ -102,12 +107,19 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testSetPowerZero() {
         elevatorSubsystem.setPower(0);
-        assertTrue(contract.isElevatorReady());
-        assertTrue(contract.isElevatorLimitSwitchReady());
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.setPower(0);
+        elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
         assertFalse(elevatorSubsystem.getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
+
+    public void elevatorReady() {
+        assertTrue(contract.isElevatorReady());
+        assertTrue(contract.isElevatorLimitSwitchReady());
+    }
+
 }
