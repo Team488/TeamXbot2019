@@ -14,6 +14,7 @@ import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.networking.OffboardCommunicationClient;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;
 import xbot.common.properties.StringProperty;
@@ -32,6 +33,8 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     boolean beenTooLong;
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
+    final BooleanProperty hasTargetProperty;
+    final DoubleProperty targetYawProperty;
 
     @Inject
     public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
@@ -41,6 +44,8 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         recentPacket = "no packets yet";
         packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
         packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
+        hasTargetProperty = propMan.createEphemeralProperty("hasTarget", false);
+        targetYawProperty = propMan.createEphemeralProperty("targetYaw", 0.0);
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -65,9 +70,18 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
             if(!isDataValid) {
                 visionData = null;
-            }
+            } 
         } catch (IOException e) {
             visionData = null;
+        }
+
+        // report out values
+        if(visionData != null) {
+            targetYawProperty.set(visionData.getYaw());
+            hasTargetProperty.set(visionData.isHasTarget());
+        } else {
+            targetYawProperty.set(0.0);
+            hasTargetProperty.set(false);
         }
     }
 
