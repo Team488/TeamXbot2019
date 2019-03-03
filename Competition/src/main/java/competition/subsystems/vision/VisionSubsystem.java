@@ -84,10 +84,10 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
         // report out values
         if(visionData != null) {
-            yawToTargetProperty.set(visionData.getYaw());
+            yawToTargetProperty.set(visionData.getYaw() != null ? visionData.getYaw() : 0.0);
             hasTargetProperty.set(visionData.isHasTarget());
-            targetRangeProperty.set(visionData.getRange());
-            targetRotationProperty.set(visionData.getRotation());
+            targetRangeProperty.set(visionData.getRange() != null ? visionData.getRange() : 0.0);
+            targetRotationProperty.set(visionData.getRotation() != null ? visionData.getRotation() : 0.0);
         } else {
             yawToTargetProperty.set(0.0);
             hasTargetProperty.set(false);
