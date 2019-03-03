@@ -147,4 +147,9 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public DeviceInfo getFourBarFollower() {
         return null;
     }
+
+    @Override
+    public DeviceInfo getFourBarMasterEncoder() {
+        return null;
+    }
 }

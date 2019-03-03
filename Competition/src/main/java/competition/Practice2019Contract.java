@@ -132,7 +132,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isFourBarReady() {
-        return false;
+        return true;
     }
 
     @Override
@@ -143,6 +143,11 @@ public class Practice2019Contract extends ElectricalContract2019 {
     @Override
     public DeviceInfo getFourBarFollower() {
         return new DeviceInfo(20, false);
+    }
+
+    @Override
+    public DeviceInfo getFourBarMasterEncoder() {
+        return new DeviceInfo(0, false);
     }
 
 }

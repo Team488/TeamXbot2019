@@ -30,15 +30,20 @@ public class FourBarSubsystem extends BaseSubsystem {
         if (contract.isFourBarReady()) {
             this.master = clf.createCANTalon(contract.getFourBarMaster().channel);
             this.follower = clf.createCANTalon(contract.getFourBarFollower().channel);
+
+            XCANTalon.configureMotorTeam("FourBar", "FourBarMaster", master, follower, contract.getFourBarMaster().inverted,
+                    contract.getFourBarFollower().inverted, contract.getFourBarMasterEncoder().inverted);
         }
         fourBarPower = propFactory.createPersistentProperty("Standard Four Bar Power", 1);
-        fourBarMaxHeight = propFactory.createPersistentProperty("Maxiumum movement for Four Bar", 1000);
+        fourBarMaxHeight = propFactory.createPersistentProperty("Maxiumum movement for Four Bar", 14325);
         enableSoftLimit();
         configSoftLimit();
     }
+
     public void deploy() {
         setPower(fourBarPower.get());
     }
+
     public void retract() {
         setPower(-fourBarPower.get());
     }
@@ -59,8 +64,8 @@ public class FourBarSubsystem extends BaseSubsystem {
     }
 
     public void configSoftLimit() {
-        upperLimit = (int)startingPos + (int)fourBarMaxHeight.get();
-        lowerLimit = (int)startingPos;
+        upperLimit = (int) startingPos + (int) fourBarMaxHeight.get();
+        lowerLimit = (int) startingPos;
 
         master.configForwardSoftLimitThreshold(upperLimit, 0);
         master.configReverseSoftLimitThreshold(lowerLimit, 0);
@@ -75,8 +80,5 @@ public class FourBarSubsystem extends BaseSubsystem {
         master.configForwardSoftLimitEnable(false, 0);
         master.configReverseSoftLimitEnable(false, 0);
     }
-
-
-    
 
 }

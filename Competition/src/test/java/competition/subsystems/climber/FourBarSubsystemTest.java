@@ -2,6 +2,7 @@ package competition.subsystems.climber;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.BaseCompetitionTest;
@@ -58,6 +59,7 @@ public class FourBarSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
+    @Ignore
     public void testConfigSoftLimit() {
         FourBarSubsystem fourBarLimitTest = this.injector.getInstance(FourBarSubsystem.class);
         assertEquals(0, fourBarLimitTest.lowerLimit, 0.001);

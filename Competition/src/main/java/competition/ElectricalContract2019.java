@@ -61,5 +61,8 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
 
     public abstract DeviceInfo getFourBarMaster();
 
+    public abstract DeviceInfo getFourBarMasterEncoder();
+
     public abstract DeviceInfo getFourBarFollower();
+
 }

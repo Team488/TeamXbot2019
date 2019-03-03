@@ -147,4 +147,9 @@ public class RoboxContract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public DeviceInfo getFourBarMasterEncoder() {
+        return null;
+    }
+
 }
