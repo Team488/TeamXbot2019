@@ -14,6 +14,7 @@ import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.networking.OffboardCommunicationClient;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;
 import xbot.common.properties.StringProperty;
@@ -30,8 +31,13 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     VisionData visionData;
     double lastCalledTime;
     boolean beenTooLong;
+    
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
+    final BooleanProperty hasTargetProperty;
+    final DoubleProperty yawToTargetProperty;
+    final DoubleProperty targetRangeProperty;
+    final DoubleProperty targetRotationProperty;
 
     @Inject
     public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
@@ -39,8 +45,14 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         propMan.setPrefix(this.getPrefix());
         differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
         recentPacket = "no packets yet";
+        
         packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
         packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
+        hasTargetProperty = propMan.createEphemeralProperty("hasTarget", false);
+        yawToTargetProperty = propMan.createEphemeralProperty("yawToTarget", 0.0);
+        targetRangeProperty = propMan.createEphemeralProperty("targetRange", 0.0);
+        targetRotationProperty = propMan.createEphemeralProperty("targetRotation", 0.0);
+
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -65,9 +77,22 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
             if(!isDataValid) {
                 visionData = null;
-            }
+            } 
         } catch (IOException e) {
             visionData = null;
+        }
+
+        // report out values
+        if(visionData != null) {
+            yawToTargetProperty.set(visionData.getYaw() != null ? visionData.getYaw() : 0.0);
+            hasTargetProperty.set(visionData.isHasTarget());
+            targetRangeProperty.set(visionData.getRange() != null ? visionData.getRange() : 0.0);
+            targetRotationProperty.set(visionData.getRotation() != null ? visionData.getRotation() : 0.0);
+        } else {
+            yawToTargetProperty.set(0.0);
+            hasTargetProperty.set(false);
+            targetRangeProperty.set(0.0);
+            targetRotationProperty.set(0.0);
         }
     }
 
