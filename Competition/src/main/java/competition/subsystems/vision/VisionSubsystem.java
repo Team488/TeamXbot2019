@@ -31,10 +31,13 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     VisionData visionData;
     double lastCalledTime;
     boolean beenTooLong;
+    
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
     final BooleanProperty hasTargetProperty;
-    final DoubleProperty targetYawProperty;
+    final DoubleProperty yawToTargetProperty;
+    final DoubleProperty targetRangeProperty;
+    final DoubleProperty targetRotationProperty;
 
     @Inject
     public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
@@ -42,10 +45,14 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         propMan.setPrefix(this.getPrefix());
         differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
         recentPacket = "no packets yet";
+        
         packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
         packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
         hasTargetProperty = propMan.createEphemeralProperty("hasTarget", false);
-        targetYawProperty = propMan.createEphemeralProperty("targetYaw", 0.0);
+        yawToTargetProperty = propMan.createEphemeralProperty("yawToTarget", 0.0);
+        targetRangeProperty = propMan.createEphemeralProperty("targetRange", 0.0);
+        targetRotationProperty = propMan.createEphemeralProperty("targetRotation", 0.0);
+
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -77,11 +84,15 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
         // report out values
         if(visionData != null) {
-            targetYawProperty.set(visionData.getYaw());
+            yawToTargetProperty.set(visionData.getYaw());
             hasTargetProperty.set(visionData.isHasTarget());
+            targetRangeProperty.set(visionData.getRange());
+            targetRotationProperty.set(visionData.getRotation());
         } else {
-            targetYawProperty.set(0.0);
+            yawToTargetProperty.set(0.0);
             hasTargetProperty.set(false);
+            targetRangeProperty.set(0.0);
+            targetRotationProperty.set(0.0);
         }
     }
 
