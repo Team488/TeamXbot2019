@@ -132,6 +132,8 @@ public class OperatorCommandMap {
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
 
         operatorInterface.operatorGamepad.getifAvailable(8).whenPressed(stopElevator);
+
+        
     }
 
     @Inject
