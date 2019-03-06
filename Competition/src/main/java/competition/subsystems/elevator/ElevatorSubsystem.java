@@ -10,11 +10,14 @@ import xbot.common.command.BaseSetpointSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
+import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.logic.Latch;
+import xbot.common.logic.Latch.EdgeType;
 import xbot.common.math.MathUtils;
 import xbot.common.math.PIDFactory;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 
 @Singleton
 public class ElevatorSubsystem extends BaseSetpointSubsystem {
@@ -31,21 +34,26 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
     private final DoubleProperty distanceBetweenLevels;
     protected final DoubleProperty brakePowerLimit;
     private ElectricalContract2019 contract;
+    public DoubleProperty armForcedDownToFreeRatchetDuration;
+    public double raiseArmRequestedTime;
+    private Latch positivePowerLatch;
+    public final DoubleProperty armDeadBand;
 
     public enum HatchLevel {
         Low, Medium, High,
     }
 
     @Inject
-    public ElevatorSubsystem(CommonLibFactory factory, XPropertyManager propManager, ElectricalContract2019 contract,
+    public ElevatorSubsystem(CommonLibFactory factory, PropertyFactory propManager, ElectricalContract2019 contract,
             PIDFactory pd) {
         log.info("Creating ElevatorSubsystem");
+        propManager.setPrefix(this.getPrefix());
         this.contract = contract;
         this.allowElevatorMotionSolenoid = factory.createSolenoid(contract.getBrakeSolenoid().channel);
         if (contract.isElevatorReady()) {
             this.master = factory.createCANTalon(contract.getElevatorMasterMotor().channel);
             this.follower = factory.createCANTalon(contract.getElevatorFollowerMotor().channel);
-            XCANTalon.configureMotorTeam(getPrefix(), "ElevatorMaster", master, follower,
+            XCANTalon.configureMotorTeam(this.getPrefix(), "ElevatorMaster", master, follower,
                     contract.getElevatorMasterMotor().inverted, contract.getElevatorFollowerMotor().inverted,
                     contract.getElevatorMasterEncoder().inverted);
         } else {
@@ -57,22 +65,29 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
         } else {
             this.calibrationSensor = null;
         }
-        elevatorStandardPower = propManager.createPersistentProperty(getPrefix() + "StandardPower", 1);
-        distanceBetweenLevels = propManager.createPersistentProperty(getPrefix() + "DistanceBetweenLevels", 1);
-        brakePowerLimit = propManager.createPersistentProperty(getPrefix() + "BrakePowerLimit", .05);
-        currentCalibrationSensorPosition = propManager
-                .createPersistentProperty(getPrefix() + "CalibrationSensorPosition", -1);
+        elevatorStandardPower = propManager.createPersistentProperty("StandardPower", 1);
+        distanceBetweenLevels = propManager.createPersistentProperty("DistanceBetweenLevels", 1);
+        brakePowerLimit = propManager.createPersistentProperty("BrakePowerLimit", 0.05);
+        currentCalibrationSensorPosition = propManager.createPersistentProperty("CalibrationSensorPosition", -1);
+        armDeadBand = propManager.createPersistentProperty("Arm Deadband", 0.05);
+        armForcedDownToFreeRatchetDuration = propManager.createPersistentProperty("Arm Forced Down To Free Ratchet Duration", .1);
+        positivePowerLatch = new Latch(false, EdgeType.Both, edge -> {
+            if(edge == EdgeType.RisingEdge) {
+                log.info("Arm wants to rise");
+                raiseArmRequestedTime = XTimer.getFPGATimestamp();
+            }
+        });
     }
 
     public void stop() {
         setPower(0);
     }
 
-    public void raiseElevator() {
+    public void raise() {
         setPower(elevatorStandardPower.get());
     }
 
-    public void lowerElevator() {
+    public void lower() {
         setPower(-elevatorStandardPower.get());
     }
 
@@ -101,6 +116,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
 
     public void setPower(double power) {
         if (contract.isElevatorReady()) {
+            positivePowerLatch.setValue(power > armDeadBand.get());
             if (contract.isElevatorLimitSwitchReady() && isCalibrationSensorPressed()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
                 calibrate();
@@ -110,6 +126,9 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
             } else {
                 allowElevatorMotionSolenoid.setOn(false);
             }
+            if (XTimer.getFPGATimestamp() - raiseArmRequestedTime <= armForcedDownToFreeRatchetDuration.get()) {
+                    power = -elevatorStandardPower.get();
+                }
             master.simpleSet(power);
         }
     }
@@ -135,6 +154,10 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
 
     public double getTickGoal() {
         return tickGoal;
+    }
+
+    public void insanelyDangerousElevatorMode(double power) {
+        master.simpleSet(power);
     }
 
 }

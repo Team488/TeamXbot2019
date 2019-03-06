@@ -1,19 +1,23 @@
 package competition.subsystems.vision;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import com.fasterxml.jackson.jr.ob.JSON;
+
 import xbot.common.command.BaseSubsystem;
 import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.networking.OffboardCommunicationClient;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.properties.StringProperty;
-import xbot.common.properties.XPropertyManager;
 import xbot.common.subsystems.drive.RabbitPoint;
 import xbot.common.subsystems.drive.RabbitPoint.PointTerminatingType;
 import xbot.common.subsystems.drive.RabbitPoint.PointType;
@@ -24,23 +28,31 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     OffboardCommunicationClient client;
     final StringProperty packetProp;
     private String recentPacket;
+    VisionData visionData;
     double lastCalledTime;
-    double angleToTarget;
-    double parsedAngle;
-    boolean isCalled;
-    boolean numberIsTooBig;
-    boolean cannotParseNumber;
     boolean beenTooLong;
+    
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
+    final BooleanProperty hasTargetProperty;
+    final DoubleProperty yawToTargetProperty;
+    final DoubleProperty targetRangeProperty;
+    final DoubleProperty targetRotationProperty;
 
     @Inject
-    public VisionSubsystem(XPropertyManager propMan, CommonLibFactory clf) {
+    public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
         this.client = clf.createZeromqListener("tcp://10.4.88.12:5801", "");
-        differenceBetweenTime = propMan.createPersistentProperty(getPrefix() + "differenceBetweenTime", 1);
+        propMan.setPrefix(this.getPrefix());
+        differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
         recentPacket = "no packets yet";
-        packetProp = propMan.createEphemeralProperty(getPrefix() + "Packet", recentPacket);        
-        packetNumberProp = propMan.createEphemeralProperty(getPrefix() + "NumPackets", 0);
+        
+        packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
+        packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
+        hasTargetProperty = propMan.createEphemeralProperty("hasTarget", false);
+        yawToTargetProperty = propMan.createEphemeralProperty("yawToTarget", 0.0);
+        targetRangeProperty = propMan.createEphemeralProperty("targetRange", 0.0);
+        targetRotationProperty = propMan.createEphemeralProperty("targetRotation", 0.0);
+
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -50,35 +62,54 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         recentPacket = packet;
         lastCalledTime = XTimer.getFPGATimestamp();
         packetNumberProp.set(packetNumberProp.get() + 1);
-        //VisionData newData;
         try {
-            //newData = JSON.std.beanFrom(VisionData.class, recentPacket);
-            //parsedAngle = newData.getTargetYaw().intValue();
-            parsedAngle = Double.parseDouble(packet);
-            cannotParseNumber = false;
-        } catch (NumberFormatException e) {
-            cannotParseNumber = true;
-            parsedAngle = 0.0;
+            visionData = JSON.std.beanFrom(VisionData.class, recentPacket);
+            // validate the data
+            boolean isDataValid = true;
+            if(visionData.getYaw() != null) {
+                double angle = visionData.getYaw().doubleValue();
+                if (angle > 180.0 || angle < -180.0) {
+                    isDataValid = false;
+                }
+            } else {
+                isDataValid = false;
+            }
+
+            if(!isDataValid) {
+                visionData = null;
+            } 
+        } catch (IOException e) {
+            visionData = null;
         }
 
-        if (parsedAngle > 180.0 || parsedAngle < -180.0) {
-            numberIsTooBig = true;
-            parsedAngle = 0.0;
+        // report out values
+        if(visionData != null) {
+            yawToTargetProperty.set(visionData.getYaw() != null ? visionData.getYaw() : 0.0);
+            hasTargetProperty.set(visionData.isHasTarget());
+            targetRangeProperty.set(visionData.getRange() != null ? visionData.getRange() : 0.0);
+            targetRotationProperty.set(visionData.getRotation() != null ? visionData.getRotation() : 0.0);
         } else {
-            numberIsTooBig = false;
+            yawToTargetProperty.set(0.0);
+            hasTargetProperty.set(false);
+            targetRangeProperty.set(0.0);
+            targetRotationProperty.set(0.0);
         }
     }
 
     public boolean isTargetInView() {
         beenTooLong = ((XTimer.getFPGATimestamp() - lastCalledTime) > differenceBetweenTime.get());
-        if (beenTooLong || numberIsTooBig || cannotParseNumber) {
+        if(beenTooLong || visionData == null) {
             return false;
+        } else {
+            return visionData.hasTarget;
         }
-        return true;
     }
 
     public double getAngleToTarget() {
-        return parsedAngle;
+        if(isTargetInView()) {
+            return visionData.getYaw().doubleValue();
+        }
+        return 0.0;
     }
 
     public List<RabbitPoint> getVisionTargetRelativePosition() {

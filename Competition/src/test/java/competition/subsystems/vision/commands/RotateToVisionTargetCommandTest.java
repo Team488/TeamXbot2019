@@ -23,16 +23,6 @@ public class RotateToVisionTargetCommandTest extends BaseCompetitionTest {
         driveSubsystem = injector.getInstance(DriveSubsystem.class);
         visionSubsystem = injector.getInstance(VisionSubsystem.class);
     }
-    @Test
-    public void testSetHeadingGoal() {
-        rotateToVisionTargetCommand.givenGoal = 0.0;
-        rotateToVisionTargetCommand.relative = true;
-        assertEquals(0.0, rotateToVisionTargetCommand.givenGoal, 0.001);
-        assertTrue(rotateToVisionTargetCommand.relative);
-        rotateToVisionTargetCommand.setHeadingGoal(1.0, false);
-        assertEquals(1.0, rotateToVisionTargetCommand.givenGoal, 0.001);
-        assertFalse(rotateToVisionTargetCommand.relative);
-    }
 
     @Test
     public void testConstructor() {

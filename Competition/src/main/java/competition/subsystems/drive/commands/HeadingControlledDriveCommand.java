@@ -5,14 +5,14 @@ import xbot.common.command.BaseCommand;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.XYPair;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.control_logic.HeadingAssistModule;
 
 public abstract class HeadingControlledDriveCommand extends BaseCommand {
 
     protected CommonLibFactory clf;
     protected DriveSubsystem drive;
-    protected XPropertyManager propMan;
+    protected PropertyFactory propFactory;
     final DoubleProperty deadbandProp;
     final HeadingAssistModule ham;
 
@@ -32,13 +32,14 @@ public abstract class HeadingControlledDriveCommand extends BaseCommand {
         return ham.calculateHeadingPower(getHumanRotationInput());
     }
 
-    public HeadingControlledDriveCommand(CommonLibFactory clf, DriveSubsystem drive, XPropertyManager propMan) {
+    public HeadingControlledDriveCommand(CommonLibFactory clf, DriveSubsystem drive, PropertyFactory propFactory) {
         this.clf = clf;
         this.drive = drive;
-        this.propMan = propMan;
+        this.propFactory = propFactory;
 
-        deadbandProp = propMan.createPersistentProperty(getPrefix() + "Deadband", 0.05);
-
+        propFactory.setPrefix(this);
+        deadbandProp = propFactory.createPersistentProperty("Deadband", 0.05);
+        
         ham = clf.createHeadingAssistModule(
             clf.createHeadingModule(drive.getRotateToHeadingPid()),
             clf.createHeadingModule(drive.getRotateDecayPid()));

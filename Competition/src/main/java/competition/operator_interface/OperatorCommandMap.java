@@ -8,6 +8,8 @@ import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGrou
 import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup;
 import competition.subsystems.climber.commands.DeployAllClimberLegsCommand;
+import competition.subsystems.climber.commands.DeployBackCommand;
+import competition.subsystems.climber.commands.DeployFrontCommand;
 import competition.subsystems.climber.commands.RetractBackCommand;
 import competition.subsystems.climber.commands.RetractFrontCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
@@ -173,10 +175,13 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setUpClimberCommands(OperatorInterface operatorInterface, DeployAllClimberLegsCommand climb,
+    public void setUpClimberCommands(OperatorInterface operatorInterface, DeployBackCommand deployBack, DeployFrontCommand deployFront,
             RetractBackCommand retractBack, RetractFrontCommand retractFront) {
-        operatorInterface.operatorGamepad.getifAvailable(9).whenPressed(climb);
-        climb.includeOnSmartDashboard("Climb");
+                //deployFront, deployBack
+        operatorInterface.operatorGamepad.getifAvailable(9).whenPressed(deployBack);
+        operatorInterface.operatorGamepad.getifAvailable(10).whenPressed(deployFront);
+        deployFront.includeOnSmartDashboard("Climb - deployFront");
+        deployBack.includeOnSmartDashboard("Climb - deployBack");
 
         operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(retractBack);
         operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractFront);
