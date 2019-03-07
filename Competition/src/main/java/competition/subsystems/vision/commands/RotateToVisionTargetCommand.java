@@ -20,6 +20,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     Double goal = null;
     HeadingModule hm;
     double rotation;
+    private boolean continuousAcquisition = false;
 
 
     @Inject
@@ -41,11 +42,18 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         // reset no goal state
         goal = null;
     }
+    
+    /*
+     * @param continuousAcquisition the continuousAcquisition to set
+     */
+    public void setContinuousAcquisition(boolean continuousAcquisition) {
+        this.continuousAcquisition = continuousAcquisition;
+    }
 
     @Override
     public void execute() {
         // if not yet acquired, look for target
-        if(goal == null && visionSubsystem.isTargetInView()) {
+        if((goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
             double relativeAngle = visionSubsystem.getAngleToTarget();
             goal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
         }

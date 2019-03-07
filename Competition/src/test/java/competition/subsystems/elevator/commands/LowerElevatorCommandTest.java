@@ -20,11 +20,6 @@ public class LowerElevatorCommandTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void testLowerElevatorCommandConstructer() {
-        LowerElevatorCommand testLowerElevatorCommand = this.injector.getInstance(LowerElevatorCommand.class);
-    }
-
-    @Test
     public void testLowerElevatorIntialize() {
         lowerElevatorCommand.initialize();
     }

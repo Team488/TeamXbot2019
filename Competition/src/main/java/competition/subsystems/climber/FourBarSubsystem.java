@@ -36,8 +36,9 @@ public class FourBarSubsystem extends BaseSubsystem {
         }
         fourBarPower = propFactory.createPersistentProperty("Standard Four Bar Power", 1);
         fourBarMaxHeight = propFactory.createPersistentProperty("Maxiumum movement for Four Bar", 14325);
-        enableSoftLimit();
-        configSoftLimit();
+        // TODO: Re-enable once we are confident about the min/max range.
+        //enableSoftLimit();
+        //configSoftLimit();
     }
 
     public void deploy() {

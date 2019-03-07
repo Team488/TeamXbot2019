@@ -64,7 +64,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorCalibrationSensor() {
-        return new DeviceInfo(10, false);
+        return new DeviceInfo(9, true);
     }
 
     public DeviceInfo getBrakeSolenoid() {
@@ -78,7 +78,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isElevatorLimitSwitchReady() {
-        return false;
+        return true;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getFourBarFollower() {
-        return new DeviceInfo(20, false);
+        return new DeviceInfo(20, true);
     }
 
     @Override

@@ -154,6 +154,7 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(OperatorInterface operatorInterface,
             RotateToVisionTargetCommand rotateToVisionTargetCommand) {
+            rotateToVisionTargetCommand.setContinuousAcquisition(true);
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
@@ -161,17 +162,25 @@ public class OperatorCommandMap {
     @Inject
     public void setupDriverCommandGroups(OperatorInterface operatorInterface, ScoreOnMidCargoCommandGroup mid,
             ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
-            GoToLoadingStationCommandGroup loading) {
+            GoToLoadingStationCommandGroup loading,
+            RotateToHeadingCommand faceForward,
+            RotateToHeadingCommand faceLeft,
+            RotateToHeadingCommand faceRight,
+            RotateToHeadingCommand faceBack) {
         front.includeOnSmartDashboard("Score on Front Cargo");
         near.includeOnSmartDashboard("Score on Near Cargo");
         mid.includeOnSmartDashboard("Score on Mid Cargo");
         loading.includeOnSmartDashboard("Go to Loading Station");
 
-        operatorInterface.driverGamepad.getifAvailable(4).whenPressed(front);
-        operatorInterface.driverGamepad.getifAvailable(3).whenPressed(loading);
-        operatorInterface.driverGamepad.getifAvailable(2).whenPressed(mid);
-        operatorInterface.driverGamepad.getifAvailable(1).whenPressed(near);
+        faceForward.setHeadingGoal(90, false);
+        faceLeft.setHeadingGoal(180, false);
+        faceRight.setHeadingGoal(0, false);
+        faceBack.setHeadingGoal(-90, false);
 
+        operatorInterface.driverGamepad.getifAvailable(4).whileHeld(faceForward);
+        operatorInterface.driverGamepad.getifAvailable(3).whileHeld(faceLeft);
+        operatorInterface.driverGamepad.getifAvailable(2).whileHeld(faceRight);
+        operatorInterface.driverGamepad.getifAvailable(1).whileHeld(faceBack);
     }
 
     @Inject

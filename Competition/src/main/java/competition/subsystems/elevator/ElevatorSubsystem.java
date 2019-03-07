@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import competition.ElectricalContract2019;
 import xbot.common.command.BaseSetpointSubsystem;
+import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
@@ -16,11 +17,12 @@ import xbot.common.logic.Latch;
 import xbot.common.logic.Latch.EdgeType;
 import xbot.common.math.MathUtils;
 import xbot.common.math.PIDFactory;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;
 
 @Singleton
-public class ElevatorSubsystem extends BaseSetpointSubsystem {
+public class ElevatorSubsystem extends BaseSetpointSubsystem implements PeriodicDataSource {
     private static Logger log = Logger.getLogger(ElevatorSubsystem.class);
 
     private double tickGoal;
@@ -38,6 +40,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
     public double raiseArmRequestedTime;
     private Latch positivePowerLatch;
     public final DoubleProperty armDeadBand;
+    private BooleanProperty armLimitSwitchProp;
     public DoubleProperty winchUnlockPower;
 
     public enum HatchLevel {
@@ -63,22 +66,25 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
         }
         if (contract.isElevatorLimitSwitchReady()) {
             this.calibrationSensor = factory.createDigitalInput(contract.getElevatorCalibrationSensor().channel);
+            this.calibrationSensor.setInverted(contract.getElevatorCalibrationSensor().inverted);
         } else {
             this.calibrationSensor = null;
         }
         elevatorStandardPower = propManager.createPersistentProperty("StandardPower", 1);
-        winchUnlockPower = propManager.createPersistentProperty("UnlockPower", .1);
+        winchUnlockPower = propManager.createPersistentProperty("UnlockPower", -.1);
         distanceBetweenLevels = propManager.createPersistentProperty("DistanceBetweenLevels", 1);
         brakePowerLimit = propManager.createPersistentProperty("BrakePowerLimit", 0.05);
         currentCalibrationSensorPosition = propManager.createPersistentProperty("CalibrationSensorPosition", -1);
         armDeadBand = propManager.createPersistentProperty("Arm Deadband", 0.05);
         armForcedDownToFreeRatchetDuration = propManager.createPersistentProperty("Arm Forced Down To Free Ratchet Duration", .1);
+        armLimitSwitchProp = propManager.createEphemeralProperty("LowerLimitSwitch", false);
         positivePowerLatch = new Latch(false, EdgeType.Both, edge -> {
             if(edge == EdgeType.RisingEdge) {
                 log.info("Arm wants to rise");
                 raiseArmRequestedTime = XTimer.getFPGATimestamp();
             }
         });
+        raiseArmRequestedTime = -9999999;
     }
 
     public void stop() {
@@ -118,20 +124,34 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
 
     public void setPower(double power) {
         if (contract.isElevatorReady()) {
+            boolean releaseRatchet = false;
             positivePowerLatch.setValue(power > armDeadBand.get());
+
+            if (Math.abs(power) < armDeadBand.get()) {
+                power = 0;
+            }
+
             if (contract.isElevatorLimitSwitchReady() && isCalibrationSensorPressed()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
                 calibrate();
             }
-            if (Math.abs(power) > brakePowerLimit.get()) {
-                allowElevatorMotionSolenoid.setOn(true);
+            
+            // we only need to disengage the ratchet when going up.
+            if (power > brakePowerLimit.get()) {
+                releaseRatchet = true;
             } else {
-                allowElevatorMotionSolenoid.setOn(false);
+                releaseRatchet = false;
             }
+
+            // The ratchet may have trouble disengaging when under heavy strain. Therefore,
+            // if we want to go up, then we should first apply some downwards power for a moment
+            // while releasing the ratchet.
             if (XTimer.getFPGATimestamp() - raiseArmRequestedTime <= armForcedDownToFreeRatchetDuration.get()) {
-                    power = -winchUnlockPower.get();
+                    releaseRatchet = true;
+                    power = winchUnlockPower.get();
                 }
             master.simpleSet(power);
+            allowElevatorMotionSolenoid.setOn(releaseRatchet);
         }
     }
 
@@ -160,6 +180,17 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
 
     public void insanelyDangerousElevatorMode(double power) {
         master.simpleSet(power);
+    }
+
+    public void setCurrentPositionAsGoalPosition() {
+        setTickGoal(getElevatorHeightInTicks());
+    }
+
+    @Override
+    public void updatePeriodicData() {
+        if (contract.isElevatorLimitSwitchReady()) {
+            armLimitSwitchProp.set(calibrationSensor.get());
+        }
     }
 
 }
