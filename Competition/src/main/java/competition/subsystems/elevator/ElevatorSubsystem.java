@@ -38,6 +38,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
     public double raiseArmRequestedTime;
     private Latch positivePowerLatch;
     public final DoubleProperty armDeadBand;
+    public DoubleProperty winchUnlockPower;
 
     public enum HatchLevel {
         Low, Medium, High,
@@ -66,6 +67,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
             this.calibrationSensor = null;
         }
         elevatorStandardPower = propManager.createPersistentProperty("StandardPower", 1);
+        winchUnlockPower = propManager.createPersistentProperty("UnlockPower", .1);
         distanceBetweenLevels = propManager.createPersistentProperty("DistanceBetweenLevels", 1);
         brakePowerLimit = propManager.createPersistentProperty("BrakePowerLimit", 0.05);
         currentCalibrationSensorPosition = propManager.createPersistentProperty("CalibrationSensorPosition", -1);
@@ -127,7 +129,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem {
                 allowElevatorMotionSolenoid.setOn(false);
             }
             if (XTimer.getFPGATimestamp() - raiseArmRequestedTime <= armForcedDownToFreeRatchetDuration.get()) {
-                    power = -elevatorStandardPower.get();
+                    power = -winchUnlockPower.get();
                 }
             master.simpleSet(power);
         }

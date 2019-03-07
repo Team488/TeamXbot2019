@@ -49,6 +49,8 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     public void testLowerElevator() {
         assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
         elevatorSubsystem.lower();
+        timer.advanceTimeInSecondsBy(3);
+        elevatorSubsystem.lower();
         assertEquals(-1, elevatorSubsystem.getMasterPower(), 0.001);
     }
 
