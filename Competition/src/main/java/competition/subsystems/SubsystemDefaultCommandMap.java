@@ -5,7 +5,9 @@ import com.google.inject.Singleton;
 
 import competition.RumbleManagerCommand;
 import competition.subsystems.climber.FourBarSubsystem;
+import competition.subsystems.climber.MotorClimberSubsystem;
 import competition.subsystems.climber.commands.FourBarViaJoysticksCommand;
+import competition.subsystems.climber.commands.MotorClimberDoNothingCommand;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.elevator.ElevatorSubsystem;
@@ -34,5 +36,10 @@ public class SubsystemDefaultCommandMap {
     @Inject
     public void setupFourBarSubsystem(FourBarSubsystem fourBar, FourBarViaJoysticksCommand command) {
         fourBar.setDefaultCommand(command);
+    }
+
+    @Inject
+    public void setupMotorClimberSubsystem(MotorClimberSubsystem climber, MotorClimberDoNothingCommand command) {
+        climber.setDefaultCommand(command);
     }
 }
