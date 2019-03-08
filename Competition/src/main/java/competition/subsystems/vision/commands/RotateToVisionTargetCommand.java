@@ -9,6 +9,8 @@ import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.XYPair;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.control_logic.HeadingModule;
 
 public class RotateToVisionTargetCommand extends BaseCommand {
@@ -17,7 +19,9 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     final VisionSubsystem visionSubsystem;
     final PoseSubsystem pose;
     final DriveSubsystem drive;
+    final DoubleProperty visionDeltaLimitProp;
     Double goal = null;
+    boolean goalFrozen = false;
     HeadingModule hm;
     double rotation;
     private boolean continuousAcquisition = false;
@@ -25,12 +29,14 @@ public class RotateToVisionTargetCommand extends BaseCommand {
 
     @Inject
     public RotateToVisionTargetCommand(OperatorInterface oi, 
-    VisionSubsystem visionSubsystem, CommonLibFactory clf,
-    DriveSubsystem drive, PoseSubsystem pose) {
+            VisionSubsystem visionSubsystem, CommonLibFactory clf,
+            DriveSubsystem drive, PoseSubsystem pose, PropertyFactory propFactory) {
+        propFactory.setPrefix(this);
         this.pose = pose;
         this.oi = oi;
         this.drive = drive;
         this.visionSubsystem = visionSubsystem;
+        this.visionDeltaLimitProp = propFactory.createPersistentProperty("Freeze Angle Delta Deg", 10.0);
         hm = clf.createHeadingModule(drive.getRotateToHeadingPid());
         this.requires(visionSubsystem);
         this.requires(drive);
@@ -41,6 +47,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         log.info("Initializing");
         // reset no goal state
         goal = null;
+        goalFrozen = false;
     }
     
     /*
@@ -55,7 +62,15 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         // if not yet acquired, look for target
         if((goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
             double relativeAngle = visionSubsystem.getAngleToTarget();
-            goal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
+            double newGoal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
+
+            // see if the goal has jumped like crazy from last tick, if so vision is probably 
+            // giving us bad data as we near the target so stop listening to it
+            if(goal != null && Math.abs(goal - newGoal) > visionDeltaLimitProp.get()) {
+                goalFrozen = true;
+            } else {
+                goal = newGoal;
+            }
         }
 
         if(goal != null) {

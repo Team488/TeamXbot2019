@@ -157,7 +157,7 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(OperatorInterface operatorInterface,
             RotateToVisionTargetCommand rotateToVisionTargetCommand) {
-            rotateToVisionTargetCommand.setContinuousAcquisition(true);
+        rotateToVisionTargetCommand.setContinuousAcquisition(true);
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
