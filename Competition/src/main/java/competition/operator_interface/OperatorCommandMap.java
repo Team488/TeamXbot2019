@@ -114,10 +114,10 @@ public class OperatorCommandMap {
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
         operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(toggleGrab);
-        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(grabDisc);
+        //operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
-        operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
-        operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
+        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(extend);
+        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retract);
     }
 
     @Inject
@@ -187,16 +187,8 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setUpClimberCommands(OperatorInterface operatorInterface, DeployBackCommand deployBack, DeployFrontCommand deployFront,
-            RetractBackCommand retractBack, RetractFrontCommand retractFront) {
-                //deployFront, deployBack
-        operatorInterface.operatorGamepad.getifAvailable(9).whenPressed(deployBack);
-        operatorInterface.operatorGamepad.getifAvailable(10).whenPressed(deployFront);
-        deployFront.includeOnSmartDashboard("Climb - deployFront");
-        deployBack.includeOnSmartDashboard("Climb - deployBack");
-
-        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractBack);
-        operatorInterface.operatorGamepad.getifAvailable(7).whenPressed(retractFront);
+    public void setUpClimberCommands(OperatorInterface operatorInterface, MotorClimberCommand command) {
+        operatorInterface.operatorGamepad.getifAvailable(4).toggleWhenPressed(command);
     }
 
     @Inject
