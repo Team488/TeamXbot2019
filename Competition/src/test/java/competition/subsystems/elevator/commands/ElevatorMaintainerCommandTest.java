@@ -38,19 +38,19 @@ public class ElevatorMaintainerCommandTest extends BaseCompetitionTest {
     public void testElevatorMaintainerCommandExecute() {
         assertEquals(0, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
         assertEquals(0, elevatorSubsystem.getTickGoal(), 0.001);
-        assertEquals(0, elevatorSubsystem.getElevatorHeightInTicks(), 0.001);
-        assertEquals(0, elevatorMaintainerCommand.power, 0.001);
+        assertEquals(0, elevatorSubsystem.getElevatorHeightInRawTicks(), 0.001);
+        assertEquals(0, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
         elevatorSubsystem.setTickGoal(100);
         ((MockCANTalon) elevatorSubsystem.master).setPosition(100);
         assertFalse(elevatorSubsystem.isCalibrationSensorPressed());
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(true);
         assertEquals(100, elevatorSubsystem.getTickGoal(), 0.001);
-        assertEquals(100, elevatorSubsystem.getElevatorHeightInTicks(), 0.001);
+        assertEquals(100, elevatorSubsystem.getElevatorHeightInRawTicks(), 0.001);
         assertTrue(elevatorSubsystem.isCalibrationSensorPressed());
         elevatorMaintainerCommand.execute();
         timer.advanceTimeInSecondsBy(3);
         elevatorMaintainerCommand.execute();
-        assertEquals(elevatorMaintainerCommand.power, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
+        assertEquals(elevatorSubsystem.master.getMotorOutputPercent(), elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
 
     }
 

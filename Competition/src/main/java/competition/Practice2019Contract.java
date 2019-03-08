@@ -64,7 +64,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorCalibrationSensor() {
-        return new DeviceInfo(10, false);
+        return new DeviceInfo(9, true);
     }
 
     public DeviceInfo getBrakeSolenoid() {
@@ -78,7 +78,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isElevatorLimitSwitchReady() {
-        return false;
+        return true;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isClimberReady() {
-        return true;
+        return false;
     }
 
     @Override
@@ -132,22 +132,47 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isFourBarReady() {
-        return true;
+        return false;
     }
 
     @Override
     public DeviceInfo getFourBarMaster() {
-        return new DeviceInfo(35, false);
+        return new DeviceInfo(1, false);
     }
 
     @Override
     public DeviceInfo getFourBarFollower() {
-        return new DeviceInfo(20, false);
+        return new DeviceInfo(2, true);
     }
 
     @Override
     public DeviceInfo getFourBarMasterEncoder() {
         return new DeviceInfo(0, false);
+    }
+
+    @Override
+    public boolean isMotorClimberReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getFrontLeftClimber() {
+        return new DeviceInfo(35, false);
+    }
+
+    @Override
+    public DeviceInfo getFrontRightClimber() {
+        return new DeviceInfo(20, false);
+    }
+
+    @Override
+    public DeviceInfo getRearLeftClimber() {
+        return new DeviceInfo(48, false);
+    }
+
+    @Override
+    public DeviceInfo getRearRightClimber() {
+        return new DeviceInfo(49, false);
     }
 
 }

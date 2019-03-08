@@ -41,14 +41,14 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     private final PIDManager positionalPid;
     private final PIDManager rotateToHeadingPid;
     private final PIDManager rotateDecayPid;
-
     private final ElectricalContract2019 contract;
+    private final DoubleProperty typicalCurrentLimitProp;
 
     @Inject
-    public DriveSubsystem(CommonLibFactory factory, PropertyFactory propManager, ElectricalContract2019 contract,
+    public DriveSubsystem(CommonLibFactory factory, PropertyFactory propFactory, ElectricalContract2019 contract,
             PIDFactory pf) {
         log.info("Creating DriveSubsystem");
-        propManager.setPrefix(this.getPrefix());
+        propFactory.setPrefix(this.getPrefix());
         this.contract = contract;
         positionalPid = pf.createPIDManager("Drive to position", 0.1, 0, 0.3, 0, 0.75, -0.75, 3, 1, 0.5);
 
@@ -59,9 +59,10 @@ public class DriveSubsystem extends BaseDriveSubsystem {
 
         rotateDecayPid = pf.createPIDManager("DriveDecay", 0, 0, 1);
 
-        leftTicksPerFiveFeet = propManager.createPersistentProperty("leftDriveTicksPer5Feet", 12348.8);
-        rightTicksPerFiveFeet = propManager.createPersistentProperty("rightDriveTicksPer5Feet", 12348.8);
-
+        leftTicksPerFiveFeet = propFactory.createPersistentProperty("leftDriveTicksPer5Feet", 12348.8);
+        rightTicksPerFiveFeet = propFactory.createPersistentProperty("rightDriveTicksPer5Feet", 12348.8);
+        typicalCurrentLimitProp = propFactory.createPersistentProperty("CurrentLimitOnBoot", 38);
+                
         if (contract.isDriveReady()) {
             this.leftMaster = factory.createCANTalon(contract.getLeftDriveMaster().channel);
             this.leftFollower = factory.createCANTalon(contract.getLeftDriveFollower().channel);
@@ -92,6 +93,7 @@ public class DriveSubsystem extends BaseDriveSubsystem {
             masterTalons.put(rightMaster, new MotionRegistration(0, 1, 1));
         }
         this.setVoltageRamp(0.05);
+        this.setCurrentLimits((int)typicalCurrentLimitProp.get(), true);
     }
 
     @Override

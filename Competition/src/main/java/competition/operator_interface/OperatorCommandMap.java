@@ -10,6 +10,7 @@ import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup
 import competition.subsystems.climber.commands.DeployAllClimberLegsCommand;
 import competition.subsystems.climber.commands.DeployBackCommand;
 import competition.subsystems.climber.commands.DeployFrontCommand;
+import competition.subsystems.climber.commands.MotorClimberCommand;
 import competition.subsystems.climber.commands.RetractBackCommand;
 import competition.subsystems.climber.commands.RetractFrontCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
@@ -29,6 +30,7 @@ import competition.subsystems.gripper.commands.ExtendGripperCommand;
 import competition.subsystems.gripper.commands.GrabDiscCommand;
 import competition.subsystems.gripper.commands.ReleaseDiscCommand;
 import competition.subsystems.gripper.commands.RetractGripperCommand;
+import competition.subsystems.gripper.commands.ToggleGrabDiscCommand;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
@@ -112,8 +114,9 @@ public class OperatorCommandMap {
 
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
-            GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract) {
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
+            GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(toggleGrab);
+        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
@@ -158,6 +161,7 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(OperatorInterface operatorInterface,
             RotateToVisionTargetCommand rotateToVisionTargetCommand) {
+            rotateToVisionTargetCommand.setContinuousAcquisition(true);
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
     }
@@ -165,17 +169,25 @@ public class OperatorCommandMap {
     @Inject
     public void setupDriverCommandGroups(OperatorInterface operatorInterface, ScoreOnMidCargoCommandGroup mid,
             ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
-            GoToLoadingStationCommandGroup loading) {
+            GoToLoadingStationCommandGroup loading,
+            RotateToHeadingCommand faceForward,
+            RotateToHeadingCommand faceLeft,
+            RotateToHeadingCommand faceRight,
+            RotateToHeadingCommand faceBack) {
         front.includeOnSmartDashboard("Score on Front Cargo");
         near.includeOnSmartDashboard("Score on Near Cargo");
         mid.includeOnSmartDashboard("Score on Mid Cargo");
         loading.includeOnSmartDashboard("Go to Loading Station");
 
-        operatorInterface.driverGamepad.getifAvailable(4).whenPressed(front);
-        operatorInterface.driverGamepad.getifAvailable(3).whenPressed(loading);
-        operatorInterface.driverGamepad.getifAvailable(2).whenPressed(mid);
-        operatorInterface.driverGamepad.getifAvailable(1).whenPressed(near);
+        faceForward.setHeadingGoal(90, false);
+        faceLeft.setHeadingGoal(180, false);
+        faceRight.setHeadingGoal(0, false);
+        faceBack.setHeadingGoal(-90, false);
 
+        operatorInterface.driverGamepad.getifAvailable(4).whileHeld(faceForward);
+        operatorInterface.driverGamepad.getifAvailable(3).whileHeld(faceLeft);
+        operatorInterface.driverGamepad.getifAvailable(2).whileHeld(faceRight);
+        operatorInterface.driverGamepad.getifAvailable(1).whileHeld(faceBack);
     }
 
     @Inject
@@ -187,8 +199,8 @@ public class OperatorCommandMap {
         deployFront.includeOnSmartDashboard("Climb - deployFront");
         deployBack.includeOnSmartDashboard("Climb - deployBack");
 
-        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(retractBack);
-        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractFront);
+        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retractBack);
+        operatorInterface.operatorGamepad.getifAvailable(7).whenPressed(retractFront);
     }
 
     @Inject
