@@ -60,7 +60,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     @Override
     public void execute() {
         // if not yet acquired, look for target
-        if((goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
+        if(!goalFrozen && (goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
             double relativeAngle = visionSubsystem.getAngleToTarget();
             double newGoal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
 
