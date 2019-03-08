@@ -49,14 +49,14 @@ public class ElevatorMaintainerCommand extends BaseCommand {
     @Override
     public void initialize() {
         log.info("Initializing");
-        previousTickPosition = elevatorSubsystem.getElevatorHeightInTicks();
+        previousTickPosition = elevatorSubsystem.getElevatorHeightInRawTicks();
         previousTime = XTimer.getFPGATimestamp();
         decider.reset();
     }
 
     @Override
     public void execute() {
-        double currentTickPosition = elevatorSubsystem.getElevatorHeightInTicks();
+        double currentTickPosition = elevatorSubsystem.getElevatorHeightInRawTicks();
         double currentTime = XTimer.getFPGATimestamp();
         double humanInput = oi.operatorGamepad.getRightStickY();
         HumanVsMachineMode deciderMode = decider.getRecommendedMode(humanInput);

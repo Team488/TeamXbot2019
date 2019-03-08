@@ -27,31 +27,31 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
 
     @Test
     public void testStopElevator() {
-        assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(0, getMasterPower(), 0.001);
         elevatorSubsystem.raise();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.raise();
-        assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(1, getMasterPower(), 0.001);
         elevatorSubsystem.stop();
-        assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(0, getMasterPower(), 0.001);
     }
 
     @Test
     public void testRaiseElevator() {
-        assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(0, getMasterPower(), 0.001);
         elevatorSubsystem.raise();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.raise();
-        assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(1, getMasterPower(), 0.001);
     }
 
     @Test
     public void testLowerElevator() {
-        assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(0, getMasterPower(), 0.001);
         elevatorSubsystem.lower();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.lower();
-        assertEquals(-1, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(-1, getMasterPower(), 0.001);
     }
 
     @Test
@@ -65,29 +65,31 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     public void testCalibrationSensorState() {
         assertEquals(false, elevatorSubsystem.getIsCalibrated());
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(true);
+        elevatorSubsystem.setPower(0);
         assertEquals(true, elevatorSubsystem.getIsCalibrated());
     }
 
     @Test
     public void testGetElevatorHeightInTicks() {
         ((MockCANTalon) elevatorSubsystem.master).setPosition(100);
-        assertEquals(100, elevatorSubsystem.getElevatorHeightInTicks(), 0.001);
+        assertEquals(100, elevatorSubsystem.getElevatorHeightInRawTicks(), 0.001);
         ((MockCANTalon) elevatorSubsystem.master).setPosition(0);
-        assertEquals(0, elevatorSubsystem.getElevatorHeightInTicks(), 0.001);
+        assertEquals(0, elevatorSubsystem.getElevatorHeightInRawTicks(), 0.001);
     }
 
     @Test
     public void testGetCalibrationHeight() {
         // calibrationHeight is negative -1 as placeholder in ElevatorSubsystem.java
-        assertEquals(-1, elevatorSubsystem.getCalibrationHeight(), 0.001);
-        ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(true);
-        elevatorSubsystem.calibrate();
         assertEquals(0, elevatorSubsystem.getCalibrationHeight(), 0.001);
+        ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(true);
+        ((MockCANTalon)elevatorSubsystem.master).setPosition(1000);
+        elevatorSubsystem.calibrate();
+        assertEquals(1000, elevatorSubsystem.getCalibrationHeight(), 0.001);
     }
 
     @Test
     public void testSetPowerIntial() {
-        assertEquals(0.0, elevatorSubsystem.getMasterPower(), 0.001);
+        assertEquals(0.0, getMasterPower(), 0.001);
         elevatorReady();
         testIsCalibrationSensorPressed();
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
@@ -101,8 +103,8 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
-        assertEquals(1, elevatorSubsystem.getMasterPower(), 0.001);
-        assertTrue(elevatorSubsystem.getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
+        assertEquals(1, getMasterPower(), 0.001);
+        assertTrue(getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
         assertTrue(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
 
@@ -114,14 +116,18 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
-        assertEquals(0, elevatorSubsystem.getMasterPower(), 0.001);
-        assertFalse(elevatorSubsystem.getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
+        assertEquals(0, getMasterPower(), 0.001);
+        assertFalse(getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
 
     public void elevatorReady() {
         assertTrue(contract.isElevatorReady());
         assertTrue(contract.isElevatorLimitSwitchReady());
+    }
+
+    private double getMasterPower() {
+        return elevatorSubsystem.master.getMotorOutputPercent();
     }
 
 }
