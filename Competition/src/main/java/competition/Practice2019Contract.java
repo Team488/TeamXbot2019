@@ -87,7 +87,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     public DeviceInfo getGripperDiscSolenoid() {
-        return new DeviceInfo(0, false);
+        return new DeviceInfo(0, true);
     }
 
     @Override

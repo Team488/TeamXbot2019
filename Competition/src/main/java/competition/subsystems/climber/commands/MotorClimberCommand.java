@@ -12,11 +12,13 @@ public class MotorClimberCommand extends BaseCommand {
 
         MotorClimberSubsystem climber;
         OperatorInterface oi;
+        ElevatorSubsystem elevator;
 
     @Inject
     public MotorClimberCommand(MotorClimberSubsystem climber, ElevatorSubsystem elevator, OperatorInterface oi) {
         this.climber = climber;
         this.oi = oi;
+        this.elevator = elevator;
         this.requires(climber);
         this.requires(elevator);
     }
@@ -45,6 +47,7 @@ public class MotorClimberCommand extends BaseCommand {
 
         climber.setFrontPower(frontClimb, tilt);
         climber.setRearPower(rearClimb, tilt);
+        elevator.setPower(0);
     }
 
 }
