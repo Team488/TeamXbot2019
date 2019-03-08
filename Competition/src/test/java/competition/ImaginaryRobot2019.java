@@ -29,4 +29,14 @@ public class ImaginaryRobot2019 extends Competition2019Contract {
     public boolean isFourBarReady() {
         return true;
     }
+
+    @Override
+    public boolean isClimberReady() {
+        return true;
+    }
+
+    @Override
+    public boolean isMotorClimberReady() {
+        return true;
+    }
 }
