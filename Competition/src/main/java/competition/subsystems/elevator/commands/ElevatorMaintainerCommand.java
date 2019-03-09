@@ -58,7 +58,7 @@ public class ElevatorMaintainerCommand extends BaseCommand {
     public void execute() {
         double currentTickPosition = elevatorSubsystem.getElevatorHeightInRawTicks();
         double currentTime = XTimer.getFPGATimestamp();
-        double humanInput = oi.operatorGamepad.getRightStickY();
+        double humanInput = oi.operatorGamepad.getLeftVector().y;
         HumanVsMachineMode deciderMode = decider.getRecommendedMode(humanInput);
         double candidatePower = 0;
 

@@ -109,11 +109,10 @@ public class OperatorCommandMap {
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(toggleGrab);
-        //operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(grabDisc);
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
-        operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(extend);
-        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(retract);
+        operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
+        operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
 
     @Inject
@@ -185,7 +184,7 @@ public class OperatorCommandMap {
 
     @Inject
     public void setUpClimberCommands(OperatorInterface operatorInterface, MotorClimberCommand command) {
-        operatorInterface.operatorGamepad.getifAvailable(4).toggleWhenPressed(command);
+        operatorInterface.operatorGamepad.getifAvailable(5).whileHeld(command);
     }
 
     @Inject

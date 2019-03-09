@@ -31,7 +31,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorSubsystem.raise();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.raise();
-        assertEquals(1, getMasterPower(), 0.001);
+        assertEquals(1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
         elevatorSubsystem.stop();
         assertEquals(0, getMasterPower(), 0.001);
     }
@@ -42,7 +42,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorSubsystem.raise();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.raise();
-        assertEquals(1, getMasterPower(), 0.001);
+        assertEquals(1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorSubsystem.lower();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.lower();
-        assertEquals(-1, getMasterPower(), 0.001);
+        assertEquals(-1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
     }
 
     @Test
@@ -103,8 +103,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
-        assertEquals(1, getMasterPower(), 0.001);
-        assertTrue(getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
+        assertEquals(1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
         assertTrue(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
 
@@ -117,7 +116,6 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
         testIsCalibrationSensorPressed();
         assertEquals(0, getMasterPower(), 0.001);
-        assertFalse(getMasterPower() > elevatorSubsystem.brakePowerLimit.get());
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
 

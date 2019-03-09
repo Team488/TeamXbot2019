@@ -35,7 +35,7 @@ public class StopElevatorCommandTest extends BaseCompetitionTest {
         elevatorSubsystem.raise();
         timer.advanceTimeInSecondsBy(3);
         elevatorSubsystem.raise();
-        assertEquals(1, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
+        assertEquals(1*elevatorSubsystem.getMaximumPower(), elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
         stopElevatorCommand.execute();
         assertEquals(0, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
     }

@@ -35,15 +35,16 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
     private final DoubleProperty elevatorStandardPower;
     private final DoubleProperty midHeightProp;
     private final DoubleProperty topHeightProp;
-    protected final DoubleProperty brakePowerLimit;
+    private final DoubleProperty brakePowerLimit;
     private ElectricalContract2019 contract;
-    public DoubleProperty armForcedDownToFreeRatchetDuration;
+    private final DoubleProperty armForcedDownToFreeRatchetDuration;
     public double raiseArmRequestedTime;
     private Latch positivePowerLatch;
     private Latch calibrationLatch;
-    public final DoubleProperty armDeadBand;
-    private BooleanProperty armLimitSwitchProp;
-    public DoubleProperty winchUnlockPower;
+    private final DoubleProperty armDeadBand;
+    private final BooleanProperty armLimitSwitchProp;
+    private final DoubleProperty winchUnlockPower;
+    private final DoubleProperty elevatorMaximumPower;
 
     public enum HatchLevel {
         Low, Medium, High,
@@ -72,6 +73,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
         }
 
         elevatorStandardPower = propManager.createPersistentProperty("StandardPower", 1);
+        elevatorMaximumPower = propManager.createPersistentProperty("MaximumPower", 0.5);
         winchUnlockPower = propManager.createPersistentProperty("UnlockPower", -.1);
         midHeightProp = propManager.createPersistentProperty("MidHeight", 0);
         topHeightProp = propManager.createPersistentProperty("TopHeight", 0);
@@ -140,7 +142,10 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
         if (contract.isElevatorReady()) {
             boolean releaseRatchet = false;
             positivePowerLatch.setValue(power > armDeadBand.get());
-            calibrationLatch.setValue(calibrationSensor.get());
+            
+            if (contract.isElevatorLimitSwitchReady()){
+                calibrationLatch.setValue(calibrationSensor.get());
+            }
 
             if (Math.abs(power) < armDeadBand.get()) {
                 power = 0;
@@ -164,9 +169,15 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
                     releaseRatchet = true;
                     power = winchUnlockPower.get();
                 }
+
+            power *= elevatorMaximumPower.get();
             master.simpleSet(power);
             allowElevatorMotionSolenoid.setOn(releaseRatchet);
         }
+    }
+
+    public double getMaximumPower() {
+        return elevatorMaximumPower.get();
     }
 
     private double getTickHeightForLevel(HatchLevel level) {

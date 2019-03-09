@@ -35,7 +35,7 @@ public class RaiseElevatorCommandTest extends BaseCompetitionTest {
         raiseElevatorCommand.execute();
         timer.advanceTimeInSecondsBy(3);
         raiseElevatorCommand.execute();
-        assertEquals(1, elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
+        assertEquals(1*elevatorSubsystem.getMaximumPower(), elevatorSubsystem.master.getMotorOutputPercent(), 0.001);
     }
 
 }

@@ -11,6 +11,7 @@ import competition.subsystems.climber.commands.MotorClimberDoNothingCommand;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.elevator.ElevatorSubsystem;
+import competition.subsystems.elevator.commands.ElevatorMaintainerCommand;
 import competition.subsystems.elevator.commands.StopElevatorCommand;
 import competition.subsystems.rumble.RumbleSubsystem;
 
@@ -24,7 +25,7 @@ public class SubsystemDefaultCommandMap {
     }
 
     @Inject
-    public void setupElevatorSubsystem(ElevatorSubsystem elevatorSubsystem, StopElevatorCommand command) {
+    public void setupElevatorSubsystem(ElevatorSubsystem elevatorSubsystem, ElevatorMaintainerCommand command) {
         elevatorSubsystem.setDefaultCommand(command);
     }
 

@@ -78,7 +78,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public boolean isElevatorLimitSwitchReady() {
-        return true;
+        return false;
     }
 
     @Override
