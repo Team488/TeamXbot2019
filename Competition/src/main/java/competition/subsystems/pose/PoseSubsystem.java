@@ -66,7 +66,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
         
         visionBackoffDistance = propManager.createPersistentProperty("VisionBackoffDistance", 36);
-        distanceFromCenterOfRobot = propManager.createPersistentProperty("DistanceFromCenterOfBot", 18);
+        distanceFromCenterOfRobot = propManager.createPersistentProperty("DistanceFromCenterOfBot", 21);
 
         // New definitions for each landmark:
         // <Side> <RelativeLocation> <Entity>
