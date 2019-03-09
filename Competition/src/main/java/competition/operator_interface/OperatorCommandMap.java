@@ -7,12 +7,7 @@ import competition.commandgroups.drivecommandgroups.GoToLoadingStationCommandGro
 import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup;
-import competition.subsystems.climber.commands.DeployAllClimberLegsCommand;
-import competition.subsystems.climber.commands.DeployBackCommand;
-import competition.subsystems.climber.commands.DeployFrontCommand;
 import competition.subsystems.climber.commands.MotorClimberCommand;
-import competition.subsystems.climber.commands.RetractBackCommand;
-import competition.subsystems.climber.commands.RetractFrontCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
@@ -20,6 +15,7 @@ import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
+import competition.subsystems.elevator.commands.ElevatorManualOverrideCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
 import competition.subsystems.elevator.commands.RaiseElevatorCommand;
 import competition.subsystems.elevator.commands.SetElevatorTickGoalCommand;
@@ -123,7 +119,7 @@ public class OperatorCommandMap {
     @Inject
     public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
             LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
-            SetElevatorTickGoalCommand setElevatorTickGoal) {
+            SetElevatorTickGoalCommand setElevatorTickGoal, ElevatorManualOverrideCommand override) {
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
@@ -135,6 +131,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
 
         operatorInterface.operatorGamepad.getifAvailable(8).whenPressed(stopElevator);
+        operatorInterface.operatorGamepad.getifAvailable(9).toggleWhenPressed(override);
     }
 
     @Inject

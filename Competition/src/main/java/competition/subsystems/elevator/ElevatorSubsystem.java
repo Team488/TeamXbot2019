@@ -124,8 +124,12 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
     public void calibrate() {
         calibrationOffsetProp.set(getElevatorHeightInRawTicks());
         isCalibrated = true;
-        //master.configReverseSoftLimitEnable(true, 0);
+        //setSafeties(true);
         //master.configReverseSoftLimitThreshold((int)getElevatorHeightInRawTicks(), 0);
+    }
+
+    public void setSafeties(boolean on) {
+        master.configReverseSoftLimitEnable(on, 0);
     }
 
     public double getCalibrationHeight() {
@@ -183,8 +187,13 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
         return tickGoal;
     }
 
-    public void insanelyDangerousElevatorMode(double power) {
+    public void insanelyDangerousSetPower(double power) {
+        boolean releaseRatchet = false;
+        if (power > brakePowerLimit.get()) {
+            releaseRatchet = true;
+        }
         master.simpleSet(power);
+        allowElevatorMotionSolenoid.setOn(releaseRatchet);
     }
 
     public void setCurrentPositionAsGoalPosition() {
