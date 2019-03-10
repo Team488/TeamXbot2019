@@ -13,6 +13,7 @@ import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
+import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.commands.ElevatorManualOverrideCommand;
@@ -52,9 +53,10 @@ public class OperatorCommandMap {
             ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
             ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
             ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem,
-            ConfigurablePurePursuitCommand goToVisionTarget) {
+            HumanAssistedPurePursuitCommand goToVisionTarget,
+            HumanAssistedPurePursuitCommand goToVisionLine) {
         operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
-        operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(tank);
+        operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(arcade);
         operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
         operatorInterface.driverGamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
 
@@ -103,14 +105,19 @@ public class OperatorCommandMap {
         goToVisionTarget.setMode(PointLoadingMode.Relative);
         goToVisionTarget.setDotProductDrivingEnabled(true);
         goToVisionTarget.setPointSupplier(() -> vision.getVisionTargetRelativePosition());
-        operatorInterface.driverGamepad.getifAvailable(7).whenPressed(goToVisionTarget);
+        operatorInterface.driverGamepad.getifAvailable(7).whileHeld(goToVisionTarget);
+
+        goToVisionLine.setMode(PointLoadingMode.Relative);
+        goToVisionLine.setDotProductDrivingEnabled(true);
+        goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
+        operatorInterface.driverGamepad.getifAvailable(5).whileHeld(goToVisionLine);
     }
 
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
-        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
+        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
@@ -147,7 +154,7 @@ public class OperatorCommandMap {
 
         setPositionToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
         setPositionToLeftLoadingStation.forceHeading(false);
-        operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
+        //operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
     }
 
     @Inject

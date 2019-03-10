@@ -8,6 +8,8 @@ import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.properties.BooleanProperty;
+import xbot.common.properties.PropertyFactory;
 
 @Singleton
 public class GripperSubsystem extends BaseSubsystem {
@@ -21,11 +23,14 @@ public class GripperSubsystem extends BaseSubsystem {
     public XDigitalInput diskSensor;
     public boolean gripperReady;
     private ToggleState gripperState;
+    private final BooleanProperty grabbingDiscProp;
 
     @Inject
-    public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract) {
+    public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract, PropertyFactory propFactory) {
         gripperReady = contract.isGripperReady();
         gripperState = ToggleState.GRAB;
+
+        propFactory.setPrefix(this.getPrefix());
 
         if (gripperReady) {
             gripperDiscPiston = clf.createSolenoid(contract.getGripperDiscSolenoid().channel);
@@ -36,14 +41,16 @@ public class GripperSubsystem extends BaseSubsystem {
 
             gripperExtensionPiston = clf.createSolenoid(contract.getGripperExtensionSolenoid().channel);
             gripperExtensionPiston.setInverted(contract.getGripperExtensionSolenoid().inverted);
-
         }
+
+        grabbingDiscProp = propFactory.createPersistentProperty("GrabbingDisc", true);
     }
 
     public void grabHatch() {
         if (gripperReady) {
             gripperDiscPiston.setOn(true);
             gripperState = ToggleState.GRAB;
+            grabbingDiscProp.set(true);
         }
     }
 
@@ -51,6 +58,7 @@ public class GripperSubsystem extends BaseSubsystem {
         if (gripperReady) {
             gripperDiscPiston.setOn(false);
             gripperState = ToggleState.RELEASE;
+            grabbingDiscProp.set(false);
         }
     }
 

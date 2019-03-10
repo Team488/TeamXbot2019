@@ -9,6 +9,7 @@ import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.XYPair;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;
 import xbot.common.subsystems.drive.control_logic.HeadingModule;
@@ -25,7 +26,9 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     HeadingModule hm;
     double rotation;
     private boolean continuousAcquisition = false;
-
+    final DoubleProperty constantOffsetProp;
+    final DoubleProperty freezeOffsetProp;
+    final BooleanProperty frozenProp;
 
     @Inject
     public RotateToVisionTargetCommand(OperatorInterface oi, 
@@ -37,6 +40,10 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         this.drive = drive;
         this.visionSubsystem = visionSubsystem;
         this.visionDeltaLimitProp = propFactory.createPersistentProperty("Freeze Angle Delta Deg", 10.0);
+        constantOffsetProp = propFactory.createPersistentProperty("ConstantOffset", 0);
+        freezeOffsetProp = propFactory.createPersistentProperty("FreezeOffset", 0);
+        frozenProp = propFactory.createEphemeralProperty("IsFrozen", false);
+
         hm = clf.createHeadingModule(drive.getRotateToHeadingPid());
         this.requires(visionSubsystem);
         this.requires(drive);
@@ -48,6 +55,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         // reset no goal state
         goal = null;
         goalFrozen = false;
+        frozenProp.set(false);
     }
     
     /*
@@ -62,12 +70,14 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         // if not yet acquired, look for target
         if(!goalFrozen && (goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
             double relativeAngle = visionSubsystem.getAngleToTarget();
+            relativeAngle += constantOffsetProp.get();
             double newGoal = pose.getCurrentHeading().shiftValue(relativeAngle).getValue();
 
             // see if the goal has jumped like crazy from last tick, if so vision is probably 
             // giving us bad data as we near the target so stop listening to it
             if(goal != null && Math.abs(goal - newGoal) > visionDeltaLimitProp.get()) {
                 goalFrozen = true;
+                goal += freezeOffsetProp.get();
             } else {
                 goal = newGoal;
             }
@@ -79,7 +89,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
             rotation = 0;
             hm.reset();
         }
-
+        frozenProp.set(goalFrozen);
         drive.drive(new XYPair(0, oi.driverGamepad.getLeftVector().y), rotation);
     }
 }

@@ -31,7 +31,7 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     VisionData visionData;
     double lastCalledTime;
     boolean beenTooLong;
-    
+
     final DoubleProperty differenceBetweenTime;
     final DoubleProperty packetNumberProp;
     final BooleanProperty hasTargetProperty;
@@ -45,14 +45,13 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
         propMan.setPrefix(this.getPrefix());
         differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
         recentPacket = "no packets yet";
-        
-        packetProp = propMan.createEphemeralProperty("Packet", recentPacket);        
+
+        packetProp = propMan.createEphemeralProperty("Packet", recentPacket);
         packetNumberProp = propMan.createEphemeralProperty("NumPackets", 0);
         hasTargetProperty = propMan.createEphemeralProperty("hasTarget", false);
         yawToTargetProperty = propMan.createEphemeralProperty("yawToTarget", 0.0);
         targetRangeProperty = propMan.createEphemeralProperty("targetRange", 0.0);
         targetRotationProperty = propMan.createEphemeralProperty("targetRotation", 0.0);
-
 
         client.setNewPacketHandler(packet -> handlePacket(packet));
         client.start();
@@ -66,7 +65,7 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
             visionData = JSON.std.beanFrom(VisionData.class, recentPacket);
             // validate the data
             boolean isDataValid = true;
-            if(visionData.getYaw() != null) {
+            if (visionData.getYaw() != null) {
                 double angle = visionData.getYaw().doubleValue();
                 if (angle > 180.0 || angle < -180.0) {
                     isDataValid = false;
@@ -75,15 +74,15 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
                 isDataValid = false;
             }
 
-            if(!isDataValid) {
+            if (!isDataValid) {
                 visionData = null;
-            } 
+            }
         } catch (IOException e) {
             visionData = null;
         }
 
         // report out values
-        if(visionData != null) {
+        if (visionData != null) {
             yawToTargetProperty.set(visionData.getYaw() != null ? visionData.getYaw() : 0.0);
             hasTargetProperty.set(visionData.isHasTarget());
             targetRangeProperty.set(visionData.getRange() != null ? visionData.getRange() : 0.0);
@@ -98,7 +97,7 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
     public boolean isTargetInView() {
         beenTooLong = ((XTimer.getFPGATimestamp() - lastCalledTime) > differenceBetweenTime.get());
-        if(beenTooLong || visionData == null) {
+        if (beenTooLong || visionData == null) {
             return false;
         } else {
             return visionData.hasTarget;
@@ -106,24 +105,36 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     }
 
     public double getAngleToTarget() {
-        if(isTargetInView()) {
+        if (isTargetInView()) {
             return visionData.getYaw().doubleValue();
         }
         return 0.0;
     }
 
     public List<RabbitPoint> getVisionTargetRelativePosition() {
-        var points = new ArrayList<RabbitPoint>();
-        // TODO: get data from solve PNP
-        RabbitPoint goalPoint = new RabbitPoint(36, 36, 90);
-        goalPoint.pointType = PointType.PositionAndHeading;
-        goalPoint.terminatingType = PointTerminatingType.Stop;
-
-        points.add(goalPoint);
-
-        return points;
+        return createPathToVisionTarget(visionData.getRange(), visionData.getRotation()+90);
     }
 
+    public List<RabbitPoint> getVisionTargetLine() {
+        return createPathToVisionTarget(12*20, visionData.getYaw()+90);
+    }
+
+    public List<RabbitPoint> createPathToVisionTarget(double distance, double finalHeading) {
+        var points = new ArrayList<RabbitPoint>();
+
+        if (isTargetInView()) {
+            double xOffset = Math.cos((visionData.getYaw() + 90) * Math.PI / 180) * distance;
+            double yOffset = Math.sin((visionData.getYaw() + 90) * Math.PI / 180) * distance;
+
+            RabbitPoint goalPoint = new RabbitPoint(xOffset, yOffset, finalHeading);
+            goalPoint.pointType = PointType.PositionAndHeading;
+            goalPoint.terminatingType = PointTerminatingType.Stop;
+
+            points.add(goalPoint);
+        }
+        return points;
+    }
+    
     @Override
     public void updatePeriodicData() {
         if (recentPacket != null) {
