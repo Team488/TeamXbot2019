@@ -153,7 +153,7 @@ public class RoboxContract extends ElectricalContract2019 {
     }
 
     @Override
-    public boolean isMotorClimberReady() {
+    public boolean isFrontMotorClimberReady() {
         return false;
     }
 
@@ -175,6 +175,11 @@ public class RoboxContract extends ElectricalContract2019 {
     @Override
     public DeviceInfo getRearRightClimber() {
         return null;
+    }
+
+    @Override
+    public boolean isRearMotorClimberReady() {
+        return false;
     }
 
 }

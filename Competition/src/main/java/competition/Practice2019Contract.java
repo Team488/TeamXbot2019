@@ -151,7 +151,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
     }
 
     @Override
-    public boolean isMotorClimberReady() {
+    public boolean isFrontMotorClimberReady() {
         return false;
     }
 
@@ -173,6 +173,11 @@ public class Practice2019Contract extends ElectricalContract2019 {
     @Override
     public DeviceInfo getRearRightClimber() {
         return new DeviceInfo(49, false);
+    }
+
+    @Override
+    public boolean isRearMotorClimberReady() {
+        return false;
     }
 
 }

@@ -36,7 +36,12 @@ public class ImaginaryRobot2019 extends Competition2019Contract {
     }
 
     @Override
-    public boolean isMotorClimberReady() {
+    public boolean isFrontMotorClimberReady() {
+        return true;
+    }
+
+    @Override
+    public boolean isRearMotorClimberReady() {
         return true;
     }
 }

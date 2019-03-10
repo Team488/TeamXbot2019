@@ -65,7 +65,9 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
 
     public abstract DeviceInfo getFourBarFollower();
 
-    public abstract boolean isMotorClimberReady();
+    public abstract boolean isFrontMotorClimberReady();
+
+    public abstract boolean isRearMotorClimberReady();
 
     public abstract DeviceInfo getFrontLeftClimber();
     public abstract DeviceInfo getFrontRightClimber();

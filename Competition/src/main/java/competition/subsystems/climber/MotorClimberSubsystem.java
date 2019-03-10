@@ -28,9 +28,12 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         this.clf = clf;
         this.contract = contract;
 
-        if (contract.isMotorClimberReady()) {
+        if (contract.isFrontMotorClimberReady()) {
             frontLeft = setupMotor(contract.getFrontLeftClimber());
             frontRight = setupMotor(contract.getFrontRightClimber());
+        }
+
+        if (contract.isRearMotorClimberReady()) {
             rearLeft = setupMotor(contract.getRearLeftClimber());
             rearRight = setupMotor(contract.getRearRightClimber());
         }
@@ -43,14 +46,14 @@ public class MotorClimberSubsystem extends BaseSubsystem {
     }
 
     public void setFrontPower(double lift, double tilt) {
-        if (contract.isMotorClimberReady()) {
+        if (contract.isFrontMotorClimberReady()) {
             frontLeft.simpleSet(lift - tilt);
             frontRight.simpleSet(lift + tilt);
         }
     }
 
     public void setRearPower(double lift, double tilt) {
-        if (contract.isMotorClimberReady()) {
+        if (contract.isRearMotorClimberReady()) {
             rearLeft.simpleSet(lift - tilt);
             rearRight.simpleSet(lift + tilt);
         }
