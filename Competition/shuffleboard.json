@@ -702,6 +702,20 @@
                   "_title": "Solenoid[0,5]/Value",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,2]/Value",
+                  "_title": "Solenoid[0,2]/Value",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[9]/Value",
+                  "_title": "DigitalInput[9]/Value",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
                 }
               ]
             }
@@ -1037,7 +1051,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "4,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -1048,7 +1062,7 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/StandardPower"
             }
           },
-          "5,0": {
+          "6,1": {
             "size": [
               2,
               2
@@ -1057,6 +1071,41 @@
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/ElevatorMaster",
               "_title": "/SmartDashboard/ElevatorSubsystem/ElevatorMaster"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/Arm Deadband",
+              "_title": "/SmartDashboard/ElevatorSubsystem/Arm Deadband"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/BrakePowerLimit",
+              "_title": "/SmartDashboard/ElevatorSubsystem/BrakePowerLimit"
+            }
+          },
+          "1,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/GripperSubsystem/GrabbingDisc",
+              "_title": "SmartDashboard/GripperSubsystem/GrabbingDisc",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -1103,6 +1152,41 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PoseSubsystem/VisionBackoffDistance",
               "_title": "/SmartDashboard/PoseSubsystem/VisionBackoffDistance"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RotateToVisionTargetCommand/ConstantOffset",
+              "_title": "/SmartDashboard/RotateToVisionTargetCommand/ConstantOffset"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RotateToVisionTargetCommand/Freeze Angle Delta Deg",
+              "_title": "/SmartDashboard/RotateToVisionTargetCommand/Freeze Angle Delta Deg"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/RotateToVisionTargetCommand/IsFrozen",
+              "_title": "/SmartDashboard/RotateToVisionTargetCommand/IsFrozen",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -1168,9 +1252,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.400000095367432,
-    "y": 0.800000011920929,
-    "width": 1548.800048828125,
-    "height": 752.7999877929688
+    "x": -5.599999904632568,
+    "y": 7.199999809265137,
+    "width": 640.0,
+    "height": 548.7999877929688
   }
 }
