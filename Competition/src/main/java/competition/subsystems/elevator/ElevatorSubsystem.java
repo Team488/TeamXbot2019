@@ -180,7 +180,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
         return elevatorMaximumPower.get();
     }
 
-    private double getTickHeightForLevel(HatchLevel level) {
+    public double getTickHeightForLevel(HatchLevel level) {
         if (level == HatchLevel.Low) {
             return calibrationOffsetProp.get();
         } else if (level == HatchLevel.Medium) {

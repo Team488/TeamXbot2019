@@ -16,6 +16,8 @@ import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
 import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
+import competition.subsystems.elevator.ElevatorSubsystem;
+import competition.subsystems.elevator.ElevatorSubsystem.HatchLevel;
 import competition.subsystems.elevator.commands.ElevatorManualOverrideCommand;
 import competition.subsystems.elevator.commands.LowerElevatorCommand;
 import competition.subsystems.elevator.commands.RaiseElevatorCommand;
@@ -123,9 +125,11 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupElevatorCommands(OperatorInterface operatorInterface, RaiseElevatorCommand raiseElevator,
+    public void setupElevatorCommands(OperatorInterface operatorInterface, ElevatorSubsystem elevatorSubsystem, 
+            RaiseElevatorCommand raiseElevator,
             LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
-            SetElevatorTickGoalCommand setElevatorTickGoal, ElevatorManualOverrideCommand override) {
+            SetElevatorTickGoalCommand setElevatorLow, SetElevatorTickGoalCommand setElevatorMid, 
+            SetElevatorTickGoalCommand setElevatorHigh, ElevatorManualOverrideCommand override) {
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
         operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
@@ -138,6 +142,14 @@ public class OperatorCommandMap {
 
         operatorInterface.operatorGamepad.getifAvailable(8).whenPressed(stopElevator);
         operatorInterface.operatorGamepad.getifAvailable(9).toggleWhenPressed(override);
+
+        setElevatorLow.setGoal(elevatorSubsystem.getTickHeightForLevel(HatchLevel.Low));
+        setElevatorMid.setGoal(elevatorSubsystem.getTickHeightForLevel(HatchLevel.Medium));
+        setElevatorHigh.setGoal(elevatorSubsystem.getTickHeightForLevel(HatchLevel.High));
+
+        operatorInterface.operatorGamepad.getPovIfAvailable(0).whenPressed(setElevatorLow);
+        operatorInterface.operatorGamepad.getPovIfAvailable(90).whenPressed(setElevatorMid);
+        operatorInterface.operatorGamepad.getPovIfAvailable(270).whenPressed(setElevatorHigh);
     }
 
     @Inject
