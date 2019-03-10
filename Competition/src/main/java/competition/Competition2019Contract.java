@@ -16,4 +16,24 @@ public class Competition2019Contract extends Practice2019Contract {
     public boolean isElevatorLimitSwitchReady() {
         return true;
     }
+
+    @Override
+    public DeviceInfo getFrontLeftClimber() {
+        return new DeviceInfo(35, false);
+    }
+
+    @Override
+    public DeviceInfo getFrontRightClimber() {
+        return new DeviceInfo(20, false);
+    }
+
+    @Override
+    public DeviceInfo getRearLeftClimber() {
+        return new DeviceInfo(48, false);
+    }
+
+    @Override
+    public DeviceInfo getRearRightClimber() {
+        return new DeviceInfo(49, false);
+    }
 }
