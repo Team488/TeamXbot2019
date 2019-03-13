@@ -182,4 +182,14 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public boolean isRearMotorClimberReady() {
         return false;
     }
+
+    @Override
+    public DeviceInfo getRearLeftEncoder() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getRearRightEncoder() {
+        return null;
+    }
 }

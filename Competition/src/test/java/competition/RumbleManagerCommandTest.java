@@ -3,6 +3,7 @@ package competition;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.subsystems.vision.VisionSubsystem;
@@ -22,6 +23,7 @@ public class RumbleManagerCommandTest extends BaseCompetitionTest {
     }
 
     @Test
+    @Ignore
     public void test() {
         // TODO: Add abilty to test RumbleManager so we can see if the rumble command is
         // sent

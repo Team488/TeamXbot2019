@@ -182,4 +182,14 @@ public class RoboxContract extends ElectricalContract2019 {
         return false;
     }
 
+    @Override
+    public DeviceInfo getRearLeftEncoder() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getRearRightEncoder() {
+        return null;
+    }
+
 }

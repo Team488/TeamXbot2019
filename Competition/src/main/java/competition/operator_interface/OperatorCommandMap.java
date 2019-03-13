@@ -118,8 +118,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
-        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
+        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }

@@ -36,6 +36,18 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         if (contract.isRearMotorClimberReady()) {
             rearLeft = setupMotor(contract.getRearLeftClimber());
             rearRight = setupMotor(contract.getRearRightClimber());
+
+            //rearLeft.configReverseSoftLimitEnable(true, 0);
+            //rearLeft.configReverseSoftLimitThreshold(0, 0);
+
+            rearLeft.configureAsMasterMotor(getPrefix(), "RearLeft", contract.getRearLeftClimber().inverted,
+                    contract.getRearLeftEncoder().inverted);
+
+            //rearRight.configReverseSoftLimitEnable(true, 0);
+            //rearRight.configReverseSoftLimitThreshold(0, 0);
+
+            rearRight.configureAsMasterMotor(getPrefix(), "RearRight", contract.getRearRightClimber().inverted,
+                    contract.getRearRightEncoder().inverted);
         }
     }
 

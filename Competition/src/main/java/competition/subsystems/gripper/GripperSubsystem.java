@@ -4,10 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import competition.ElectricalContract2019;
+import competition.RumbleManager;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
+import xbot.common.controls.sensors.XTimer;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.logic.Latch;
+import xbot.common.logic.Latch.EdgeType;
 import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.PropertyFactory;
 
@@ -24,9 +28,11 @@ public class GripperSubsystem extends BaseSubsystem {
     public boolean gripperReady;
     private ToggleState gripperState;
     private final BooleanProperty grabbingDiscProp;
+    private Latch gripperLatch;
 
     @Inject
-    public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract, PropertyFactory propFactory) {
+    public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract, PropertyFactory propFactory,
+            RumbleManager rumble) {
         gripperReady = contract.isGripperReady();
         gripperState = ToggleState.GRAB;
 
@@ -44,6 +50,15 @@ public class GripperSubsystem extends BaseSubsystem {
         }
 
         grabbingDiscProp = propFactory.createPersistentProperty("GrabbingDisc", true);
+
+        gripperLatch = new Latch(false, EdgeType.Both, edge -> {
+            if (edge == EdgeType.RisingEdge) {
+                rumble.rumbleDriverGamepad(0.5, 0.5);
+            }
+            if (edge == EdgeType.FallingEdge) {
+                rumble.rumbleDriverGamepad(0.5, 0.5);
+            }
+        });
     }
 
     public void grabHatch() {
@@ -52,6 +67,7 @@ public class GripperSubsystem extends BaseSubsystem {
             gripperState = ToggleState.GRAB;
             grabbingDiscProp.set(true);
         }
+        checkIfToggled();
     }
 
     public void releaseHatch() {
@@ -60,6 +76,7 @@ public class GripperSubsystem extends BaseSubsystem {
             gripperState = ToggleState.RELEASE;
             grabbingDiscProp.set(false);
         }
+        checkIfToggled();
     }
 
     public void setExtension(boolean extend) {
@@ -71,6 +88,11 @@ public class GripperSubsystem extends BaseSubsystem {
             return diskSensor.get();
         }
         return false;
+    }
+
+    private void checkIfToggled() {
+        boolean gripping = (gripperState == ToggleState.GRAB);
+        gripperLatch.setValue(gripping);
     }
 
     public void toggle() {
