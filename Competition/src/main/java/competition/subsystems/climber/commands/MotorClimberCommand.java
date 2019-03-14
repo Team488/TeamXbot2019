@@ -32,8 +32,8 @@ public class MotorClimberCommand extends BaseCommand {
     public void execute() {
         double frontClimb = oi.operatorGamepad.getLeftVector().y;
         double rearClimb = oi.operatorGamepad.getRightVector().y;
-        double leftTilt = oi.operatorGamepad.getLeftVector().x;
-        double rightTilt =  oi.operatorGamepad.getRightVector().x;
+        double leftTilt = MathUtils.squareAndRetainSign(oi.operatorGamepad.getLeftVector().x);
+        double rightTilt =  MathUtils.squareAndRetainSign(oi.operatorGamepad.getRightVector().x);
         double tilt = 0;
         if (Math.abs(Math.signum(leftTilt) - Math.signum(rightTilt)) < 0.001) {
             // if the signs are the same, just take the biggest one.
