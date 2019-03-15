@@ -18,6 +18,7 @@ public class SetPoseToFieldLandmarkCommand extends BaseCommand {
     @Inject
     public SetPoseToFieldLandmarkCommand(PoseSubsystem pose, CommonLibFactory clf) {
         this.pose = pose;
+        this.setRunWhenDisabled(true);
     }
 
     /**

@@ -13,6 +13,7 @@ import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseRobot;
 
 public class Robot extends BaseRobot {
+    protected PoseSubsystem pose;
 
     @Override
     protected void initializeSystems() {
@@ -20,7 +21,8 @@ public class Robot extends BaseRobot {
         this.injector.getInstance(SubsystemDefaultCommandMap.class);
         this.injector.getInstance(OperatorCommandMap.class);
 
-        registerPeriodicDataSource(this.injector.getInstance(PoseSubsystem.class));
+        this.pose = this.injector.getInstance(PoseSubsystem.class);
+        registerPeriodicDataSource(pose);
         registerPeriodicDataSource(this.injector.getInstance(VisionSubsystem.class));
         registerPeriodicDataSource(this.injector.getInstance(RumbleManager.class));
         registerPeriodicDataSource(this.injector.getInstance(DriveSubsystem.class));
@@ -61,5 +63,11 @@ public class Robot extends BaseRobot {
     @Override
     protected void setupInjectionModule() {
         this.injectionModule = new CompetitionModule(getRobotPlatform());
+    }
+
+    @Override
+    public void autonomousInit() {        
+        super.autonomousInit();
+        pose.setCurrentHeading(90);
     }
 }

@@ -118,8 +118,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(grabDisc);
-        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(releaseDisc);
+        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
+        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }
@@ -154,8 +154,12 @@ public class OperatorCommandMap {
 
     @Inject
     public void setupPoseCommands(SetPoseToFieldLandmarkCommand setPoseToLeftHabLevelZero,
-            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation, OperatorInterface operatorInterface,
-            SetPoseToFieldLandmarkCommand setPositionToLeftLoadingStation) {
+            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation, 
+            OperatorInterface operatorInterface,
+            SetPoseToFieldLandmarkCommand setPositionToLeftLoadingStation,
+            SetPoseToFieldLandmarkCommand setPositionToHab2Left, 
+            SetPoseToFieldLandmarkCommand setPositionToHab2Right,
+            SetPoseToFieldLandmarkCommand setPositionToHab1Center) {
         // Start with a smaller set of commands, we can build up from there.
         setPoseToLeftHabLevelZero.setLandmark(Side.Left, FieldLandmark.HabLevelZero);
         setPoseToLeftHabLevelZero.forceHeading(true);
@@ -167,6 +171,15 @@ public class OperatorCommandMap {
         setPositionToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
         setPositionToLeftLoadingStation.forceHeading(false);
         //operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
+
+        // Setting where the bot starts after drive teams places them
+        setPositionToHab1Center.setLandmark(Side.Left, FieldLandmark.HabLevelOne);
+        setPositionToHab2Left.setLandmark(Side.Left, FieldLandmark.HabLevelTwo);
+        setPositionToHab2Right.setLandmark(Side.Right, FieldLandmark.HabLevelTwo);
+
+        setPositionToHab1Center.includeOnSmartDashboard("Set Position to Center of HAB Level 1");
+        setPositionToHab2Left.includeOnSmartDashboard("Set Position to Left of HAB Level 2");
+        setPositionToHab2Right.includeOnSmartDashboard("Set Position to Right of HAB Level 2");
     }
 
     @Inject
@@ -178,13 +191,16 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupDriverCommandGroups(OperatorInterface operatorInterface, ScoreOnMidCargoCommandGroup mid,
+    public void setupDriverCommandGroups(OperatorInterface operatorInterface, PoseSubsystem pose,
+     ScoreOnMidCargoCommandGroup mid,
             ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
             GoToLoadingStationCommandGroup loading,
             RotateToHeadingCommand faceForward,
             RotateToHeadingCommand faceLeft,
             RotateToHeadingCommand faceRight,
-            RotateToHeadingCommand faceBack) {
+            RotateToHeadingCommand faceBack,
+            ConfigurablePurePursuitCommand leftLoading,
+            ConfigurablePurePursuitCommand rightLoading) {
         front.includeOnSmartDashboard("Score on Front Cargo");
         near.includeOnSmartDashboard("Score on Near Cargo");
         mid.includeOnSmartDashboard("Score on Mid Cargo");
@@ -195,9 +211,15 @@ public class OperatorCommandMap {
         faceRight.setHeadingGoal(0, false);
         faceBack.setHeadingGoal(-90, false);
 
+        leftLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        leftLoading.setDotProductDrivingEnabled(true);
+
+        rightLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
+        rightLoading.setDotProductDrivingEnabled(true);
+
         operatorInterface.driverGamepad.getifAvailable(4).whileHeld(faceForward);
-        operatorInterface.driverGamepad.getifAvailable(3).whileHeld(faceLeft);
-        operatorInterface.driverGamepad.getifAvailable(2).whileHeld(faceRight);
+        operatorInterface.driverGamepad.getifAvailable(3).whileHeld(leftLoading);
+        operatorInterface.driverGamepad.getifAvailable(2).whileHeld(rightLoading);
         operatorInterface.driverGamepad.getifAvailable(1).whileHeld(faceBack);
     }
 
