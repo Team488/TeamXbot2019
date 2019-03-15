@@ -34,7 +34,10 @@ import competition.subsystems.pose.PoseSubsystem.Side;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import competition.subsystems.vision.VisionSubsystem;
 import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
+import xbot.common.controls.sensors.AdvancedButton;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
+import xbot.common.controls.sensors.ChordButton;
+import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
 import xbot.common.subsystems.drive.PurePursuitCommand.PointLoadingMode;
 import xbot.common.subsystems.drive.RabbitPoint;
@@ -47,17 +50,16 @@ public class OperatorCommandMap {
     // Example for setting up a command to fire when a button is pressed:
 
     @Inject
-    public void setupDriveCommands(OperatorInterface operatorInterface, VisionSubsystem vision, CheesyDriveWithJoysticksCommand cheesyDrive,
-            ArcadeDriveWithJoysticksCommand arcade, TankDriveWithJoysticksCommand tank, RotateToHeadingCommand rotate,
-            CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
-            ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
-            ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
-            ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
-            ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
-            ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem,
-            HumanAssistedPurePursuitCommand goToVisionTarget,
+    public void setupDriveCommands(OperatorInterface operatorInterface, VisionSubsystem vision,
+            CheesyDriveWithJoysticksCommand cheesyDrive, ArcadeDriveWithJoysticksCommand arcade,
+            TankDriveWithJoysticksCommand tank, RotateToHeadingCommand rotate, CheesyQuickTurnCommand quickTurn,
+            ConfigurablePurePursuitCommand pursuit, ResetHeadingAndDistanceCommandGroup resetPose,
+            ConfigurablePurePursuitCommand forward, ConfigurablePurePursuitCommand backward,
+            DriveEverywhereCommandGroup driveEverywhere, ConfigurablePurePursuitCommand goToRocket,
+            ConfigurablePurePursuitCommand goToLoadingStation, ConfigurablePurePursuitCommand goToFrontCargo,
+            ConfigurablePurePursuitCommand goToNearCargo, ConfigurablePurePursuitCommand goToFarLoadingStation,
+            PoseSubsystem poseSubsystem, HumanAssistedPurePursuitCommand goToVisionTarget,
             HumanAssistedPurePursuitCommand goToVisionLine) {
-        operatorInterface.driverGamepad.getifAvailable(6).whileHeld(quickTurn);
         operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(arcade);
         operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
         operatorInterface.driverGamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
@@ -112,12 +114,44 @@ public class OperatorCommandMap {
         goToVisionLine.setMode(PointLoadingMode.Relative);
         goToVisionLine.setDotProductDrivingEnabled(true);
         goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
-        operatorInterface.driverGamepad.getifAvailable(5).whileHeld(goToVisionLine);
+    }
+    
+    @Inject
+    public void setupDriverCommandGroups(OperatorInterface operatorInterface, CommonLibFactory clf, PoseSubsystem pose,
+            ScoreOnMidCargoCommandGroup mid, ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
+            GoToLoadingStationCommandGroup loading, RotateToHeadingCommand faceForward, RotateToHeadingCommand faceLeft,
+            RotateToHeadingCommand faceRight, RotateToHeadingCommand faceBack,
+            ConfigurablePurePursuitCommand leftLoading, ConfigurablePurePursuitCommand rightLoading) {
+        front.includeOnSmartDashboard("Score on Front Cargo");
+        near.includeOnSmartDashboard("Score on Near Cargo");
+        mid.includeOnSmartDashboard("Score on Mid Cargo");
+        loading.includeOnSmartDashboard("Go to Loading Station");
+
+        faceForward.setHeadingGoal(90, false);
+        faceLeft.setHeadingGoal(180, false);
+        faceRight.setHeadingGoal(0, false);
+        faceBack.setHeadingGoal(-90, false);
+
+        AdvancedButton leftShift = operatorInterface.driverGamepad.getifAvailable(5);
+        AdvancedButton rightShift = operatorInterface.driverGamepad.getifAvailable(6);
+        AdvancedButton driverA = operatorInterface.driverGamepad.getifAvailable(1);
+        ChordButton leftA = clf.createChordButton(leftShift, driverA);
+        ChordButton rightA = clf.createChordButton(rightShift, driverA);
+
+        leftLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        leftLoading.setDotProductDrivingEnabled(true);
+
+        rightLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
+        rightLoading.setDotProductDrivingEnabled(true);
+
+        leftA.whileHeld(leftLoading);
+        rightA.whileHeld(rightLoading);
     }
 
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
-            GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract, ToggleGrabDiscCommand toggleGrab) {
+            GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract,
+            ToggleGrabDiscCommand toggleGrab) {
         operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
         operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
@@ -125,10 +159,9 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setupElevatorCommands(OperatorInterface operatorInterface, ElevatorSubsystem elevatorSubsystem, 
-            RaiseElevatorCommand raiseElevator,
-            LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
-            SetElevatorTickGoalCommand setElevatorLow, SetElevatorTickGoalCommand setElevatorMid, 
+    public void setupElevatorCommands(OperatorInterface operatorInterface, ElevatorSubsystem elevatorSubsystem,
+            RaiseElevatorCommand raiseElevator, LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
+            SetElevatorTickGoalCommand setElevatorLow, SetElevatorTickGoalCommand setElevatorMid,
             SetElevatorTickGoalCommand setElevatorHigh, ElevatorManualOverrideCommand override) {
         // Right Up
         AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
@@ -154,11 +187,9 @@ public class OperatorCommandMap {
 
     @Inject
     public void setupPoseCommands(SetPoseToFieldLandmarkCommand setPoseToLeftHabLevelZero,
-            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation, 
-            OperatorInterface operatorInterface,
+            SetPoseToFieldLandmarkCommand setPoseToLeftLoadingStation, OperatorInterface operatorInterface,
             SetPoseToFieldLandmarkCommand setPositionToLeftLoadingStation,
-            SetPoseToFieldLandmarkCommand setPositionToHab2Left, 
-            SetPoseToFieldLandmarkCommand setPositionToHab2Right,
+            SetPoseToFieldLandmarkCommand setPositionToHab2Left, SetPoseToFieldLandmarkCommand setPositionToHab2Right,
             SetPoseToFieldLandmarkCommand setPositionToHab1Center) {
         // Start with a smaller set of commands, we can build up from there.
         setPoseToLeftHabLevelZero.setLandmark(Side.Left, FieldLandmark.HabLevelZero);
@@ -170,7 +201,7 @@ public class OperatorCommandMap {
 
         setPositionToLeftLoadingStation.setLandmark(Side.Left, FieldLandmark.LoadingStation);
         setPositionToLeftLoadingStation.forceHeading(false);
-        //operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
+        // operatorInterface.driverGamepad.getifAvailable(5).whenPressed(setPositionToLeftLoadingStation);
 
         // Setting where the bot starts after drive teams places them
         setPositionToHab1Center.setLandmark(Side.Left, FieldLandmark.HabLevelOne);
@@ -188,39 +219,6 @@ public class OperatorCommandMap {
         rotateToVisionTargetCommand.setContinuousAcquisition(true);
         operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
         rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
-    }
-
-    @Inject
-    public void setupDriverCommandGroups(OperatorInterface operatorInterface, PoseSubsystem pose,
-     ScoreOnMidCargoCommandGroup mid,
-            ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
-            GoToLoadingStationCommandGroup loading,
-            RotateToHeadingCommand faceForward,
-            RotateToHeadingCommand faceLeft,
-            RotateToHeadingCommand faceRight,
-            RotateToHeadingCommand faceBack,
-            ConfigurablePurePursuitCommand leftLoading,
-            ConfigurablePurePursuitCommand rightLoading) {
-        front.includeOnSmartDashboard("Score on Front Cargo");
-        near.includeOnSmartDashboard("Score on Near Cargo");
-        mid.includeOnSmartDashboard("Score on Mid Cargo");
-        loading.includeOnSmartDashboard("Go to Loading Station");
-
-        faceForward.setHeadingGoal(90, false);
-        faceLeft.setHeadingGoal(180, false);
-        faceRight.setHeadingGoal(0, false);
-        faceBack.setHeadingGoal(-90, false);
-
-        leftLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
-        leftLoading.setDotProductDrivingEnabled(true);
-
-        rightLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
-        rightLoading.setDotProductDrivingEnabled(true);
-
-        operatorInterface.driverGamepad.getifAvailable(4).whileHeld(faceForward);
-        operatorInterface.driverGamepad.getifAvailable(3).whileHeld(leftLoading);
-        operatorInterface.driverGamepad.getifAvailable(2).whileHeld(rightLoading);
-        operatorInterface.driverGamepad.getifAvailable(1).whileHeld(faceBack);
     }
 
     @Inject
