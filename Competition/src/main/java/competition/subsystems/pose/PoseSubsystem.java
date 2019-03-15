@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -28,22 +29,12 @@ public class PoseSubsystem extends BasePoseSubsystem {
     LowResField field;
 
     public enum Side {
-        Left,
-        Right
+        Left, Right
     }
 
     public enum FieldLandmark {
-        FrontCargoShip,
-        NearCargoShip,
-        MidCargoShip,
-        FarCargoShip,
-        NearRocket,
-        MidRocket,
-        FarRocket,
-        LoadingStation,
-        HabLevelTwo,
-        HabLevelOne,
-        HabLevelZero
+        FrontCargoShip, NearCargoShip, MidCargoShip, FarCargoShip, NearRocket, MidRocket, FarRocket, LoadingStation,
+        HabLevelTwo, HabLevelOne, HabLevelZero
     }
 
     private final Map<String, FieldPosePropertyManager> landmarkToLocation;
@@ -54,6 +45,8 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private final FieldPosePropertyManager leftCargoShipWaypoint; // all side cargo locations use the same waypoint
     private final DoubleProperty distanceFromCenterOfRobot;
     private final DoubleProperty visionBackoffDistance;
+    private final DoubleProperty autoResetAngleThreshold;
+    private final DoubleProperty autoResetMaximumDistance;
     private CommonLibFactory clf;
 
     @Inject
@@ -64,22 +57,27 @@ public class PoseSubsystem extends BasePoseSubsystem {
         this.field = field;
         propManager.setPrefix(this.getPrefix());
         landmarkToLocation = new HashMap<String, FieldPosePropertyManager>();
-        
+
         visionBackoffDistance = propManager.createPersistentProperty("VisionBackoffDistance", 36);
         distanceFromCenterOfRobot = propManager.createPersistentProperty("DistanceFromCenterOfBot", 21);
+        autoResetAngleThreshold = propManager.createPersistentProperty("AutoResetAngleThreshold", 20);
+        autoResetMaximumDistance = propManager.createPersistentProperty("AutoResetMaximumDistance", 36);
 
         // New definitions for each landmark:
         // <Side> <RelativeLocation> <Entity>
         // Side: Left/Right
         // RelativeLocation: Front, Near, Mid, Far
-        // The four left side CargoShip hatches would be as follows: LeftFrontCargoShip, LeftNearCargoShip, LeftMidCargoShip, LeftFarCargoShip
-        // The two left side Rocket hatches would be as follows: LeftNearRocket, LeftFarRocket (and LeftMidRocket if you are doing cargo)
+        // The four left side CargoShip hatches would be as follows: LeftFrontCargoShip,
+        // LeftNearCargoShip, LeftMidCargoShip, LeftFarCargoShip
+        // The two left side Rocket hatches would be as follows: LeftNearRocket,
+        // LeftFarRocket (and LeftMidRocket if you are doing cargo)
 
-        // These waypoints represent good places to navigate to on the field before doing a final approach. 
+        // These waypoints represent good places to navigate to on the field before
+        // doing a final approach.
         leftNearRocketWaypoint = clf.createFieldPosePropertyManager("LeftNearRocketWaypoint", 40, 135, 0);
         leftFarRocketWaypoint = clf.createFieldPosePropertyManager("LeftFarRocketWaypoint", 70, 260, 0);
         leftCargoShipWaypoint = clf.createFieldPosePropertyManager("LeftCargoShipWaypoint", 80, 200, 0);
-        
+
         // First value X, Second value Y, Third value angle
         // X
         // Near CargoShip
@@ -111,34 +109,35 @@ public class PoseSubsystem extends BasePoseSubsystem {
         String leftName = createLandmarkKey(Side.Left, landmark);
         String rightName = createLandmarkKey(Side.Right, landmark);
         FieldPosePropertyManager left = clf.createFieldPosePropertyManager(getPrefix() + leftName, leftPose);
-        FieldPosePropertyManager right = clf.createFieldPosePropertyManager(getPrefix() + rightName, flipFieldPose(leftPose));
+        FieldPosePropertyManager right = clf.createFieldPosePropertyManager(getPrefix() + rightName,
+                flipFieldPose(leftPose));
         landmarkToLocation.put(leftName, left);
         landmarkToLocation.put(rightName, right);
     }
 
     private FieldPose getWaypointForLandmark(Side side, FieldLandmark landmark) {
         // A relatively safe default.
-        FieldPose candidate = new FieldPose(20,20,90);
-        
+        FieldPose candidate = new FieldPose(20, 20, 90);
+
         switch (landmark) {
-            // This uses switch statement fallthrough to group several cases together
-            case NearCargoShip:
-            case MidCargoShip:
-            case FarCargoShip:
-            case MidRocket:
-                candidate = leftCargoShipWaypoint.getPose();
-                break;
-            case LoadingStation:
-            case FrontCargoShip: 
-            case NearRocket:
-                candidate = leftNearRocketWaypoint.getPose();
-                break;
-            case FarRocket:
-                candidate = leftFarRocketWaypoint.getPose();
-                break;
-            default:
-                log.warn("Could not find any waypoint for " + landmark + "! Will head back towards player station.");
-                break;
+        // This uses switch statement fallthrough to group several cases together
+        case NearCargoShip:
+        case MidCargoShip:
+        case FarCargoShip:
+        case MidRocket:
+            candidate = leftCargoShipWaypoint.getPose();
+            break;
+        case LoadingStation:
+        case FrontCargoShip:
+        case NearRocket:
+            candidate = leftNearRocketWaypoint.getPose();
+            break;
+        case FarRocket:
+            candidate = leftFarRocketWaypoint.getPose();
+            break;
+        default:
+            log.warn("Could not find any waypoint for " + landmark + "! Will head back towards player station.");
+            break;
         }
 
         if (side == Side.Right) {
@@ -157,11 +156,11 @@ public class PoseSubsystem extends BasePoseSubsystem {
         if (!landmarkToLocation.containsKey(landmarkKey)) {
             log.warn("Tried to find a path to a landmark, but could not find it in the maps!");
             return path;
-        }        
-        
+        }
+
         FieldPose visionPose = getVisionPointForLandmark(side, landmark);
-        
-        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Stop);        
+
+        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
 
         if (automaticWaypoints) {
             List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
@@ -173,7 +172,7 @@ public class PoseSubsystem extends BasePoseSubsystem {
             RabbitPoint waypoint = new RabbitPoint(waypointPose, PointType.PositionOnly, PointTerminatingType.Continue);
             path.add(waypoint);
         }
-        
+
         path.add(visionPoint);
 
         log.info("Goal Pose: " + visionPoint.pose.toString());
@@ -191,11 +190,10 @@ public class PoseSubsystem extends BasePoseSubsystem {
     }
 
     public FieldPose getFieldPoseForLandmark(Side side, FieldLandmark landmark) {
-        String landmarkKey = createLandmarkKey(side, landmark);        
+        String landmarkKey = createLandmarkKey(side, landmark);
         if (landmarkToLocation.containsKey(landmarkKey)) {
             return landmarkToLocation.get(landmarkKey).getPose();
-        }
-        else {
+        } else {
             log.warn("Could not find a location for landmark " + landmark.toString() + "! Returning 0, 0, 90");
             return new FieldPose(new XYPair(), new ContiguousHeading(90));
         }
@@ -218,9 +216,49 @@ public class PoseSubsystem extends BasePoseSubsystem {
         return side.toString() + landmark.toString();
     }
 
-    public static FieldPose flipFieldPose(FieldPose current) {
-        return new FieldPose(new XYPair((12*27)- current.getPoint().x, current.getPoint().y), new ContiguousHeading(180- current.getHeading().getValue()));
-    }
-    
+    public void updatePositionDueToGripperActuation() {
+        double angleRange = autoResetAngleThreshold.get();
+        double maximumDistance = autoResetMaximumDistance.get();
+        // The gripper was actuated. We check the following in order.
+        FieldPose currentPose = getCurrentFieldPose();
+        ContiguousHeading heading = currentPose.getHeading();
 
+        // generically search through all landmarks.
+        var candidateLandmarks = new HashMap<String, FieldPose>();
+        for (String landmarkKey : landmarkToLocation.keySet()) {
+
+            FieldPose landmarkPose = landmarkToLocation.get(landmarkKey).getPose()
+                    .getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
+            if (Math.abs(heading.difference(landmarkPose.getHeading())) < angleRange) {
+                candidateLandmarks.put(landmarkKey, landmarkPose);
+            }
+        }
+
+        if (candidateLandmarks.size() == 0) {
+            log.info("Not pointing towards any landmark. Will not update position.");
+            return;
+        }
+
+        var distances = new TreeMap<Double, String>();
+        for (String landmarkKey : candidateLandmarks.keySet()) {
+            distances.put(candidateLandmarks.get(landmarkKey).getPoint().getDistanceToPoint(currentPose.getPoint()),
+                    landmarkKey);
+        }
+
+        // Grab the closest one, make sure it's within range.
+        var resetCandidate = distances.firstEntry();
+        if (resetCandidate.getKey() < maximumDistance) {
+            log.info("The closest landmark, " + resetCandidate.getValue() + ", is within the maximum distance");
+            // Need to account for the robot's width.
+            FieldPose landmarkPose = landmarkToLocation.get(resetCandidate.getValue()).getPose()
+                    .getPointAlongPoseLine(-distanceFromCenterOfRobot.get());
+            log.info("Setting robot position to " + landmarkPose.toString());
+            setCurrentPosition(landmarkPose.getPoint().x, landmarkPose.getPoint().y);
+        }
+    }
+
+    public static FieldPose flipFieldPose(FieldPose current) {
+        return new FieldPose(new XYPair((12 * 27) - current.getPoint().x, current.getPoint().y),
+                new ContiguousHeading(180 - current.getHeading().getValue()));
+    }
 }

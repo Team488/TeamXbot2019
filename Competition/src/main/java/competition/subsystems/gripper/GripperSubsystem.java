@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 
 import competition.ElectricalContract2019;
 import competition.RumbleManager;
+import competition.subsystems.pose.PoseSubsystem;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.sensors.XDigitalInput;
@@ -29,12 +30,14 @@ public class GripperSubsystem extends BaseSubsystem {
     private ToggleState gripperState;
     private final BooleanProperty grabbingDiscProp;
     private Latch gripperLatch;
+    private PoseSubsystem pose;
 
     @Inject
     public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract, PropertyFactory propFactory,
-            RumbleManager rumble) {
+            RumbleManager rumble, PoseSubsystem pose) {
         gripperReady = contract.isGripperReady();
         gripperState = ToggleState.GRAB;
+        this.pose = pose;
 
         propFactory.setPrefix(this.getPrefix());
 
@@ -53,10 +56,12 @@ public class GripperSubsystem extends BaseSubsystem {
 
         gripperLatch = new Latch(false, EdgeType.Both, edge -> {
             if (edge == EdgeType.RisingEdge) {
-                rumble.rumbleDriverGamepad(0.5, 0.5);
+                //rumble.rumbleDriverGamepad(0.5, 0.5);
+                pose.updatePositionDueToGripperActuation();
             }
             if (edge == EdgeType.FallingEdge) {
-                rumble.rumbleDriverGamepad(0.5, 0.5);
+                //rumble.rumbleDriverGamepad(0.5, 0.5);
+                pose.updatePositionDueToGripperActuation();
             }
         });
     }

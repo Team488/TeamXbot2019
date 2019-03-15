@@ -1,11 +1,9 @@
 package competition.subsystems.pose;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.BaseCompetitionTest;
@@ -26,24 +24,26 @@ public class PoseSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    @Ignore
     public void getPathWithWaypoints() {
         
         List<RabbitPoint> points = pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false);
-        assertEquals(3, points.size(), 0.001);
+        assertEquals(2, points.size(), 0.001);
         
         assertEquals(PointTerminatingType.Continue, points.get(0).terminatingType);
         assertEquals(PointType.PositionOnly, points.get(0).pointType);
         System.out.println(points.get(0).pose.toString());
 
-        assertEquals(PointTerminatingType.Continue, points.get(1).terminatingType);
+        assertEquals(PointTerminatingType.Stop, points.get(1).terminatingType);
         assertEquals(PointType.PositionAndHeading, points.get(1).pointType);
         System.out.println(points.get(1).pose.toString());
+    }
 
-        assertEquals(PointTerminatingType.Stop, points.get(2).terminatingType);
-        assertEquals(PointType.PositionAndHeading, points.get(2).pointType);
-        System.out.println(points.get(2).pose.toString());
+    @Test
+    public void testUpdatingPosition() {
+        pose.setCurrentPosition(20, 40);
+        pose.setCurrentHeading(-80);
+        pose.updatePositionDueToGripperActuation();
 
-        assertTrue("Middle point should be further left than final point", points.get(1).pose.getPoint().x < points.get(2).pose.getPoint().x);
+        assertEquals(22.75, pose.getCurrentFieldPose().getPoint().x, 0.001);
     }
 }
