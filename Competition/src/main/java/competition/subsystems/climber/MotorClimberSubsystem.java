@@ -19,7 +19,6 @@ public class MotorClimberSubsystem extends BaseSubsystem {
     public XCANTalon frontRight;
     public XCANTalon rearLeft;
     public XCANTalon rearRight;
-
     CommonLibFactory clf;
     ElectricalContract2019 contract;
 
@@ -37,14 +36,14 @@ public class MotorClimberSubsystem extends BaseSubsystem {
             rearLeft = setupMotor(contract.getRearLeftClimber());
             rearRight = setupMotor(contract.getRearRightClimber());
 
-            //rearLeft.configReverseSoftLimitEnable(true, 0);
-            //rearLeft.configReverseSoftLimitThreshold(0, 0);
+            // rearLeft.configReverseSoftLimitEnable(true, 0);
+            // rearLeft.configReverseSoftLimitThreshold(0, 0);
 
             rearLeft.configureAsMasterMotor(getPrefix(), "RearLeft", contract.getRearLeftClimber().inverted,
                     contract.getRearLeftEncoder().inverted);
 
-            //rearRight.configReverseSoftLimitEnable(true, 0);
-            //rearRight.configReverseSoftLimitThreshold(0, 0);
+            // rearRight.configReverseSoftLimitEnable(true, 0);
+            // rearRight.configReverseSoftLimitThreshold(0, 0);
 
             rearRight.configureAsMasterMotor(getPrefix(), "RearRight", contract.getRearRightClimber().inverted,
                     contract.getRearRightEncoder().inverted);
@@ -68,6 +67,22 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         if (contract.isRearMotorClimberReady()) {
             rearLeft.simpleSet(lift - tilt);
             rearRight.simpleSet(lift + tilt);
+        }
+    }
+
+    public void safety() {
+        boolean frontLeftReachedLimit;
+        boolean frontRightReachedLimit;
+        boolean backLeftReachedLimit;
+        boolean backRightReachedLimit;
+        if (frontLeftReachedLimit && frontRightReachedLimit) {
+            frontRight.simpleSet(0);
+            frontLeft.simpleSet(0);
+        }
+
+        if (backLeftReachedLimit && backRightReachedLimit) {
+            rearLeft.simpleSet(0);
+            rearRight.simpleSet(0);
         }
     }
 }
