@@ -115,68 +115,28 @@ public class PoseSubsystem extends BasePoseSubsystem {
         landmarkToLocation.put(rightName, right);
     }
 
-    private FieldPose getWaypointForLandmark(Side side, FieldLandmark landmark) {
-        // A relatively safe default.
-        FieldPose candidate = new FieldPose(20, 20, 90);
+    public List<RabbitPoint> getPathToFieldPose(FieldPose goalPose) {
+        FieldPose currentPose = getCurrentFieldPose();
+        log.info("Starting Pose: " + currentPose.toString());
+        RabbitPoint goalPoint = new RabbitPoint(goalPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
 
-        switch (landmark) {
-        // This uses switch statement fallthrough to group several cases together
-        case NearCargoShip:
-        case MidCargoShip:
-        case FarCargoShip:
-        case MidRocket:
-            candidate = leftCargoShipWaypoint.getPose();
-            break;
-        case LoadingStation:
-        case FrontCargoShip:
-        case NearRocket:
-            candidate = leftNearRocketWaypoint.getPose();
-            break;
-        case FarRocket:
-            candidate = leftFarRocketWaypoint.getPose();
-            break;
-        default:
-            log.warn("Could not find any waypoint for " + landmark + "! Will head back towards player station.");
-            break;
-        }
+        List<RabbitPoint> generatedPoints = field.generatePath(currentPose, goalPoint);
 
-        if (side == Side.Right) {
-            candidate = flipFieldPose(candidate);
-        }
-
-        return candidate;
+        log.info("Goal Pose: " + goalPoint.pose.toString());
+        return generatedPoints;
     }
 
     public List<RabbitPoint> getPathToLandmark(Side side, FieldLandmark landmark, boolean automaticWaypoints) {
-        log.info("Starting Pose: " + this.getCurrentFieldPose().toString());
-        var path = new ArrayList<RabbitPoint>();
         String landmarkKey = createLandmarkKey(side, landmark);
 
         // If this point isn't fully registereds, escape.
         if (!landmarkToLocation.containsKey(landmarkKey)) {
             log.warn("Tried to find a path to a landmark, but could not find it in the maps!");
-            return path;
+            return new ArrayList<RabbitPoint>();
         }
 
         FieldPose visionPose = getVisionPointForLandmark(side, landmark);
-
-        RabbitPoint visionPoint = new RabbitPoint(visionPose, PointType.PositionAndHeading, PointTerminatingType.Stop);
-
-        if (automaticWaypoints) {
-            List<RabbitPoint> generatedPoints = field.generatePath(getCurrentFieldPose(), visionPoint);
-            for (RabbitPoint p : generatedPoints) {
-                path.add(p);
-            }
-        } else {
-            FieldPose waypointPose = getWaypointForLandmark(side, landmark);
-            RabbitPoint waypoint = new RabbitPoint(waypointPose, PointType.PositionOnly, PointTerminatingType.Continue);
-            path.add(waypoint);
-        }
-
-        path.add(visionPoint);
-
-        log.info("Goal Pose: " + visionPoint.pose.toString());
-        return path;
+        return getPathToFieldPose(visionPose);
     }
 
     @Override

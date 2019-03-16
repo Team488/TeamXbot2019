@@ -100,6 +100,16 @@ public class LowRestFieldTest extends BaseCompetitionTest {
         assertEquals(finalPoint.pose.getPoint().y, path.get(3).pose.getPoint().y, 0.001);
     }
 
+    @Test
+    public void testShortRoute() {
+        LowResField f = new LowResField();
+        FieldPose robotPose = new FieldPose(15, 15, 90);
+        RabbitPoint finalPoint = new RabbitPoint(15, 30, 90);
+
+        var path = f.generatePath(robotPose, finalPoint);
+        assertEquals(1, path.size());
+    }
+
     // multiple tests suggest that path generation takes 4125 nanoseconds, or 0.004 milliseconds, on a desktop PC.
     // The robot tries to get all its work done in under 20 milliseconds, so this seems like plenty of headroom.
     public void testGenerationPerformance() {

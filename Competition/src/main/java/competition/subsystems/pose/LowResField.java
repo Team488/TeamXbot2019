@@ -95,15 +95,15 @@ public class LowResField {
             // We can directly change the robot pose
 
             if (o.contains(robotPose.getPoint().x, robotPose.getPoint().y)) {
-                log.info("Robot is currently inside an obstacle. Shifting for calculations.");
+                log.info("Robot is currently inside obstacle" + o.name +". Shifting for calculations.");
                 // our original robot pose is inside, and needs to shift.
                 XYPair slidPoint = o.movePointOutsideOfBounds(robotPose.getPoint());
                 robotPose = new FieldPose(slidPoint, robotPose.getHeading());
             }
 
             if (o.contains(targetPoint.pose.getPoint().x, targetPoint.pose.getPoint().y)) {
-                log.info("Target is currently inside an obstacle.");
-                log.info("Adding an interstitial waypoint just outside the obstacle.");
+                log.info("Target is currently inside obstacle" + o.name + ".");
+                log.info("Adding an interstitial waypoint just outside obstacle" + o.name + ".");
                 // our target is inside - we need to change our focalPoint and save this one.
                 XYPair slidPoint = o.movePointOutsideOfBounds(targetPoint.pose.getPoint());
                 rabbitStack.push(targetPoint);
@@ -147,6 +147,7 @@ public class LowResField {
                 if (o.intersectsLine(robotPose.getPoint().x, robotPose.getPoint().y, focalPoint.pose.getPoint().x, focalPoint.pose.getPoint().y)) {
                     // The line collidies with this obstacle! Set collision to true so we continue to iterate.
                     collision = true;
+                    log.info("Projected path currently collides with " + o.name + ". Creating a new safe point.");
                     XYPair pointToSearchFrom = new XYPair();
                     // We want to find the closest corner of the bounding box that will create an optimal path.
                     // If a line crosses a rectangle, then in nearly all cases, there will be two intersection points.
@@ -170,6 +171,7 @@ public class LowResField {
                     RabbitPoint cornerPoint = 
                         new RabbitPoint(new FieldPose(nearestCorner.x, nearestCorner.y, 0), PointType.PositionOnly, PointTerminatingType.Continue);
                     // Our current focal point needs to be saved in the final list.
+                    log.info("New safe point created: " + cornerPoint.pose.toString());
                     rabbitStack.add(focalPoint);
                     // Change the focal point to the new corner point, and check for collisions again.
                     focalPoint = cornerPoint;
@@ -181,6 +183,7 @@ public class LowResField {
         // The iteration is complete, so it's time to build up the path.
         // We don't need to add the robot's current position, so next we add the Focal Point.
         // If there we no collisions, the focal point will be the targetPoint.
+        log.info("Path clear. Adding goal point.");
         path.add(focalPoint);
         while (rabbitStack.size() > 0) {
             // If there were collisions, then we need to use the rabbitStack. The top contains generated waypoints, and 

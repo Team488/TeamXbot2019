@@ -24,18 +24,25 @@ public class PoseSubsystemTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void getPathWithWaypoints() {
+    public void getSimplePathWithWaypoints() {
         
         List<RabbitPoint> points = pose.getPathToLandmark(Side.Left, FieldLandmark.NearCargoShip, false);
-        assertEquals(2, points.size(), 0.001);
+        assertEquals(1, points.size(), 0.001);
         
-        assertEquals(PointTerminatingType.Continue, points.get(0).terminatingType);
-        assertEquals(PointType.PositionOnly, points.get(0).pointType);
+        assertEquals(PointTerminatingType.Stop, points.get(0).terminatingType);
+        assertEquals(PointType.PositionAndHeading, points.get(0).pointType);
         System.out.println(points.get(0).pose.toString());
+    }
 
-        assertEquals(PointTerminatingType.Stop, points.get(1).terminatingType);
-        assertEquals(PointType.PositionAndHeading, points.get(1).pointType);
-        System.out.println(points.get(1).pose.toString());
+    @Test
+    public void getComplexPathWithWaypoints() {
+        
+        List<RabbitPoint> points = pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, false);
+        assertEquals(3, points.size(), 0.001);
+        
+        assertEquals(PointTerminatingType.Stop, points.get(2).terminatingType);
+        assertEquals(PointType.PositionAndHeading, points.get(2).pointType);
+        System.out.println(points.get(2).pose.toString());
     }
 
     @Test

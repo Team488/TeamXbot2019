@@ -38,6 +38,7 @@ import xbot.common.controls.sensors.AdvancedButton;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import xbot.common.controls.sensors.ChordButton;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.math.FieldPose;
 import xbot.common.subsystems.drive.ConfigurablePurePursuitCommand;
 import xbot.common.subsystems.drive.PurePursuitCommand.PointLoadingMode;
 import xbot.common.subsystems.drive.RabbitPoint;
@@ -138,10 +139,13 @@ public class OperatorCommandMap {
         ChordButton leftA = clf.createChordButton(leftShift, driverA);
         ChordButton rightA = clf.createChordButton(rightShift, driverA);
 
-        leftLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        FieldPose leftLoadingStationWaypoint = new FieldPose(45, 94, -90);
+        FieldPose rightLoadingStationWaypoint = PoseSubsystem.flipFieldPose(leftLoadingStationWaypoint);
+
+        leftLoading.setPointSupplier(() -> pose.getPathToFieldPose(leftLoadingStationWaypoint));
         leftLoading.setDotProductDrivingEnabled(true);
 
-        rightLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
+        rightLoading.setPointSupplier(() -> pose.getPathToFieldPose(rightLoadingStationWaypoint));
         rightLoading.setDotProductDrivingEnabled(true);
 
         leftA.whileHeld(leftLoading);
