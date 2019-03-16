@@ -5,11 +5,14 @@ import javax.sql.CommonDataSource;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.graalvm.compiler.loop.MathUtil;
+
 import competition.ElectricalContract2019;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.injection.ElectricalContract.DeviceInfo;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
+import xbot.common.math.MathUtils;
 import xbot.common.properties.PropertyFactory;
 
 @Singleton
@@ -70,19 +73,41 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         }
     }
 
-    public void safety() {
-        boolean frontLeftReachedLimit;
-        boolean frontRightReachedLimit;
-        boolean backLeftReachedLimit;
-        boolean backRightReachedLimit;
-        if (frontLeftReachedLimit && frontRightReachedLimit) {
-            frontRight.simpleSet(0);
-            frontLeft.simpleSet(0);
+    public void upperHeightSafety(double power) {
+        boolean frontLeftReachedUpperLimit;
+        boolean frontRightReachedUpperLimit;
+        boolean backLeftReachedUpperLimit;
+        boolean backRightReachedUpperLimit;
+
+        if (frontLeftReachedUpperLimit && frontRightReachedUpperLimit) {
+            power = MathUtils.constrainDouble(power, -1, 0);
+            frontRight.simpleSet(power);
+            frontLeft.simpleSet(power);
         }
 
-        if (backLeftReachedLimit && backRightReachedLimit) {
-            rearLeft.simpleSet(0);
-            rearRight.simpleSet(0);
+        if (backLeftReachedUpperLimit && backRightReachedUpperLimit) {
+            power = MathUtils.constrainDouble(power, -1, 0);
+            rearLeft.simpleSet(power);
+            rearRight.simpleSet(power);
+        }
+    }
+
+    public void lowerHeightSafety(double power) {
+        boolean frontLeftReachedLowerLimit;
+        boolean frontRightReachedLowerLimit;
+        boolean backLeftReachedLowerLimit;
+        boolean backRightReachedLowerLimit;
+
+        if (frontLeftReachedUpperLimit && frontRightReachedUpperLimit) {
+            power = MathUtils.constrainDouble(power, 0, 1);
+            frontRight.simpleSet(power);
+            frontLeft.simpleSet(power);
+        }
+
+        if (backLeftReachedUpperLimit && backRightReachedUpperLimit) {
+            power = MathUtils.constrainDouble(power, 0, 1);
+            rearLeft.simpleSet(power);
+            rearRight.simpleSet(power);
         }
     }
 }
