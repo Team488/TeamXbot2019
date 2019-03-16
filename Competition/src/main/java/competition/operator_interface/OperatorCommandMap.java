@@ -115,6 +115,7 @@ public class OperatorCommandMap {
         goToVisionLine.setMode(PointLoadingMode.Relative);
         goToVisionLine.setDotProductDrivingEnabled(true);
         goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
+        operatorInterface.driverGamepad.getifAvailable(4).whileHeld(goToVisionLine);
     }
     
     @Inject
@@ -122,6 +123,7 @@ public class OperatorCommandMap {
             ScoreOnMidCargoCommandGroup mid, ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
             GoToLoadingStationCommandGroup loading, RotateToHeadingCommand faceForward, RotateToHeadingCommand faceLeft,
             RotateToHeadingCommand faceRight, RotateToHeadingCommand faceBack,
+            ConfigurablePurePursuitCommand leftLoadingWaypoint, ConfigurablePurePursuitCommand rightLoadingWaypoint,
             ConfigurablePurePursuitCommand leftLoading, ConfigurablePurePursuitCommand rightLoading) {
         front.includeOnSmartDashboard("Score on Front Cargo");
         near.includeOnSmartDashboard("Score on Near Cargo");
@@ -136,20 +138,31 @@ public class OperatorCommandMap {
         AdvancedButton leftShift = operatorInterface.driverGamepad.getifAvailable(5);
         AdvancedButton rightShift = operatorInterface.driverGamepad.getifAvailable(6);
         AdvancedButton driverA = operatorInterface.driverGamepad.getifAvailable(1);
+        AdvancedButton driverB = operatorInterface.driverGamepad.getifAvailable(2);
         ChordButton leftA = clf.createChordButton(leftShift, driverA);
         ChordButton rightA = clf.createChordButton(rightShift, driverA);
+        ChordButton leftB = clf.createChordButton(leftShift, driverB);
+        ChordButton rightB = clf.createChordButton(rightShift, driverB);
 
         FieldPose leftLoadingStationWaypoint = new FieldPose(45, 94, -90);
         FieldPose rightLoadingStationWaypoint = PoseSubsystem.flipFieldPose(leftLoadingStationWaypoint);
 
-        leftLoading.setPointSupplier(() -> pose.getPathToFieldPose(leftLoadingStationWaypoint));
-        leftLoading.setDotProductDrivingEnabled(true);
+        leftLoadingWaypoint.setPointSupplier(() -> pose.getPathToFieldPose(leftLoadingStationWaypoint));
+        leftLoadingWaypoint.setDotProductDrivingEnabled(true);
 
-        rightLoading.setPointSupplier(() -> pose.getPathToFieldPose(rightLoadingStationWaypoint));
+        rightLoadingWaypoint.setPointSupplier(() -> pose.getPathToFieldPose(rightLoadingStationWaypoint));
+        rightLoadingWaypoint.setDotProductDrivingEnabled(true);
+
+        leftLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
+        leftLoading.setDotProductDrivingEnabled(true);
+        rightLoading.setPointSupplier(() -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
         rightLoading.setDotProductDrivingEnabled(true);
 
-        leftA.whileHeld(leftLoading);
-        rightA.whileHeld(rightLoading);
+        leftA.whileHeld(leftLoadingWaypoint);
+        rightA.whileHeld(rightLoadingWaypoint);
+
+        leftB.whileHeld(leftLoading);
+        rightB.whileHeld(rightLoading);
     }
 
     @Inject
