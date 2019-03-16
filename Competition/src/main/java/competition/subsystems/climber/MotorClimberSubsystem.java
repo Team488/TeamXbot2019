@@ -5,11 +5,10 @@ import javax.sql.CommonDataSource;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import org.graalvm.compiler.loop.MathUtil;
-
 import competition.ElectricalContract2019;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XCANTalon;
+import xbot.common.controls.sensors.XDigitalInput;
 import xbot.common.injection.ElectricalContract.DeviceInfo;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
 import xbot.common.math.MathUtils;
@@ -22,6 +21,14 @@ public class MotorClimberSubsystem extends BaseSubsystem {
     public XCANTalon frontRight;
     public XCANTalon rearLeft;
     public XCANTalon rearRight;
+    public XDigitalInput frontLeftSensor;
+    public XDigitalInput frontRightSensor;
+    public XDigitalInput rearLeftSensor;
+    public XDigitalInput rearRightSensor;
+    boolean frontLeftReachedUpperLimit;
+    boolean frontRightReachedUpperLimit;
+    boolean backLeftReachedUpperLimit;
+    boolean backRightReachedUpperLimit;
     CommonLibFactory clf;
     ElectricalContract2019 contract;
 
@@ -73,12 +80,14 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         }
     }
 
-    public void upperHeightSafety(double power) {
-        boolean frontLeftReachedUpperLimit;
-        boolean frontRightReachedUpperLimit;
-        boolean backLeftReachedUpperLimit;
-        boolean backRightReachedUpperLimit;
+    public void isSensorPressed() {
+       frontLeftReachedUpperLimit = frontLeftSensor.get();
+       frontRightReachedUpperLimit = frontRightSensor.get();
+       backLeftReachedUpperLimit = rearLeftSensor.get();
+       backRightReachedUpperLimit = rearRightSensor.get();
+    }
 
+    public void upperHeightSafety(double power) {   
         if (frontLeftReachedUpperLimit && frontRightReachedUpperLimit) {
             power = MathUtils.constrainDouble(power, -1, 0);
             frontRight.simpleSet(power);
@@ -93,21 +102,6 @@ public class MotorClimberSubsystem extends BaseSubsystem {
     }
 
     public void lowerHeightSafety(double power) {
-        boolean frontLeftReachedLowerLimit;
-        boolean frontRightReachedLowerLimit;
-        boolean backLeftReachedLowerLimit;
-        boolean backRightReachedLowerLimit;
-
-        if (frontLeftReachedUpperLimit && frontRightReachedUpperLimit) {
-            power = MathUtils.constrainDouble(power, 0, 1);
-            frontRight.simpleSet(power);
-            frontLeft.simpleSet(power);
-        }
-
-        if (backLeftReachedUpperLimit && backRightReachedUpperLimit) {
-            power = MathUtils.constrainDouble(power, 0, 1);
-            rearLeft.simpleSet(power);
-            rearRight.simpleSet(power);
-        }
+        
     }
 }
