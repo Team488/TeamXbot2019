@@ -39,7 +39,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         this.oi = oi;
         this.drive = drive;
         this.visionSubsystem = visionSubsystem;
-        this.visionDeltaLimitProp = propFactory.createPersistentProperty("Freeze Angle Delta Deg", 10.0);
+        this.visionDeltaLimitProp = propFactory.createPersistentProperty("Freeze Angle Delta Deg", 5.0);
         constantOffsetProp = propFactory.createPersistentProperty("ConstantOffset", 0);
         freezeOffsetProp = propFactory.createPersistentProperty("FreezeOffset", 0);
         frozenProp = propFactory.createEphemeralProperty("IsFrozen", false);
