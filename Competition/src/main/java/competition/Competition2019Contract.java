@@ -66,4 +66,24 @@ public class Competition2019Contract extends Practice2019Contract {
     public DeviceInfo getFrontRightEncoder() {
         return new DeviceInfo(0, false);
     }
+
+    @Override
+    public DeviceInfo getFrontLeftLimit() {
+        return new DeviceInfo(2, true);
+    }
+
+    @Override
+    public DeviceInfo getFrontRightLimit() {
+        return new DeviceInfo(3, true);
+    }
+
+    @Override
+    public DeviceInfo getRearLeftLimit() {
+        return new DeviceInfo(4, true);
+    }
+
+    @Override
+    public DeviceInfo getRearRightLimit() {
+        return new DeviceInfo(5, true);
+    }
 }

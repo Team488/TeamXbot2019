@@ -1,13 +1,21 @@
 package competition.operator_interface;
 
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import competition.commandgroups.drivecommandgroups.GoToLoadingStationCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup;
-import competition.subsystems.climber.commands.MotorClimberCommand;
+import competition.subsystems.climber.commands.CalibrateFloorCommand;
+import competition.subsystems.climber.commands.DebugMotorClimberCommand;
+import competition.subsystems.climber.commands.FrontMotorClimberManualControlCommand;
+import competition.subsystems.climber.commands.HoldRearClimberPositionCommand;
+import competition.subsystems.climber.commands.HoldRobotLevelCommand;
+import competition.subsystems.climber.commands.RearMotorClimberManualControlCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
@@ -34,6 +42,9 @@ import competition.subsystems.pose.PoseSubsystem.Side;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import competition.subsystems.vision.VisionSubsystem;
 import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
+import xbot.common.command.BaseCommand;
+import xbot.common.command.SimpleCommandGroup;
+import xbot.common.command.SimpleCommandGroup.ExecutionType;
 import xbot.common.controls.sensors.AdvancedButton;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import xbot.common.controls.sensors.ChordButton;
@@ -117,7 +128,7 @@ public class OperatorCommandMap {
         goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
         operatorInterface.driverGamepad.getifAvailable(4).whileHeld(goToVisionLine);
     }
-    
+
     @Inject
     public void setupDriverCommandGroups(OperatorInterface operatorInterface, CommonLibFactory clf, PoseSubsystem pose,
             ScoreOnMidCargoCommandGroup mid, ScoreOnFrontCargoCommandGroup front, ScoreOnNearCargoCommandGroup near,
@@ -180,15 +191,6 @@ public class OperatorCommandMap {
             RaiseElevatorCommand raiseElevator, LowerElevatorCommand lowerElevator, StopElevatorCommand stopElevator,
             SetElevatorTickGoalCommand setElevatorLow, SetElevatorTickGoalCommand setElevatorMid,
             SetElevatorTickGoalCommand setElevatorHigh, ElevatorManualOverrideCommand override) {
-        // Right Up
-        AnalogHIDDescription triggerRaise = new AnalogHIDDescription(3, .25, 1.01);
-        operatorInterface.operatorGamepad.addAnalogButton(triggerRaise);
-        operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerRaise).whileHeld(raiseElevator);
-
-        // Left Down
-        AnalogHIDDescription triggerLower = new AnalogHIDDescription(2, .25, 1.01);
-        operatorInterface.operatorGamepad.addAnalogButton(triggerLower);
-        operatorInterface.operatorGamepad.getAnalogIfAvailable(triggerLower).whileHeld(lowerElevator);
 
         operatorInterface.operatorGamepad.getifAvailable(8).whenPressed(stopElevator);
         operatorInterface.operatorGamepad.getifAvailable(9).toggleWhenPressed(override);
@@ -239,8 +241,39 @@ public class OperatorCommandMap {
     }
 
     @Inject
-    public void setUpClimberCommands(OperatorInterface operatorInterface, MotorClimberCommand command) {
-        operatorInterface.operatorGamepad.getifAvailable(5).whileHeld(command);
+    public void setUpClimberCommands(OperatorInterface operatorInterface, DebugMotorClimberCommand debugMotorClimber,
+            Provider<FrontMotorClimberManualControlCommand> frontManualProvider, RearMotorClimberManualControlCommand rearManual,
+            HoldRobotLevelCommand rearLevel, HoldRearClimberPositionCommand rearHoldPosition, CalibrateFloorCommand calibrateFloor) {
+
+        var fullManual = new ArrayList<BaseCommand>();
+        fullManual.add(frontManualProvider.get());
+        fullManual.add(rearManual);
+        SimpleCommandGroup fullManualGroup = new SimpleCommandGroup("FullManualClimb", fullManual,
+                ExecutionType.Parallel);
+
+        var holdLevel = new ArrayList<BaseCommand>();
+        holdLevel.add(frontManualProvider.get());
+        holdLevel.add(rearLevel);
+        SimpleCommandGroup holdLevelGroup = new SimpleCommandGroup("HoldLevelClimb", holdLevel, ExecutionType.Parallel);
+
+        var holdPosition = new ArrayList<BaseCommand>();
+        holdLevel.add(frontManualProvider.get());
+        holdLevel.add(rearHoldPosition);
+        SimpleCommandGroup holdPositionGroup = new SimpleCommandGroup("HoldPositionClimb", holdPosition,
+                ExecutionType.Parallel);
+
+        operatorInterface.operatorGamepad.getifAvailable(5).whileHeld(debugMotorClimber);
+        operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(fullManualGroup);
+
+        AnalogHIDDescription leftTrigger = new AnalogHIDDescription(2, .25, 1.01);
+        operatorInterface.operatorGamepad.addAnalogButton(leftTrigger);
+        operatorInterface.operatorGamepad.getAnalogIfAvailable(leftTrigger).whenPressed(holdLevelGroup);
+        
+        AnalogHIDDescription rightTrigger = new AnalogHIDDescription(3, .25, 1.01);
+        operatorInterface.operatorGamepad.addAnalogButton(rightTrigger);
+        operatorInterface.operatorGamepad.getAnalogIfAvailable(rightTrigger).whenPressed(holdPositionGroup);
+
+        calibrateFloor.includeOnSmartDashboard("CalibrateFloorCommand");
     }
 
     @Inject

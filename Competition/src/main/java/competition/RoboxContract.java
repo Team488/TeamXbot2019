@@ -202,4 +202,24 @@ public class RoboxContract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public DeviceInfo getFrontLeftLimit() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFrontRightLimit() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getRearLeftLimit() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getRearRightLimit() {
+        return null;
+    }
+
 }

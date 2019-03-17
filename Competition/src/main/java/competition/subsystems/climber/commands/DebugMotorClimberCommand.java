@@ -3,23 +3,27 @@ package competition.subsystems.climber.commands;
 import com.google.inject.Inject;
 
 import competition.operator_interface.OperatorInterface;
-import competition.subsystems.climber.MotorClimberSubsystem;
+import competition.subsystems.climber.FrontMotorClimberSubsystem;
+import competition.subsystems.climber.RearMotorClimberSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.MathUtils;
 
-public class MotorClimberCommand extends BaseCommand {
+public class DebugMotorClimberCommand extends BaseCommand {
 
-        MotorClimberSubsystem climber;
+        FrontMotorClimberSubsystem front;
+        RearMotorClimberSubsystem rear;
         OperatorInterface oi;
         ElevatorSubsystem elevator;
 
     @Inject
-    public MotorClimberCommand(MotorClimberSubsystem climber, ElevatorSubsystem elevator, OperatorInterface oi) {
-        this.climber = climber;
+    public DebugMotorClimberCommand(FrontMotorClimberSubsystem front, RearMotorClimberSubsystem rear, ElevatorSubsystem elevator, OperatorInterface oi) {
+        this.front = front;
+        this.rear = rear;
         this.oi = oi;
         this.elevator = elevator;
-        this.requires(climber);
+        this.requires(front);
+        this.requires(rear);
         this.requires(elevator);
     }
 
@@ -45,8 +49,8 @@ public class MotorClimberCommand extends BaseCommand {
 
         tilt = MathUtils.constrainDoubleToRobotScale(tilt);
 
-        climber.setFrontPower(frontClimb, tilt);
-        climber.setRearPower(rearClimb, tilt);
+        front.setLiftAndTilt(frontClimb, tilt);
+        rear.setLiftAndTilt(rearClimb, tilt);
         elevator.setPower(0);
     }
 

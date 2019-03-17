@@ -2,15 +2,15 @@ package competition.subsystems.climber.commands;
 
 import com.google.inject.Inject;
 
-import competition.subsystems.climber.MotorClimberSubsystem;
+import competition.subsystems.climber.RearMotorClimberSubsystem;
 import xbot.common.command.BaseCommand;
 
-public class MotorClimberDoNothingCommand extends BaseCommand {
+public class RearMotorClimberDoNothingCommand extends BaseCommand {
 
-    MotorClimberSubsystem climber;
+    RearMotorClimberSubsystem climber;
 
     @Inject
-    public MotorClimberDoNothingCommand(MotorClimberSubsystem climber) {
+    public RearMotorClimberDoNothingCommand(RearMotorClimberSubsystem climber) {
         this.climber = climber;
         this.requires(climber);
     }
@@ -22,7 +22,6 @@ public class MotorClimberDoNothingCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        climber.setFrontPower(0, 0);
-        climber.setRearPower(0, 0);
+        climber.setLiftAndTilt(0, 0);
     }
 }

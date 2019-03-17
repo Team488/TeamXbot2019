@@ -3,18 +3,18 @@ package competition.subsystems.climber.climbercommands;
 import org.junit.Test;
 
 import competition.subsystems.climber.MotorClimberTest;
-import competition.subsystems.climber.commands.MotorClimberCommand;
+import competition.subsystems.climber.commands.DebugMotorClimberCommand;
 import xbot.common.controls.sensors.mock_adapters.MockFTCGamepad;
 import xbot.common.math.XYPair;
 
 public class MotorClimberCommandTest extends MotorClimberTest {
 
-    MotorClimberCommand command;
+    DebugMotorClimberCommand command;
 
     @Override
     public void setUp() {
         super.setUp();
-        this.command = injector.getInstance(MotorClimberCommand.class);
+        this.command = injector.getInstance(DebugMotorClimberCommand.class);
     }
 
     @Test

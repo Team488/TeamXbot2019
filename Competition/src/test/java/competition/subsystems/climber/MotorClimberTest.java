@@ -8,34 +8,36 @@ import competition.BaseCompetitionTest;
 
 public class MotorClimberTest extends BaseCompetitionTest {
 
-    protected MotorClimberSubsystem climber;
+    protected FrontMotorClimberSubsystem front;
+    protected RearMotorClimberSubsystem rear;
 
     @Override
     public void setUp() {
         super.setUp();
-        climber = injector.getInstance(MotorClimberSubsystem.class);
+        front = injector.getInstance(FrontMotorClimberSubsystem.class);
+        rear = injector.getInstance(RearMotorClimberSubsystem.class);
     }
 
     @Test
     public void goUp() {
-        climber.setFrontPower(1, 0);
-        climber.setRearPower(1, 0);
+        front.setLiftAndTilt(1, 0);
+        rear.setLiftAndTilt(1, 0);
 
         verifyClimberPower(1, 1, 1, 1);
     }
 
     @Test
     public void tilt() {
-        climber.setFrontPower(1, 0.5);
-        climber.setRearPower(1, 0.5);
+        front.setLiftAndTilt(1, 0.5);
+        rear.setLiftAndTilt(1, 0.5);
 
         verifyClimberPower(0.5, 1, 0.5, 1);
     }
 
     protected void verifyClimberPower(double frontLeft, double frontRight, double rearLeft, double rearRight) {
-        assertEquals(frontLeft, climber.frontLeft.getMotorOutputPercent(), 0.001);
-        assertEquals(frontRight, climber.frontRight.getMotorOutputPercent(), 0.001);
-        assertEquals(rearLeft, climber.rearLeft.getMotorOutputPercent(), 0.001);
-        assertEquals(rearRight, climber.rearRight.getMotorOutputPercent(), 0.001);
+        assertEquals(frontLeft, front.leftMotor.getMotorOutputPercent(), 0.001);
+        assertEquals(frontRight, front.rightMotor.getMotorOutputPercent(), 0.001);
+        assertEquals(rearLeft, rear.leftMotor.getMotorOutputPercent(), 0.001);
+        assertEquals(rearRight, rear.rightMotor.getMotorOutputPercent(), 0.001);
     }
 }
