@@ -80,28 +80,37 @@ public class MotorClimberSubsystem extends BaseSubsystem {
         }
     }
 
-    public void isSensorPressed() {
-       frontLeftReachedUpperLimit = frontLeftSensor.get();
-       frontRightReachedUpperLimit = frontRightSensor.get();
-       backLeftReachedUpperLimit = rearLeftSensor.get();
-       backRightReachedUpperLimit = rearRightSensor.get();
+    public boolean areSensorsCalibrated() {
+        frontLeftReachedUpperLimit = frontLeftSensor.get();
+        frontRightReachedUpperLimit = frontRightSensor.get();
+        backLeftReachedUpperLimit = rearLeftSensor.get();
+        backRightReachedUpperLimit = rearRightSensor.get();
+
+        if (frontLeftReachedUpperLimit == true && frontRightReachedUpperLimit == true
+                && backLeftReachedUpperLimit == true && backRightReachedUpperLimit == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void upperHeightSafety(double power) {   
-        if (frontLeftReachedUpperLimit && frontRightReachedUpperLimit) {
+    public void upperHeightSafety(double power) {
+        if (areSensorsCalibrated()) {
             power = MathUtils.constrainDouble(power, -1, 0);
             frontRight.simpleSet(power);
             frontLeft.simpleSet(power);
-        }
-
-        if (backLeftReachedUpperLimit && backRightReachedUpperLimit) {
-            power = MathUtils.constrainDouble(power, -1, 0);
             rearLeft.simpleSet(power);
             rearRight.simpleSet(power);
         }
     }
 
     public void lowerHeightSafety(double power) {
-        
+        if (areSensorsCalibrated()) {
+            power = MathUtils.constrainDouble(power, 0, 1);
+            frontRight.simpleSet(power);
+            frontLeft.simpleSet(power);
+            rearLeft.simpleSet(power);
+            rearRight.simpleSet(power);
+        }
     }
 }
