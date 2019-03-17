@@ -1,10 +1,6 @@
 package competition.subsystems.climber;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import xbot.common.command.BaseSetpointSubsystem;
-import xbot.common.command.BaseSubsystem;
 import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.actuators.XCANTalon;
 import xbot.common.controls.sensors.XDigitalInput;

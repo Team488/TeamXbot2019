@@ -69,7 +69,7 @@ public class Competition2019Contract extends Practice2019Contract {
 
     @Override
     public DeviceInfo getFrontLeftLimit() {
-        return new DeviceInfo(2, true);
+        return new DeviceInfo(4, true);
     }
 
     @Override
@@ -79,11 +79,11 @@ public class Competition2019Contract extends Practice2019Contract {
 
     @Override
     public DeviceInfo getRearLeftLimit() {
-        return new DeviceInfo(4, true);
+        return new DeviceInfo(1, true);
     }
 
     @Override
     public DeviceInfo getRearRightLimit() {
-        return new DeviceInfo(5, true);
+        return new DeviceInfo(2, true);
     }
 }

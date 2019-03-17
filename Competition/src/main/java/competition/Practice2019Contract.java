@@ -92,7 +92,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getGripperSensor() {
-        return new DeviceInfo(1, false);
+        return new DeviceInfo(6, false);
     }
 
     @Override
