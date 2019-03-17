@@ -192,4 +192,14 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public DeviceInfo getRearRightEncoder() {
         return null;
     }
+
+    @Override
+    public DeviceInfo getFrontLeftEncoder() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFrontRightEncoder() {
+        return null;
+    }
 }

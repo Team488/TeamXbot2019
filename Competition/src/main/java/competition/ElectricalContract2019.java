@@ -70,7 +70,10 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract boolean isRearMotorClimberReady();
 
     public abstract DeviceInfo getFrontLeftClimber();
+    public abstract DeviceInfo getFrontLeftEncoder();
+
     public abstract DeviceInfo getFrontRightClimber();
+    public abstract DeviceInfo getFrontRightEncoder();
     
     public abstract DeviceInfo getRearLeftClimber();
     public abstract DeviceInfo getRearLeftEncoder();

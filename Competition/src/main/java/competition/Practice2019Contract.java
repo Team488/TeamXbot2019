@@ -190,4 +190,14 @@ public class Practice2019Contract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public DeviceInfo getFrontLeftEncoder() {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo getFrontRightEncoder() {
+        return null;
+    }
+
 }

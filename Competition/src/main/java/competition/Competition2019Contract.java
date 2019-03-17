@@ -19,12 +19,12 @@ public class Competition2019Contract extends Practice2019Contract {
 
     @Override
     public DeviceInfo getFrontLeftClimber() {
-        return new DeviceInfo(49, false);
+        return new DeviceInfo(29, true);
     }
 
     @Override
     public DeviceInfo getFrontRightClimber() {
-        return new DeviceInfo(48, false);
+        return new DeviceInfo(30, false);
     }
 
     @Override
@@ -54,6 +54,16 @@ public class Competition2019Contract extends Practice2019Contract {
     
     @Override
     public boolean isFrontMotorClimberReady() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public DeviceInfo getFrontLeftEncoder() {
+        return new DeviceInfo(0, false);
+    }
+
+    @Override
+    public DeviceInfo getFrontRightEncoder() {
+        return new DeviceInfo(0, false);
     }
 }
