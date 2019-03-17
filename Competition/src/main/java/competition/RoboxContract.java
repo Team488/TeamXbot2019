@@ -222,4 +222,14 @@ public class RoboxContract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public boolean isRollerGrabberReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getRollerGrabber() {
+        return null;
+    }
+
 }

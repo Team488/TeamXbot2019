@@ -27,9 +27,6 @@ public class CompetitionModule extends RobotModule {
         this.bind(BasePoseSubsystem.class).to(PoseSubsystem.class);
         this.bind(BaseDriveSubsystem.class).to(DriveSubsystem.class);
         switch (platform) {
-            case Competition2018:
-                this.bind(ElectricalContract2019.class).to(Competition2018Contract.class);
-                break;
             case Practice2019:
                 this.bind(ElectricalContract2019.class).to(Practice2019Contract.class);
                 break;

@@ -14,6 +14,8 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
 import competition.subsystems.elevator.ElevatorSubsystem;
 import competition.subsystems.elevator.commands.ElevatorMaintainerCommand;
+import competition.subsystems.roller_gripper.RollerGripperSubsystem;
+import competition.subsystems.roller_gripper.commands.RollerStopCommand;
 import competition.subsystems.rumble.RumbleSubsystem;
 
 @Singleton
@@ -46,5 +48,10 @@ public class SubsystemDefaultCommandMap {
         RearMotorClimberSubsystem rear, RearMotorClimberDoNothingCommand rearDoNothing) {
         front.setDefaultCommand(frontDoNothing);
         rear.setDefaultCommand(rearDoNothing);
+    }
+
+    @Inject
+    public void setupRollerGripperSubsystem(RollerGripperSubsystem subsystem, RollerStopCommand stopCommand) {
+        subsystem.setDefaultCommand(stopCommand);
     }
 }

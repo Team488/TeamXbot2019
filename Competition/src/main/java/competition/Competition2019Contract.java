@@ -86,4 +86,14 @@ public class Competition2019Contract extends Practice2019Contract {
     public DeviceInfo getRearRightLimit() {
         return new DeviceInfo(2, true);
     }
+
+    @Override
+    public boolean isRollerGrabberReady() {
+        return false;
+    }
+
+    @Override
+    public DeviceInfo getRollerGrabber() {
+        return null;
+    }
 }

@@ -84,4 +84,8 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getRearRightClimber();
     public abstract DeviceInfo getRearRightEncoder();
     public abstract DeviceInfo getRearRightLimit();
+
+    // Roller grabber variant
+    public abstract boolean isRollerGrabberReady();
+    public abstract DeviceInfo getRollerGrabber();
 }

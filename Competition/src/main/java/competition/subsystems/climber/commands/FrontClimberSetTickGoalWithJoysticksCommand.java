@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.climber.FrontMotorClimberSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem;
-import xbot.common.command.BaseCommand;
 import xbot.common.command.BaseSetpointCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;

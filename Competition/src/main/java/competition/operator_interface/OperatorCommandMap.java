@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import competition.ElectricalContract2019;
 import competition.commandgroups.drivecommandgroups.GoToLoadingStationCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
@@ -39,6 +40,8 @@ import competition.subsystems.gripper.commands.ToggleGrabDiscCommand;
 import competition.subsystems.pose.PoseSubsystem;
 import competition.subsystems.pose.PoseSubsystem.FieldLandmark;
 import competition.subsystems.pose.PoseSubsystem.Side;
+import competition.subsystems.roller_gripper.commands.RollerGrabHatchCommand;
+import competition.subsystems.roller_gripper.commands.RollerReleaseHatchCommand;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import competition.subsystems.vision.VisionSubsystem;
 import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
@@ -179,9 +182,18 @@ public class OperatorCommandMap {
     @Inject
     public void setupGripperCommands(OperatorInterface operatorInterface, ReleaseDiscCommand releaseDisc,
             GrabDiscCommand grabDisc, ExtendGripperCommand extend, RetractGripperCommand retract,
-            ToggleGrabDiscCommand toggleGrab) {
-        operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
-        operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
+            ToggleGrabDiscCommand toggleGrab, ElectricalContract2019 contract, 
+            RollerGrabHatchCommand rollerGrabHatch, RollerReleaseHatchCommand rollerReleaseHatch) {
+        if(contract.isRollerGrabberReady()) {
+            // roller grabber
+            operatorInterface.operatorGamepad.getifAvailable(2).whileHeld(rollerGrabHatch);
+            operatorInterface.operatorGamepad.getifAvailable(1).whileHeld(rollerReleaseHatch);
+        } else {
+            // pneumatic grabber
+            operatorInterface.operatorGamepad.getifAvailable(2).whenPressed(grabDisc);
+            operatorInterface.operatorGamepad.getifAvailable(1).whenPressed(releaseDisc);
+        }
+
         operatorInterface.operatorGamepad.getifAvailable(3).whenPressed(extend);
         operatorInterface.operatorGamepad.getifAvailable(4).whenPressed(retract);
     }

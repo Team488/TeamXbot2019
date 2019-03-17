@@ -220,4 +220,14 @@ public class Practice2019Contract extends ElectricalContract2019 {
         return null;
     }
 
+
+    @Override
+    public boolean isRollerGrabberReady() {
+        return true;
+    }
+
+    @Override
+    public DeviceInfo getRollerGrabber() {
+        return new DeviceInfo(50, false);
+    }
 }
