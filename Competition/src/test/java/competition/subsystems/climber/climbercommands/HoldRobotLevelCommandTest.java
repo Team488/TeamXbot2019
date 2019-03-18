@@ -31,11 +31,11 @@ public class HoldRobotLevelCommandTest extends BaseCompetitionTest {
         assertPower(0);
     }
 
-    // Positive pitch means front rising. Negative pitch means front lowering.
+    // Positive pitch means front falling. Negative pitch means front rising.
     @Test
     public void testFallingForward() {
-        mockRobotIO.setGyroPitch(-10);
-        assertEquals(-10, pose.getRobotPitch(), 0.001);
+        mockRobotIO.setGyroPitch(10);
+        assertEquals(10, pose.getRobotPitch(), 0.001);
 
         command.initialize();
         command.execute();
@@ -45,8 +45,8 @@ public class HoldRobotLevelCommandTest extends BaseCompetitionTest {
 
     @Test
     public void testFallingBackward() {
-        mockRobotIO.setGyroPitch(10);
-        assertEquals(10, pose.getRobotPitch(), 0.001);
+        mockRobotIO.setGyroPitch(-10);
+        assertEquals(-10, pose.getRobotPitch(), 0.001);
 
         command.initialize();
         command.execute();
