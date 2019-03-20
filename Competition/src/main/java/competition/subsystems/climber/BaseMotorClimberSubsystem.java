@@ -1,5 +1,7 @@
 package competition.subsystems.climber;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import xbot.common.command.BaseSetpointSubsystem;
 import xbot.common.command.PeriodicDataSource;
 import xbot.common.controls.actuators.XCANTalon;
@@ -114,6 +116,10 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
             // put extra physical strain on the system.
             setVoltageRamp(leftMotor, 0.2);
             setVoltageRamp(rightMotor, 0.2);
+
+            // Set motors to brake mode so they'll resist motion when neutral
+            leftMotor.setNeutralMode(NeutralMode.Brake);
+            rightMotor.setNeutralMode(NeutralMode.Brake);
 
             // Create the digital inputs which represent our Hall Effect sensors. They will
             // detect when the legs are too retracted to retract any more.
