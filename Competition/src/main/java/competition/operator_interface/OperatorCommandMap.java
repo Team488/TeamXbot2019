@@ -7,12 +7,9 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import competition.commandgroups.drivecommandgroups.GoToLoadingStationCommandGroup;
-import competition.commandgroups.drivecommandgroups.GoToNearestLoadingStationCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnMidCargoCommandGroup;
 import competition.commandgroups.drivecommandgroups.ScoreOnNearCargoCommandGroup;
-import competition.commandgroups.drivecommandgroups.ScoreOnFrontCargoBasedOnSide;
-import competition.commandgroups.operatorcommandgroups.SafeMode;
 import competition.subsystems.climber.commands.CalibrateFloorCommand;
 import competition.subsystems.climber.commands.DebugMotorClimberCommand;
 import competition.subsystems.climber.commands.FrontMotorClimberManualControlCommand;
@@ -46,9 +43,7 @@ import competition.subsystems.pose.PoseSubsystem.Side;
 import competition.subsystems.pose.SetPoseToFieldLandmarkCommand;
 import competition.subsystems.vision.VisionSubsystem;
 import competition.subsystems.vision.commands.RotateToVisionTargetCommand;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
-import xbot.common.command.BaseCommand;
 import xbot.common.command.SimpleCommandGroup;
 import xbot.common.command.SimpleCommandGroup.ExecutionType;
 import xbot.common.controls.sensors.AdvancedButton;
@@ -70,8 +65,7 @@ public class OperatorCommandMap {
         @Inject
         public void setupDriveCommands(OperatorInterface operatorInterface, VisionSubsystem vision,
                         CheesyDriveWithJoysticksCommand cheesyDrive, ArcadeDriveWithJoysticksCommand arcade,
-                        TankDriveWithJoysticksCommand tank, RotateToHeadingCommand rotate,
-                        CheesyQuickTurnCommand quickTurn, ConfigurablePurePursuitCommand pursuit,
+                        TankDriveWithJoysticksCommand tank, RotateToHeadingCommand rotate, ConfigurablePurePursuitCommand pursuit,
                         ResetHeadingAndDistanceCommandGroup resetPose, ConfigurablePurePursuitCommand forward,
                         ConfigurablePurePursuitCommand backward, DriveEverywhereCommandGroup driveEverywhere,
                         ConfigurablePurePursuitCommand goToRocket, ConfigurablePurePursuitCommand goToLoadingStation,
@@ -145,7 +139,7 @@ public class OperatorCommandMap {
                         RotateToHeadingCommand faceRight, RotateToHeadingCommand faceBack,
                         ConfigurablePurePursuitCommand leftLoadingWaypoint,
                         ConfigurablePurePursuitCommand rightLoadingWaypoint, ConfigurablePurePursuitCommand leftLoading,
-                        ConfigurablePurePursuitCommand rightLoading) {
+                        ConfigurablePurePursuitCommand rightLoading, CheesyQuickTurnCommand quickTurn) {
                 front.includeOnSmartDashboard("Score on Front Cargo");
                 near.includeOnSmartDashboard("Score on Near Cargo");
                 mid.includeOnSmartDashboard("Score on Mid Cargo");
@@ -186,6 +180,8 @@ public class OperatorCommandMap {
 
                 leftB.whileHeld(leftLoading);
                 rightB.whileHeld(rightLoading);
+
+                leftShift.whileHeld(quickTurn);
         }
 
         @Inject
