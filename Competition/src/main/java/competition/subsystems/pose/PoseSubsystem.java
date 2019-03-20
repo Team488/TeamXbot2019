@@ -49,6 +49,8 @@ public class PoseSubsystem extends BasePoseSubsystem {
     private final DoubleProperty autoResetMaximumDistance;
     private CommonLibFactory clf;
 
+    private boolean forceSandstormFrontCargoCalibrate = false;
+
     @Inject
     public PoseSubsystem(CommonLibFactory clf, PropertyFactory propManager, DriveSubsystem drive, LowResField field) {
         super(clf, propManager);
@@ -102,6 +104,13 @@ public class PoseSubsystem extends BasePoseSubsystem {
         // Hab Level Zero, don't use this.
         // createLandmarks(FieldLandmark.HabLevelZero, 120, 118, 90);
 
+    }
+
+    /**
+     * @param forceSandstormFrontCargoCalibrate the forceSandstormFrontCargoCalibrate to set
+     */
+    public void setForceSandstormFrontCargoCalibrate(boolean forceSandstormFrontCargoCalibrate) {
+        this.forceSandstormFrontCargoCalibrate = forceSandstormFrontCargoCalibrate;
     }
 
     private void createLandmarks(FieldLandmark landmark, double x, double y, double heading) {
@@ -177,6 +186,18 @@ public class PoseSubsystem extends BasePoseSubsystem {
     }
 
     public void updatePositionDueToGripperActuation() {
+
+        if (forceSandstormFrontCargoCalibrate) {
+            forceSandstormFrontCargoCalibrate = false;
+
+            FieldPose leftFrontCargo = getFieldPoseForLandmark(Side.Left, FieldLandmark.FrontCargoShip);
+            FieldPose rightFrontCargo = getFieldPoseForLandmark(Side.Right, FieldLandmark.FrontCargoShip);
+            double x = (leftFrontCargo.getPoint().x + rightFrontCargo.getPoint().x)/2;
+            double y = leftFrontCargo.getPoint().y;
+
+            setCurrentPosition(x, y);
+        }
+
         double angleRange = autoResetAngleThreshold.get();
         double maximumDistance = autoResetMaximumDistance.get();
         // The gripper was actuated. We check the following in order.

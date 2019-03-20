@@ -73,5 +73,6 @@ public class Robot extends BaseRobot {
     public void autonomousInit() {        
         super.autonomousInit();
         pose.setCurrentHeading(90);
+        pose.setForceSandstormFrontCargoCalibrate(true);
     }
 }
