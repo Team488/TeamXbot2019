@@ -26,7 +26,7 @@ public class SetElevatorTickGoalCommand extends BaseSetpointCommand {
 
     @Override
     public void initialize() {
-        log.info("Initializing");
+        log.info("Initializing to ticks goal: " + this.tickGoal);
     }
 
     @Override
