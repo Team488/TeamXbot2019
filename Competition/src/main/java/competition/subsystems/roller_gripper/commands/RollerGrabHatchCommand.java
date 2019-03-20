@@ -17,7 +17,7 @@ public class RollerGrabHatchCommand extends BaseCommand {
 
     @Override
     public void initialize() {
-
+        log.info("Initialized");
     }
 
     @Override
