@@ -132,15 +132,16 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
         // We also setup two calibration latches, so we will only hard calibrate on the
         // first jump from false->true.
         leftCalibrationLatch = new Latch(false, EdgeType.Both, edge ->
-
         {
             if (edge == EdgeType.RisingEdge) {
+                log.info("Calibrating left!");
                 leftHardCalibrate();
             }
         });
 
         rightCalibrationLatch = new Latch(false, EdgeType.Both, edge -> {
             if (edge == EdgeType.RisingEdge) {
+                log.info("Calibrating right!");
                 rightHardCalibrate();
             }
         });
@@ -311,7 +312,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
      */
     private void setSoftLimits(XCANTalon motor, double hardOffset) {
         if (areMotorsReady) {
-            motor.configReverseSoftLimitEnable(true, 0);
+            motor.configReverseSoftLimitEnable(false, 0);
             motor.configReverseSoftLimitThreshold((int) hardOffset, 0);
             motor.configForwardSoftLimitEnable(true, 0);
             motor.configForwardSoftLimitThreshold((int) (hardOffset + maximumLegTravelInTicks.get()), 0);
@@ -337,8 +338,10 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
      */
     @Override
     public void updatePeriodicData() {
-        leftLimitProp.set(leftLimit.get());
-        rightLimitProp.set(rightLimit.get());
+        if (areMotorsReady) {
+            leftLimitProp.set(leftLimit.get());
+            rightLimitProp.set(rightLimit.get());
+        }
     }
 
     public void setTickGoalsToCurrent(EncoderAdjustment encoderAdjustment) {
