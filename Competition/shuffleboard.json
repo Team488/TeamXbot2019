@@ -1,781 +1,6 @@
 {
   "tabPane": [
     {
-      "title": "SmartDashboard",
-      "autoPopulate": true,
-      "autoPopulatePrefix": "SmartDashboard/",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ Enable time threshold",
-              "_title": "DriveSubsystem/DriveHeading/ Enable time threshold",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "1,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToPanelLoadLeft",
-              "_title": "goFromHabTouchingRampToPanelLoadLeft"
-            }
-          },
-          "2,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/LeftDriveLeftMaster/ temperature",
-              "_title": "LeftDriveLeftMaster/ temperature"
-            }
-          },
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToCargoShipFrontLeft",
-              "_title": "setPoseToCargoShipFrontLeft"
-            }
-          },
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToCargoShipRightThree",
-              "_title": "setPoseToCargoShipRightThree"
-            }
-          },
-          "5,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToHabLeftOne",
-              "_title": "setPoseToHabLeftOne"
-            }
-          },
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToHabTouchingRampRight",
-              "_title": "setPoseToHabTouchingRampRight"
-            }
-          },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/RightDriveRightMaster/ temperature",
-              "_title": "RightDriveRightMaster/ temperature"
-            }
-          },
-          "8,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ Max Output",
-              "_title": "DriveSubsystem/DriveHeading/ Max Output"
-            }
-          },
-          "9,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToCargoShipFrontLeft",
-              "_title": "goFromHabTouchingRampToCargoShipFrontLeft"
-            }
-          },
-          "0,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToCargoShipFrontRight",
-              "_title": "setPoseToCargoShipFrontRight"
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToCargoShipRightThree",
-              "_title": "goFromHabTouchingRampToCargoShipRightThree"
-            }
-          },
-          "2,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Error threshold",
-              "_title": "DriveSubsystem/Drive to position/ Error threshold"
-            }
-          },
-          "3,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ D",
-              "_title": "DriveSubsystem/DriveHeading/ D"
-            }
-          },
-          "4,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToPanelLoadRight",
-              "_title": "goFromHabTouchingRampToPanelLoadRight"
-            }
-          },
-          "5,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ F",
-              "_title": "DriveSubsystem/DriveHeading/ F"
-            }
-          },
-          "6,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToHabTouchingRampLeft",
-              "_title": "setPoseToHabTouchingRampLeft"
-            }
-          },
-          "7,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ I",
-              "_title": "DriveSubsystem/DriveHeading/ I"
-            }
-          },
-          "8,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveDecay/ Max Output",
-              "_title": "DriveSubsystem/DriveDecay/ Max Output"
-            }
-          },
-          "9,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToPanelLoadRight",
-              "_title": "setPoseToPanelLoadRight"
-            }
-          },
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ P",
-              "_title": "DriveSubsystem/DriveHeading/ P"
-            }
-          },
-          "1,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToPanelLoadLeft",
-              "_title": "setPoseToPanelLoadLeft"
-            }
-          },
-          "2,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveDecay/ Enable error threshold",
-              "_title": "DriveSubsystem/DriveDecay/ Enable error threshold",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "3,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToCargoShipLeftThree",
-              "_title": "goFromHabTouchingRampToCargoShipLeftThree"
-            }
-          },
-          "4,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToCargoShipFrontRight",
-              "_title": "goFromHabTouchingRampToCargoShipFrontRight"
-            }
-          },
-          "5,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/RIO rotated",
-              "_title": "PoseSubsystem/RIO rotated",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "6,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToHabLeftTwo",
-              "_title": "setPoseToHabLeftTwo"
-            }
-          },
-          "7,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToHabRightOne",
-              "_title": "setPoseToHabRightOne"
-            }
-          },
-          "8,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Derivative threshold",
-              "_title": "DriveSubsystem/Drive to position/ Derivative threshold"
-            }
-          },
-          "9,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Enable time threshold",
-              "_title": "DriveSubsystem/Drive to position/ Enable time threshold",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "0,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance Y",
-              "_title": "PoseSubsystem/Total distance Y"
-            }
-          },
-          "1,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveDecay/ Enable time threshold",
-              "_title": "DriveSubsystem/DriveDecay/ Enable time threshold",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "2,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Total distance X",
-              "_title": "PoseSubsystem/Total distance X"
-            }
-          },
-          "3,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/PanelLoadRight/Y",
-              "_title": "PoseSubsystem/PanelLoadRight/Y"
-            }
-          },
-          "4,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/PanelLoadRight/X",
-              "_title": "PoseSubsystem/PanelLoadRight/X"
-            }
-          },
-          "5,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/LeftDriveLeftMaster/ current",
-              "_title": "LeftDriveLeftMaster/ current"
-            }
-          },
-          "6,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToRocketFrontRight",
-              "_title": "setPoseToRocketFrontRight"
-            }
-          },
-          "7,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToRocketFrontRight",
-              "_title": "goFromHabTouchingRampToRocketFrontRight"
-            }
-          },
-          "8,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Enable error threshold",
-              "_title": "DriveSubsystem/Drive to position/ Enable error threshold",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "9,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Right drive distance",
-              "_title": "PoseSubsystem/Right drive distance"
-            }
-          },
-          "0,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ D",
-              "_title": "DriveSubsystem/Drive to position/ D"
-            }
-          },
-          "1,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ F",
-              "_title": "DriveSubsystem/Drive to position/ F"
-            }
-          },
-          "2,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ I",
-              "_title": "DriveSubsystem/Drive to position/ I"
-            }
-          },
-          "3,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/goFromHabTouchingRampToRocketFrontLeft",
-              "_title": "goFromHabTouchingRampToRocketFrontLeft"
-            }
-          },
-          "4,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToCargoShipLeftThree",
-              "_title": "setPoseToCargoShipLeftThree"
-            }
-          },
-          "5,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ P",
-              "_title": "DriveSubsystem/Drive to position/ P"
-            }
-          },
-          "6,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Current pitch",
-              "_title": "PoseSubsystem/Current pitch"
-            }
-          },
-          "7,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/setPoseToRocketFrontLeft",
-              "_title": "setPoseToRocketFrontLeft"
-            }
-          },
-          "8,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveDecay/ Derivative threshold",
-              "_title": "DriveSubsystem/DriveDecay/ Derivative threshold"
-            }
-          },
-          "9,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PoseSubsystem/HabRightOne/X",
-              "_title": "PoseSubsystem/HabRightOne/X"
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "LiveWindow",
-      "autoPopulate": true,
-      "autoPopulatePrefix": "LiveWindow/",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Ungrouped",
-              "_title": "Ungrouped",
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [21]",
-                  "_title": "Talon SRX [21]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [20]",
-                  "_title": "Talon SRX [20]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [35]",
-                  "_title": "Talon SRX [35]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [34]",
-                  "_title": "Talon SRX [34]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [-4]",
-                  "_title": "Talon SRX [-4]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [-5]",
-                  "_title": "Talon SRX [-5]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,0]/Value",
-                  "_title": "Solenoid[0,0]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [22]",
-                  "_title": "Talon SRX [22]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [23]",
-                  "_title": "Talon SRX [23]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [33]",
-                  "_title": "Talon SRX [33]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [32]",
-                  "_title": "Talon SRX [32]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[1]/Value",
-                  "_title": "DigitalInput[1]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,1]/Value",
-                  "_title": "Solenoid[0,1]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[10]/Value",
-                  "_title": "DigitalInput[10]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [25]",
-                  "_title": "Talon SRX [25]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [50]",
-                  "_title": "Talon SRX [50]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,5]/Value",
-                  "_title": "Solenoid[0,5]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,2]/Value",
-                  "_title": "Solenoid[0,2]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[9]/Value",
-                  "_title": "DigitalInput[9]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                }
-              ]
-            }
-          },
-          "2,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/PoseSubsystem",
-              "_title": "PoseSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
-            }
-          },
-          "4,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/DriveSubsystem",
-              "_title": "DriveSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
-            }
-          },
-          "6,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/VisionSubsystem",
-              "_title": "VisionSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
-            }
-          },
-          "8,0": {
-            "size": [
-              2,
-              4
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/GripperSubsystem",
-              "_title": "GripperSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
-            }
-          }
-        }
-      }
-    },
-    {
       "title": "Field Navigation",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
@@ -796,9 +21,9 @@
               "_title": "/SmartDashboard/Go To Front Cargo"
             }
           },
-          "5,0": {
+          "6,4": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
@@ -875,7 +100,7 @@
           },
           "5,3": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
@@ -915,17 +140,6 @@
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/Go To Far Loading Station",
               "_title": "/SmartDashboard/Go To Far Loading Station"
-            }
-          },
-          "9,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ D",
-              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/ D"
             }
           },
           "6,2": {
@@ -983,6 +197,17 @@
               "_title": "/SmartDashboard/DriveSubsystem/Drive to position/ D"
             }
           },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/DistanceFromCenterOfBot",
+              "_title": "/SmartDashboard/PoseSubsystem/DistanceFromCenterOfBot"
+            }
+          },
           "8,0": {
             "size": [
               1,
@@ -990,8 +215,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ Max Output",
-              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/ Max Output"
+              "_source0": "network_table:///SmartDashboard/Drive to position/Max Output",
+              "_title": "/SmartDashboard/Drive to position/Max Output"
             }
           },
           "9,0": {
@@ -1001,8 +226,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ Min Output",
-              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/ Min Output"
+              "_source0": "network_table:///SmartDashboard/Drive to position/Min Output",
+              "_title": "/SmartDashboard/Drive to position/Min Output"
             }
           },
           "8,2": {
@@ -1012,8 +237,19 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/ P",
-              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/ P"
+              "_source0": "network_table:///SmartDashboard/DriveHeading/P",
+              "_title": "/SmartDashboard/DriveHeading/P"
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveHeading/D",
+              "_title": "/SmartDashboard/DriveHeading/D"
             }
           },
           "8,1": {
@@ -1023,8 +259,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Max Output",
-              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/ Max Output"
+              "_source0": "network_table:///SmartDashboard/DriveHeading/Max Output",
+              "_title": "/SmartDashboard/DriveHeading/Max Output"
             }
           },
           "9,1": {
@@ -1034,8 +270,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/ Min Output",
-              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/ Min Output"
+              "_source0": "network_table:///SmartDashboard/DriveHeading/Min Output",
+              "_title": "/SmartDashboard/DriveHeading/Min Output"
             }
           }
         }
@@ -1051,7 +287,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,0": {
+          "8,1": {
             "size": [
               1,
               1
@@ -1062,7 +298,7 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/StandardPower"
             }
           },
-          "6,1": {
+          "6,0": {
             "size": [
               2,
               2
@@ -1073,7 +309,7 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/ElevatorMaster"
             }
           },
-          "5,1": {
+          "9,0": {
             "size": [
               1,
               1
@@ -1084,7 +320,7 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/Arm Deadband"
             }
           },
-          "5,2": {
+          "8,0": {
             "size": [
               1,
               1
@@ -1095,17 +331,59 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/BrakePowerLimit"
             }
           },
-          "1,0": {
+          "3,3": {
             "size": [
-              2,
-              2
+              1,
+              1
             ],
             "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/GripperSubsystem/GrabbingDisc",
-              "_title": "SmartDashboard/GripperSubsystem/GrabbingDisc",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/TopHeight",
+              "_title": "SmartDashboard/ElevatorSubsystem/TopHeight"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/MidHeight",
+              "_title": "SmartDashboard/ElevatorSubsystem/MidHeight"
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/CalibrationOffset",
+              "_title": "SmartDashboard/ElevatorSubsystem/CalibrationOffset"
+            }
+          },
+          "3,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/Arm Forced Down To Free Ratchet Duration",
+              "_title": "SmartDashboard/ElevatorSubsystem/Arm Forced Down To Free Ratchet Duration"
+            }
+          },
+          "3,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/UnlockPower",
+              "_title": "SmartDashboard/ElevatorSubsystem/UnlockPower"
             }
           }
         }
@@ -1167,7 +445,7 @@
           },
           "5,0": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
@@ -1176,7 +454,7 @@
               "_title": "/SmartDashboard/RotateToVisionTargetCommand/Freeze Angle Delta Deg"
             }
           },
-          "6,0": {
+          "7,0": {
             "size": [
               1,
               1
@@ -1187,6 +465,30 @@
               "_title": "/SmartDashboard/RotateToVisionTargetCommand/IsFrozen",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/VisionSubsystem/hasTarget",
+              "_title": "SmartDashboard/VisionSubsystem/hasTarget",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VisionSubsystem/yawToTarget",
+              "_title": "SmartDashboard/VisionSubsystem/yawToTarget"
             }
           }
         }
@@ -1202,29 +504,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet",
-              "_title": "/SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet"
-            }
-          },
           "5,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet",
-              "_title": "/SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet"
-            }
-          },
-          "6,0": {
             "size": [
               1,
               1
@@ -1234,12 +514,34 @@
               "_source0": "network_table:///SmartDashboard/Reset Pose to 0 0 90",
               "_title": "/SmartDashboard/Reset Pose to 0 0 90"
             }
+          },
+          "4,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet",
+              "_title": "/SmartDashboard/DriveSubsystem/leftDriveTicksPer5Feet"
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet",
+              "_title": "/SmartDashboard/DriveSubsystem/rightDriveTicksPer5Feet"
+            }
           }
         }
       }
     },
     {
-      "title": "Tab 7",
+      "title": "Climb",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -1247,14 +549,243 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
-        "tiles": {}
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/FrontMotorClimberSubsystem/FrontLeftLimit",
+              "_title": "SmartDashboard/FrontMotorClimberSubsystem/FrontLeftLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/FrontMotorClimberSubsystem/FrontRightLimit",
+              "_title": "SmartDashboard/FrontMotorClimberSubsystem/FrontRightLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/FrontMotorClimberSubsystem/MaximumLegTravelInTicks",
+              "_title": "SmartDashboard/FrontMotorClimberSubsystem/MaximumLegTravelInTicks"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/RearMotorClimberSubsystem/RearLeftLimit",
+              "_title": "SmartDashboard/RearMotorClimberSubsystem/RearLeftLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/RearMotorClimberSubsystem/RearRightLimit",
+              "_title": "SmartDashboard/RearMotorClimberSubsystem/RearRightLimit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RearMotorClimberSubsystem/MaximumLegTravelInTicks",
+              "_title": "SmartDashboard/RearMotorClimberSubsystem/MaximumLegTravelInTicks"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRobotLevelCommand/PitchControl/P",
+              "_title": "SmartDashboard/HoldRobotLevelCommand/PitchControl/P"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRobotLevelCommand/PitchControl/D",
+              "_title": "SmartDashboard/HoldRobotLevelCommand/PitchControl/D"
+            }
+          },
+          "3,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRobotLevelCommand/PitchControl/Max Output",
+              "_title": "SmartDashboard/HoldRobotLevelCommand/PitchControl/Max Output"
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRobotLevelCommand/PitchControl/Min Output",
+              "_title": "SmartDashboard/HoldRobotLevelCommand/PitchControl/Min Output"
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Left/P",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Left/P"
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Left/D",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Left/D"
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Left/Min Output",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Left/Min Output"
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Left/Max Output",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Left/Max Output"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Right/P",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Right/P"
+            }
+          },
+          "9,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Right/D",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Right/D"
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Right/Max Output",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Right/Max Output"
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HoldRearClimberPositionCommand/Right/Min Output",
+              "_title": "SmartDashboard/HoldRearClimberPositionCommand/Right/Min Output"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Current roll",
+              "_title": "SmartDashboard/PoseSubsystem/Current roll"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PoseSubsystem/Current pitch",
+              "_title": "SmartDashboard/PoseSubsystem/Current pitch"
+            }
+          }
+        }
       }
     }
   ],
   "windowGeometry": {
-    "x": -5.599999904632568,
-    "y": 7.199999809265137,
-    "width": 640.0,
-    "height": 548.7999877929688
+    "x": -7.199999809265137,
+    "y": -7.199999809265137,
+    "width": 1550.4000244140625,
+    "height": 838.4000244140625
   }
 }

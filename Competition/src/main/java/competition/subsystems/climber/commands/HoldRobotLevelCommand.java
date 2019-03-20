@@ -20,6 +20,7 @@ public class HoldRobotLevelCommand extends BaseCommand {
     public HoldRobotLevelCommand(RearMotorClimberSubsystem rear, PoseSubsystem pose, PropertyFactory propFactory, PIDFactory pf) {
         this.rear = rear;
         this.pose = pose;
+        requires(rear);
 
         pitchPid = pf.createPIDManager(getPrefix() + "PitchControl", 0.05, 0, 0, 1, -0.2);
         rollPid = pf.createPIDManager(getPrefix() + "RollControl", 0.05, 0, 0, 1, -0.2);
@@ -37,7 +38,7 @@ public class HoldRobotLevelCommand extends BaseCommand {
         double currentPitch = pose.getRobotPitch();
         double currentRoll = pose.getRobotRoll();
 
-        double pitchPower = -pitchPid.calculate(0, currentPitch);
+        double pitchPower = pitchPid.calculate(0, currentPitch);
         double rollPower = -rollPid.calculate(0, currentRoll);
         rear.setLiftAndTilt(pitchPower, rollPower);
     }
