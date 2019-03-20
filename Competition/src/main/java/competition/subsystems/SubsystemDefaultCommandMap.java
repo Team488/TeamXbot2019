@@ -32,7 +32,7 @@ public class SubsystemDefaultCommandMap {
 
     @Inject
     public void setupRumbleSubsystem(RumbleSubsystem rumbleSubsystem, RumbleManagerCommand command) {
-        rumbleSubsystem.setDefaultCommand(command); 
+        rumbleSubsystem.setDefaultCommand(command);
     }
 
     @Inject
@@ -41,10 +41,12 @@ public class SubsystemDefaultCommandMap {
     }
 
     @Inject
-    public void setupMotorClimberSubsystem(
-        FrontMotorClimberSubsystem front, FrontMotorClimberDoNothingCommand frontDoNothing,
-        RearMotorClimberSubsystem rear, RearMotorClimberDoNothingCommand rearDoNothing) {
+    public void setupMotorClimberSubsystem(FrontMotorClimberSubsystem front,
+            FrontMotorClimberDoNothingCommand frontDoNothing, RearMotorClimberSubsystem rear,
+            RearMotorClimberDoNothingCommand rearDoNothing) {
         front.setDefaultCommand(frontDoNothing);
         rear.setDefaultCommand(rearDoNothing);
     }
-}
+  
+    
+    }

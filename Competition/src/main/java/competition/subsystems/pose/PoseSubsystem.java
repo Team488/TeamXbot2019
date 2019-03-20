@@ -124,6 +124,34 @@ public class PoseSubsystem extends BasePoseSubsystem {
         landmarkToLocation.put(rightName, right);
     }
 
+    private FieldPose getWaypointForLandmark(Side side, FieldLandmark landmark) {
+        // A relatively safe default.
+        FieldPose candidate = new FieldPose(20, 20, 90);
+
+        switch (landmark) {
+        // This uses switch statement fallthrough to group several cases together
+        case NearCargoShip:
+        case MidCargoShip:
+        case FarCargoShip:
+        case MidRocket:
+            candidate = leftCargoShipWaypoint.getPose();
+            break;
+        case LoadingStation:
+        case FrontCargoShip:
+        case NearRocket:
+            candidate = leftNearRocketWaypoint.getPose();
+            break;
+        case FarRocket:
+            candidate = leftFarRocketWaypoint.getPose();
+            break;
+        default:
+            log.warn("Could not find any waypoint forCould not find any waypoint for " + landmark
+                    + "! Will head back towards player station.");
+            break;
+        }
+        return candidate;
+    }
+
     public List<RabbitPoint> getPathToFieldPose(FieldPose goalPose) {
         FieldPose currentPose = getCurrentFieldPose();
         log.info("Starting Pose: " + currentPose.toString());
@@ -242,4 +270,33 @@ public class PoseSubsystem extends BasePoseSubsystem {
         return new FieldPose(new XYPair((12 * 27) - current.getPoint().x, current.getPoint().y),
                 new ContiguousHeading(180 - current.getHeading().getValue()));
     }
+
+    public List<RabbitPoint> getPathToNearestLandmark(FieldLandmark landmark) {
+        Side candidate = Side.Left;
+        if (isRightLoadingStationCloser()) {
+            candidate = Side.Right;
+        }
+        return getPathToLandmark(candidate, landmark, true);
+    }
+
+    public boolean isRightLoadingStationCloser() {
+        FieldPose rightLoadingStation = getFieldPoseForLandmark(Side.Right, FieldLandmark.LoadingStation);
+        FieldPose leftLoadingStation = getFieldPoseForLandmark(Side.Left, FieldLandmark.LoadingStation);
+        FieldPose fieldPoseCurrent = getCurrentFieldPose();
+
+        double rightDistance = rightLoadingStation.getPoint().getDistanceToPoint(fieldPoseCurrent.getPoint());
+        double leftDistance = leftLoadingStation.getPoint().getDistanceToPoint(fieldPoseCurrent.getPoint());
+
+        if (rightDistance < leftDistance) {
+            // The right loading station is closer than the left station relative to the
+            // bot's current position.
+            return true;
+        } else {
+            // The right loading station is farther than the left station relative to the
+            // bot's current position.
+            return false;
+        }
+    }
+
+
 }
