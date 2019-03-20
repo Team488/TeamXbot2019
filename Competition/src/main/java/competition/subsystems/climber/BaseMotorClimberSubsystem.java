@@ -75,6 +75,15 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     }
 
     /**
+     * Sets left and right ticks goals to be the same value
+     * @param tickGoal the tick goal to set
+     */
+    public void setBothTickGoals(double tickGoal) {
+        setLeftTickGoal(tickGoal);
+        setRightTickGoal(tickGoal);
+    }
+
+    /**
      * The generic MotorClimberSubsystem that will be extended by the Front and Rear
      * climbers. It has all the logic so they don't need any.
      * 
@@ -353,5 +362,10 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     public void setTickGoalsToCurrent(EncoderAdjustment encoderAdjustment) {
         this.setLeftTickGoal(this.getLeftTicks(encoderAdjustment));
         this.setRightTickGoal(this.getRightTicks(encoderAdjustment));
+    }
+
+    public void setTickGoalsToSafeMaximum() {
+        this.setLeftTickGoal(maximumLegTravelInTicks.get());
+        this.setRightTickGoal(maximumLegTravelInTicks.get());
     }
 }
