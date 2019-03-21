@@ -28,6 +28,6 @@ public class FrontMotorClimberManualControlCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        front.setLiftAndTilt(oi.operatorGamepad.getLeftVector().y, oi.operatorGamepad.getLeftVector().x);
+        front.setLiftAndTilt(oi.operatorGamepad.getLeftVector().y, 0);
     }
 }

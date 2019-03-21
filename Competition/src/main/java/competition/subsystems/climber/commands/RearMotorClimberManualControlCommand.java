@@ -26,6 +26,6 @@ public class RearMotorClimberManualControlCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        rear.setLiftAndTilt(oi.operatorGamepad.getRightVector().y, oi.operatorGamepad.getRightVector().x);
+        rear.setLiftAndTilt(oi.operatorGamepad.getRightVector().y, 0);
     }
 }
