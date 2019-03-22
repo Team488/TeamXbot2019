@@ -38,7 +38,7 @@ public class RotateToHeadingCommandTest extends BaseCompetitionTest {
         command.initialize();
         command.execute();
 
-        assertEquals(1, drive.rightMaster.getMotorOutputPercent(), 0.001);
+        assertEquals(drive.getRotateToHeadingPid().getMaxOutput(), drive.rightMaster.getMotorOutputPercent(), 0.001);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class RotateToHeadingCommandTest extends BaseCompetitionTest {
         command.execute();
 
         assertFalse(command.isFinished());
-        assertEquals(1, drive.rightMaster.getMotorOutputPercent(), 0.001);
+        assertEquals(drive.getRotateToHeadingPid().getMaxOutput(), drive.rightMaster.getMotorOutputPercent(), 0.001);
         changeMockGyroHeading(90);
 
         // Once for error to stabilize to 0
