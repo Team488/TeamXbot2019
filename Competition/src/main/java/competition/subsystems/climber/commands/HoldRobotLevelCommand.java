@@ -7,16 +7,15 @@ import competition.subsystems.pose.PoseSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.PIDFactory;
 import xbot.common.math.PIDManager;
-import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyFactory;
 
 public class HoldRobotLevelCommand extends BaseCommand {
 
-    RearMotorClimberSubsystem rear;
-    PoseSubsystem pose;
-    PIDManager pitchPid;
-    PIDManager rollPid;
-    final DoubleProperty criticalPitchProp;
+    protected RearMotorClimberSubsystem rear;
+    protected  PoseSubsystem pose;
+    protected  PIDManager pitchPid;
+    protected  PIDManager rollPid;
+    
 
     @Inject
     public HoldRobotLevelCommand(RearMotorClimberSubsystem rear, PoseSubsystem pose, PropertyFactory propFactory, PIDFactory pf) {
@@ -26,7 +25,6 @@ public class HoldRobotLevelCommand extends BaseCommand {
         propFactory.setPrefix(getPrefix());
         pitchPid = pf.createPIDManager(getPrefix() + "PitchControl", 0.05, 0, 0, 1, -0.2);
         rollPid = pf.createPIDManager(getPrefix() + "RollControl", 0.05, 0, 0, 1, -0.2);
-        criticalPitchProp = propFactory.createPersistentProperty("CriticalPitchAngle", -10);
     }
 
     @Override
@@ -46,9 +44,5 @@ public class HoldRobotLevelCommand extends BaseCommand {
         rear.positiveLiftAndTilt(pitchPower, rollPower);
     }
 
-    @Override
-    public boolean isFinished() {
-        // If we tilt very far forward, that (hopefully) means that we have fallen onto HAB 3.
-        return pose.getRobotPitch() < criticalPitchProp.get();
-    }
+
 }

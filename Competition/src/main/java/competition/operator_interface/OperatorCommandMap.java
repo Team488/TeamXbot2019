@@ -15,6 +15,7 @@ import competition.subsystems.climber.commands.DebugMotorClimberCommand;
 import competition.subsystems.climber.commands.FrontMotorClimberManualControlCommand;
 import competition.subsystems.climber.commands.HoldRearClimberPositionCommand;
 import competition.subsystems.climber.commands.HoldRobotLevelCommand;
+import competition.subsystems.climber.commands.HoldRobotLevelCommandThatEnds;
 import competition.subsystems.climber.commands.RearMotorClimberManualControlCommand;
 import competition.subsystems.climber.commands.SetRearLegsToMaximumCommand;
 import competition.subsystems.drive.commands.ArcadeDriveWithJoysticksCommand;
@@ -259,7 +260,8 @@ public class OperatorCommandMap {
                         DebugMotorClimberCommand debugMotorClimber,
                         Provider<FrontMotorClimberManualControlCommand> frontManualProvider,
                         RearMotorClimberManualControlCommand rearManual,
-                        Provider<HoldRobotLevelCommand> rearLevelProvider,
+                        HoldRobotLevelCommand rearLevel,
+                        HoldRobotLevelCommandThatEnds rearLevelThatEnds,
                         HoldRearClimberPositionCommand rearHoldPosition, CalibrateFloorCommand calibrateFloor,
                         SetRearLegsToMaximumCommand rearToMax) {
 
@@ -272,7 +274,7 @@ public class OperatorCommandMap {
                 var partialClimb = new ArrayList<Command>();
                 var fullClimb = new ArrayList<Command>();
                 var climbRear = new ArrayList<Command>();
-                climbRear.add(rearLevelProvider.get());
+                climbRear.add(rearLevelThatEnds);
                 climbRear.add(rearToMax);
                 climbRear.add(rearHoldPosition);
                 SimpleCommandGroup climbRearGroup = new SimpleCommandGroup("ClimbRearGroup", climbRear,
@@ -282,7 +284,7 @@ public class OperatorCommandMap {
                 SimpleCommandGroup fullAutomaticClimbGroup = new SimpleCommandGroup("FullAutomaticClimbGroup",
                                 fullClimb, ExecutionType.Parallel);
                 partialClimb.add(frontManualProvider.get());
-                partialClimb.add(rearLevelProvider.get());
+                partialClimb.add(rearLevel);
                 SimpleCommandGroup partialClimbGroup = new SimpleCommandGroup("PartialClimbGroup", partialClimb,
                                 ExecutionType.Parallel);
 
