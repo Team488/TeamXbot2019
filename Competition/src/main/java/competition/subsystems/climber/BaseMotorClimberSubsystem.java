@@ -29,6 +29,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     private final BooleanProperty leftLimitProp;
     private final BooleanProperty rightLimitProp;
     private final DoubleProperty maximumLegTravelInTicks;
+    protected final DoubleProperty retroRocketPowerProp;
 
     private final Latch leftCalibrationLatch;
     private final Latch rightCalibrationLatch;
@@ -143,6 +144,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
         // This property controls how far the legs can extend from the hall effect
         // sensors.
         maximumLegTravelInTicks = propFactory.createPersistentProperty("MaximumLegTravelInTicks", 100000);
+        retroRocketPowerProp = propFactory.createPersistentProperty("RetroRocketPower", 0.15);
 
         // We also setup two calibration latches, so we will only hard calibrate on the
         // first jump from false->true.
@@ -376,5 +378,17 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     public void setTickGoalsToSafeMaximum() {
         this.setLeftTickGoal(maximumLegTravelInTicks.get());
         this.setRightTickGoal(maximumLegTravelInTicks.get());
+    }
+
+    public boolean getLeftLimitSwitchPressed() {
+        return leftLimit.get();
+    }
+
+    public boolean getRightLimitSwitchPressed() {
+        return rightLimit.get();
+    }
+
+    public double getRetroRocketPower() {
+        return retroRocketPowerProp.get();
     }
 }

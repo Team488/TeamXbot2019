@@ -4,28 +4,21 @@ import com.google.inject.Inject;
 
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.climber.RearMotorClimberSubsystem;
-import xbot.common.command.BaseCommand;
 
-public class RearMotorClimberManualControlCommand extends BaseCommand {
-
-    RearMotorClimberSubsystem rear;
-    OperatorInterface oi;
+public class RearMotorClimberManualControlCommand extends BaseMotorClimberManualControlCommand {
 
     @Inject
     public RearMotorClimberManualControlCommand(RearMotorClimberSubsystem rear, OperatorInterface oi) {
-        this.rear = rear;
-        this.oi = oi;
+        super(rear, oi);
+    }
 
-        this.requires(rear);
+    @Override
+    public double getHumanInput() {
+        return oi.operatorGamepad.getRightVector().y;
     }
 
     @Override
     public void initialize() {
         log.info("Initialize");
-    }
-
-    @Override
-    public void execute() {
-        rear.setLiftAndTilt(oi.operatorGamepad.getRightVector().y, 0);
     }
 }
