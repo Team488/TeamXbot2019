@@ -175,6 +175,15 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
         setRightPower(rightPower);
     }
 
+    public void positiveLiftAndTilt(double lift, double tilt) {
+        double leftPower = lift - tilt;
+        double rightPower = lift + tilt;
+        leftPower = MathUtils.constrainDouble(leftPower, 0, 1);
+        rightPower = MathUtils.constrainDouble(rightPower, 0, 1);
+        setLeftPower(leftPower);
+        setRightPower(rightPower);
+    }
+
     /**
      * Used to directly set power to the left leg. Useful for PID control by a
      * command.

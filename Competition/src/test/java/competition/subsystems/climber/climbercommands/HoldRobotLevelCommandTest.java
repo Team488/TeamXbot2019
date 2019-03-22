@@ -1,6 +1,7 @@
 package competition.subsystems.climber.climbercommands;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -83,18 +84,19 @@ public class HoldRobotLevelCommandTest extends BaseCompetitionTest {
     }
 
     protected void assertTryingToTiltBackward() {
-        assertTrue(rear.leftMotor.getMotorOutputPercent() < -0.1);
-        assertTrue(rear.rightMotor.getMotorOutputPercent() < -0.1);
+        assertEquals(0.0, rear.leftMotor.getMotorOutputPercent(), 0.001);
+        assertEquals(0.0, rear.rightMotor.getMotorOutputPercent(), 0.001);
+
     }
 
     protected void assertTryingToRollLeft() {
-        assertTrue(rear.leftMotor.getMotorOutputPercent() < -0.1);
+        assertEquals(0.0, rear.leftMotor.getMotorOutputPercent(), 0.001);
         assertTrue(rear.rightMotor.getMotorOutputPercent() > 0.1);
     }
 
     protected void assertTryingToRollRight() {
         assertTrue(rear.leftMotor.getMotorOutputPercent() > 0.1);
-        assertTrue(rear.rightMotor.getMotorOutputPercent() < -0.1);
+        assertEquals(0.0, rear.rightMotor.getMotorOutputPercent(), 0.001);
     }
 
     protected void assertPower(double power) {

@@ -43,7 +43,7 @@ public class HoldRobotLevelCommand extends BaseCommand {
 
         double pitchPower = pitchPid.calculate(0, currentPitch);
         double rollPower = -rollPid.calculate(0, currentRoll);
-        rear.setLiftAndTilt(pitchPower, rollPower);
+        rear.positiveLiftAndTilt(pitchPower, rollPower);
     }
 
     @Override
