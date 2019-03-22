@@ -13,8 +13,8 @@ public abstract class HeadingControlledDriveCommand extends BaseCommand {
     protected CommonLibFactory clf;
     protected DriveSubsystem drive;
     protected PropertyFactory propFactory;
-    final DoubleProperty deadbandProp;
-    final HeadingAssistModule ham;
+    protected final DoubleProperty deadbandProp;
+    protected final HeadingAssistModule ham;
 
     protected abstract double getHumanTranslationInput();
 

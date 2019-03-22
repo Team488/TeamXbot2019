@@ -22,6 +22,7 @@ import competition.subsystems.drive.commands.CheesyDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.CheesyQuickTurnCommand;
 import competition.subsystems.drive.commands.ConfigureDriveSubsystemCommand;
 import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
+import competition.subsystems.drive.commands.ForwardRatchetArcadeCommand;
 import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
@@ -72,7 +73,8 @@ public class OperatorCommandMap {
                         ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
                         ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem,
                         HumanAssistedPurePursuitCommand goToVisionTarget,
-                        HumanAssistedPurePursuitCommand goToVisionLine) {
+                        HumanAssistedPurePursuitCommand goToVisionLine,
+                        ForwardRatchetArcadeCommand ratchetDrive) {
                 operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(arcade);
                 operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
                 operatorInterface.driverGamepad.getPovIfAvailable(180).whenPressed(cheesyDrive);
@@ -129,6 +131,8 @@ public class OperatorCommandMap {
                 goToVisionLine.setDotProductDrivingEnabled(true);
                 goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
                 operatorInterface.driverGamepad.getifAvailable(4).whileHeld(goToVisionLine);
+
+                operatorInterface.driverGamepad.getifAvailable(9).whenPressed(ratchetDrive);
         }
 
         @Inject
