@@ -76,9 +76,9 @@ public class PoseSubsystem extends BasePoseSubsystem {
 
         // These waypoints represent good places to navigate to on the field before
         // doing a final approach.
-        leftNearRocketWaypoint = clf.createFieldPosePropertyManager("LeftNearRocketWaypoint", 40, 135, 0);
-        leftFarRocketWaypoint = clf.createFieldPosePropertyManager("LeftFarRocketWaypoint", 70, 260, 0);
-        leftCargoShipWaypoint = clf.createFieldPosePropertyManager("LeftCargoShipWaypoint", 80, 200, 0);
+        leftNearRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftNearRocketWaypoint", 40, 135, 0);
+        leftFarRocketWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftFarRocketWaypoint", 70, 260, 0);
+        leftCargoShipWaypoint = clf.createFieldPosePropertyManager(getPrefix() + "LeftCargoShipWaypoint", 80, 200, 0);
 
         // First value X, Second value Y, Third value angle
         // X
