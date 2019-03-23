@@ -288,7 +288,7 @@ public class OperatorCommandMap {
                 SimpleCommandGroup partialClimbGroup = new SimpleCommandGroup("PartialClimbGroup", partialClimb,
                                 ExecutionType.Parallel);
 
-                operatorInterface.operatorGamepad.getifAvailable(5).whileHeld(debugMotorClimber);
+                operatorInterface.operatorGamepad.getifAvailable(5).whenPressed(fullManualGroup);
                 operatorInterface.operatorGamepad.getifAvailable(6).whenPressed(partialClimbGroup);
 
                 AnalogHIDDescription leftTrigger = new AnalogHIDDescription(2, .25, 1.01);
