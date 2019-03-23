@@ -216,7 +216,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/P",
-              "_title": "SmartDashboard/DriveSubsystem/Drive to position/P"
+              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/P"
             }
           },
           "9,0": {
@@ -227,7 +227,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/D",
-              "_title": "SmartDashboard/DriveSubsystem/Drive to position/D"
+              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/D"
             }
           },
           "8,1": {
@@ -238,7 +238,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/Max Output",
-              "_title": "SmartDashboard/DriveSubsystem/Drive to position/Max Output"
+              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/Max Output"
             }
           },
           "9,1": {
@@ -249,7 +249,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive to position/Min Output",
-              "_title": "SmartDashboard/DriveSubsystem/Drive to position/Min Output"
+              "_title": "/SmartDashboard/DriveSubsystem/Drive to position/Min Output"
             }
           },
           "8,2": {
@@ -260,7 +260,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/P",
-              "_title": "SmartDashboard/DriveSubsystem/DriveHeading/P"
+              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/P"
             }
           },
           "9,2": {
@@ -271,7 +271,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/D",
-              "_title": "SmartDashboard/DriveSubsystem/DriveHeading/D"
+              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/D"
             }
           },
           "8,3": {
@@ -282,7 +282,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/Max Output",
-              "_title": "SmartDashboard/DriveSubsystem/DriveHeading/Max Output"
+              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/Max Output"
             }
           },
           "9,3": {
@@ -293,7 +293,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DriveHeading/Min Output",
-              "_title": "SmartDashboard/DriveSubsystem/DriveHeading/Min Output"
+              "_title": "/SmartDashboard/DriveSubsystem/DriveHeading/Min Output"
             }
           }
         }
