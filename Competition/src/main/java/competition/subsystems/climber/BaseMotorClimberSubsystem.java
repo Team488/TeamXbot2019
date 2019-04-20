@@ -28,8 +28,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
 
     private final BooleanProperty leftLimitProp;
     private final BooleanProperty rightLimitProp;
-    private final DoubleProperty maximumLeftLegTravelInTicks;
-    private final DoubleProperty maximumRightLegTravelInTicks;
+    private final DoubleProperty maximumLegTravelInTicks;
     protected final DoubleProperty retroRocketPowerProp;
 
     private final Latch leftCalibrationLatch;
@@ -144,8 +143,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
         rightLimitProp = propFactory.createEphemeralProperty(side + "RightLimit", false);
         // This property controls how far the legs can extend from the hall effect
         // sensors.
-        maximumLeftLegTravelInTicks = propFactory.createPersistentProperty("MaxLeftLegTravelInTicks", 45000);
-        maximumRightLegTravelInTicks = propFactory.createPersistentProperty("MaxRightLegTravelInTicks", 45000);
+        maximumLegTravelInTicks = propFactory.createPersistentProperty("MaximumLegTravelInTicks", 100000);
         retroRocketPowerProp = propFactory.createPersistentProperty("RetroRocketPower", 0.15);
 
         // We also setup two calibration latches, so we will only hard calibrate on the
@@ -294,7 +292,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     private void leftHardCalibrate() {
         leftCalibrated = true;
         leftHardOffset = getLeftTicks(EncoderAdjustment.Raw);
-        setSoftLimits(leftMotor, leftHardOffset, maximumLeftLegTravelInTicks.get());
+        setSoftLimits(leftMotor, leftHardOffset);
     }
 
     /**
@@ -303,7 +301,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     private void rightHardCalibrate() {
         rightCalibrated = true;
         rightHardOffset = getRightTicks(EncoderAdjustment.Raw);
-        setSoftLimits(rightMotor, rightHardOffset, maximumRightLegTravelInTicks.get());
+        setSoftLimits(rightMotor, rightHardOffset);
     }
 
     /**
@@ -338,12 +336,12 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
      * @param motor      which motor to configure
      * @param hardOffset the tick position where the hard stop sensor was triggered.
      */
-    private void setSoftLimits(XCANTalon motor, double hardOffset, double maxTravelInTicks) {
+    private void setSoftLimits(XCANTalon motor, double hardOffset) {
         if (areMotorsReady) {
             motor.configReverseSoftLimitEnable(false, 0);
             motor.configReverseSoftLimitThreshold((int) hardOffset, 0);
             motor.configForwardSoftLimitEnable(true, 0);
-            motor.configForwardSoftLimitThreshold((int) (hardOffset + maxTravelInTicks), 0);
+            motor.configForwardSoftLimitThreshold((int) (hardOffset + maximumLegTravelInTicks.get()), 0);
         }
     }
 
@@ -378,8 +376,8 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     }
 
     public void setTickGoalsToSafeMaximum() {
-        this.setLeftTickGoal(maximumLeftLegTravelInTicks.get());
-        this.setRightTickGoal(maximumRightLegTravelInTicks.get());
+        this.setLeftTickGoal(maximumLegTravelInTicks.get());
+        this.setRightTickGoal(maximumLegTravelInTicks.get());
     }
 
     public boolean getLeftLimitSwitchPressed() {
