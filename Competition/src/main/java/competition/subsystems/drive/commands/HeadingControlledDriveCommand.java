@@ -54,6 +54,15 @@ public abstract class HeadingControlledDriveCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        drive.drive(new XYPair(0, getTranslation()), getRotation());
+
+        double translation = getTranslation();
+        double rotation = getRotation();
+
+        if (drive.getOutreachModeActivated()) {
+            translation *= 0.35;
+            rotation *= 0.35;
+        }
+
+        drive.drive(new XYPair(0, translation), rotation);
     }
 }

@@ -26,6 +26,7 @@ import competition.subsystems.drive.commands.DriveEverywhereCommandGroup;
 import competition.subsystems.drive.commands.ForwardRatchetArcadeCommand;
 import competition.subsystems.drive.commands.HumanAssistedPurePursuitCommand;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
+import competition.subsystems.drive.commands.SetOutreachModeCommand;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.elevator.ElevatorSubsystem;
 import competition.subsystems.elevator.ElevatorSubsystem.HatchLevel;
@@ -74,7 +75,6 @@ public class OperatorCommandMap {
                         ConfigurablePurePursuitCommand goToFrontCargo, ConfigurablePurePursuitCommand goToNearCargo,
                         ConfigurablePurePursuitCommand goToFarLoadingStation, PoseSubsystem poseSubsystem,
                         HumanAssistedPurePursuitCommand goToVisionTarget,
-                        HumanAssistedPurePursuitCommand goToVisionLine,
                         ForwardRatchetArcadeCommand ratchetDrive) {
                 operatorInterface.driverGamepad.getPovIfAvailable(0).whenPressed(arcade);
                 operatorInterface.driverGamepad.getPovIfAvailable(90).whenPressed(arcade);
@@ -128,11 +128,6 @@ public class OperatorCommandMap {
                 goToVisionTarget.setPointSupplier(() -> vision.getVisionTargetRelativePosition());
                 operatorInterface.driverGamepad.getifAvailable(7).whileHeld(goToVisionTarget);
 
-                goToVisionLine.setMode(PointLoadingMode.Relative);
-                goToVisionLine.setDotProductDrivingEnabled(true);
-                goToVisionLine.setPointSupplier(() -> vision.getVisionTargetLine());
-                operatorInterface.driverGamepad.getifAvailable(4).whileHeld(goToVisionLine);
-
                 operatorInterface.driverGamepad.getifAvailable(9).whenPressed(ratchetDrive);
         }
 
@@ -144,7 +139,9 @@ public class OperatorCommandMap {
                         RotateToHeadingCommand faceRight, RotateToHeadingCommand faceBack,
                         ConfigurablePurePursuitCommand leftLoadingWaypoint,
                         ConfigurablePurePursuitCommand rightLoadingWaypoint, ConfigurablePurePursuitCommand leftLoading,
-                        ConfigurablePurePursuitCommand rightLoading, CheesyQuickTurnCommand quickTurn) {
+                        ConfigurablePurePursuitCommand rightLoading, CheesyQuickTurnCommand quickTurn,
+                        SetOutreachModeCommand enableOutreach,
+                        SetOutreachModeCommand disableOutreach) {
                 front.includeOnSmartDashboard("Score on Front Cargo");
                 near.includeOnSmartDashboard("Score on Near Cargo");
                 mid.includeOnSmartDashboard("Score on Mid Cargo");
@@ -156,37 +153,21 @@ public class OperatorCommandMap {
                 faceBack.setHeadingGoal(-90, false);
 
                 AdvancedButton leftShift = operatorInterface.driverGamepad.getifAvailable(5);
-                AdvancedButton rightShift = operatorInterface.driverGamepad.getifAvailable(6);
                 AdvancedButton driverA = operatorInterface.driverGamepad.getifAvailable(1);
                 AdvancedButton driverB = operatorInterface.driverGamepad.getifAvailable(2);
-                ChordButton leftA = clf.createChordButton(leftShift, driverA);
-                ChordButton rightA = clf.createChordButton(rightShift, driverA);
-                ChordButton leftB = clf.createChordButton(leftShift, driverB);
-                ChordButton rightB = clf.createChordButton(rightShift, driverB);
-
-                FieldPose leftLoadingStationWaypoint = new FieldPose(45, 94, -90);
-                FieldPose rightLoadingStationWaypoint = PoseSubsystem.flipFieldPose(leftLoadingStationWaypoint);
-
-                leftLoadingWaypoint.setPointSupplier(() -> pose.getPathToFieldPose(leftLoadingStationWaypoint));
-                leftLoadingWaypoint.setDotProductDrivingEnabled(true);
-
-                rightLoadingWaypoint.setPointSupplier(() -> pose.getPathToFieldPose(rightLoadingStationWaypoint));
-                rightLoadingWaypoint.setDotProductDrivingEnabled(true);
-
-                leftLoading.setPointSupplier(
-                                () -> pose.getPathToLandmark(Side.Left, FieldLandmark.LoadingStation, true));
-                leftLoading.setDotProductDrivingEnabled(true);
-                rightLoading.setPointSupplier(
-                                () -> pose.getPathToLandmark(Side.Right, FieldLandmark.LoadingStation, true));
-                rightLoading.setDotProductDrivingEnabled(true);
-
-                leftA.whileHeld(leftLoadingWaypoint);
-                rightA.whileHeld(rightLoadingWaypoint);
-
-                leftB.whileHeld(leftLoading);
-                rightB.whileHeld(rightLoading);
+                AdvancedButton driverX = operatorInterface.driverGamepad.getifAvailable(3);
+                AdvancedButton driverY = operatorInterface.driverGamepad.getifAvailable(4);
 
                 leftShift.whileHeld(quickTurn);
+
+                ChordButton ab = clf.createChordButton(driverA, driverB);
+                ChordButton xy = clf.createChordButton(driverX, driverY);
+
+                enableOutreach.setOutreachModeEnabled(true);
+                disableOutreach.setOutreachModeEnabled(false);
+
+                ab.whenPressed(enableOutreach);
+                xy.whenPressed(disableOutreach);
         }
 
         @Inject

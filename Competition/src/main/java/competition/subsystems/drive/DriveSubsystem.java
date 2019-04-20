@@ -44,6 +44,8 @@ public class DriveSubsystem extends BaseDriveSubsystem {
     private final ElectricalContract2019 contract;
     private final DoubleProperty typicalCurrentLimitProp;
 
+    private boolean outreachMode;
+
     @Inject
     public DriveSubsystem(CommonLibFactory factory, PropertyFactory propFactory, ElectricalContract2019 contract,
             PIDFactory pf) {
@@ -145,6 +147,14 @@ public class DriveSubsystem extends BaseDriveSubsystem {
             return 0;
         }
         return ticks / ticksPerInch;
+    }
+
+    public void setOutreachModeEnabled(boolean value) {
+        outreachMode = value;
+    }
+
+    public boolean getOutreachModeActivated() {
+        return outreachMode;
     }
 
     public double getSideTicksPerInch(Side side) {

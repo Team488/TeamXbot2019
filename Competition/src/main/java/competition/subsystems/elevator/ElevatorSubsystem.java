@@ -46,6 +46,8 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
     private final DoubleProperty winchUnlockPower;
     private final DoubleProperty elevatorMaximumPower;
 
+    private boolean outreachMode;
+
     public enum HatchLevel {
         Low, Medium, High,
     }
@@ -97,6 +99,14 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
                 calibrate();
             }
         });
+    }
+
+    public void setOutreachModeEnabled(boolean enabled) {
+        outreachMode = enabled;
+    }
+
+    public boolean getOutreachModeEnabled() {
+        return outreachMode;
     }
 
     public void stop() {
@@ -162,6 +172,10 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
                 releaseRatchet = false;
             }
 
+            if (getOutreachModeEnabled()) {
+                power *= 0.35;
+            }
+
             // The ratchet may have trouble disengaging when under heavy strain. Therefore,
             // if we want to go up, then we should first apply some downwards power for a moment
             // while releasing the ratchet.
@@ -171,6 +185,7 @@ public class ElevatorSubsystem extends BaseSetpointSubsystem implements Periodic
                 }
 
             power *= elevatorMaximumPower.get();
+
             master.simpleSet(power);
             allowElevatorMotionSolenoid.setOn(releaseRatchet);
         }
