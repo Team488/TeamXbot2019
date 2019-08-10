@@ -36,7 +36,10 @@ public class DriveToPositionCommand extends BaseCommand {
     @Override
     public void execute() {
         double power = driveSubsystem.getPositionalPid().calculate(goal, poseSubsystem.getCurrentFieldPose().getPoint().y);
-        driveSubsystem.drive(goal, power);
+        driveSubsystem.drive(power, power);
     }
+
+    
+
 
 }

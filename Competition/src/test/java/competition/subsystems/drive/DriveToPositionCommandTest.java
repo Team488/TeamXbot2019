@@ -32,7 +32,7 @@ public class DriveToPositionCommandTest extends BaseCompetitionTest {
     }
 
     @Test
-    public void test1() {
+    public void testHasPowerIfGoalNotReached() {
         //from 0
         ((MockCANTalon)drive.leftMaster).setPosition(0);
         ((MockCANTalon)drive.rightMaster).setPosition(0);
@@ -41,8 +41,8 @@ public class DriveToPositionCommandTest extends BaseCompetitionTest {
         command.initialize();
         command.execute();
 
-        assertTrue("checking if power decreases", drive.rightMaster.getMotorOutputPercent() >  0);
-        assertTrue("checking if power decreases", drive.leftMaster.getMotorOutputPercent() >  0);
+        assertTrue("checking if power is on", drive.rightMaster.getMotorOutputPercent() >  0);
+        assertTrue("checking if power is on", drive.leftMaster.getMotorOutputPercent() >  0);
 
         // from 5
         ((MockCANTalon)drive.leftMaster).setPosition(5);
@@ -50,16 +50,58 @@ public class DriveToPositionCommandTest extends BaseCompetitionTest {
 
         command.execute();
 
-        assertTrue("checking if power decreases",(drive.rightMaster).getMotorOutputPercent() > 0);
-        assertTrue("checking if power decreases",(drive.leftMaster).getMotorOutputPercent() > 0);    
+        assertTrue("checking if power is on",(drive.rightMaster).getMotorOutputPercent() > 0);
+        assertTrue("checking if power is on ",(drive.leftMaster).getMotorOutputPercent() > 0);     
+    }
 
-        //from 11
-        ((MockCANTalon)drive.leftMaster).setPosition(11);
-        ((MockCANTalon)drive.rightMaster).setPosition(11);
+    @Test
+    public void testIfPowerAtGoal() {
+        //from 0
+        pose.updatePeriodicData();
+        pose.updatePeriodicData();
+        pose.setCurrentHeading(90);
+
+        ((MockCANTalon)drive.leftMaster).setPosition(inchesToTicks(0));
+        ((MockCANTalon)drive.rightMaster).setPosition(inchesToTicks(0));
+
+        command.setDistanceToDrive(10);
+        command.initialize();
+        command.execute();
+
+        ((MockCANTalon)drive.leftMaster).setPosition(inchesToTicks(10));
+        ((MockCANTalon)drive.rightMaster).setPosition(inchesToTicks(10));
 
         command.execute();
 
-        assertTrue("checking if robot stops",(drive.rightMaster).getMotorOutputPercent() < 0);
-        assertTrue("checking if robot stops",(drive.leftMaster).getMotorOutputPercent() < 0);      
+        assertTrue("checking if power is off",(drive.rightMaster).getMotorOutputPercent() < Math.abs(0.2));
+        assertTrue("checking if power is off",(drive.leftMaster).getMotorOutputPercent() < Math.abs(0.2));       
+    }
+
+    @Test
+    public void testPowerPastGoal() {
+        //from 0
+
+        pose.updatePeriodicData();
+        pose.updatePeriodicData();
+        pose.setCurrentHeading(90);
+
+        ((MockCANTalon)drive.leftMaster).setPosition(inchesToTicks(0));
+        ((MockCANTalon)drive.rightMaster).setPosition(inchesToTicks(0));
+
+        command.setDistanceToDrive(10);
+        command.initialize();
+        command.execute();
+
+        ((MockCANTalon)drive.leftMaster).setPosition(inchesToTicks(11));
+        ((MockCANTalon)drive.rightMaster).setPosition(inchesToTicks(11));
+        pose.updatePeriodicData();
+        command.execute();
+
+        assertTrue("checking if power is negative",(drive.rightMaster).getMotorOutputPercent() < 0);
+        assertTrue("checking if power is negative",(drive.leftMaster).getMotorOutputPercent() < 0);       
+    }
+
+    private int inchesToTicks(double inches) {
+        return (int)(inches * 12348.8 / 60);
     }
 }
