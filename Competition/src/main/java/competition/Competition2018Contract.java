@@ -222,4 +222,9 @@ public class Competition2018Contract extends ElectricalContract2019 {
     public DeviceInfo getRearRightLimit() {
         return null;
     }
+
+    @Override
+    public boolean invertVisionData() {
+        return true;
+    }
 }

@@ -2,9 +2,11 @@ package competition.subsystems.vision.commands;
 
 import com.google.inject.Inject;
 
+import competition.RumbleManager;
 import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.pose.PoseSubsystem;
+import competition.subsystems.rumble.RumbleSubsystem;
 import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.injection.wpi_factories.CommonLibFactory;
@@ -20,6 +22,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     final VisionSubsystem visionSubsystem;
     final PoseSubsystem pose;
     final DriveSubsystem drive;
+    final RumbleManager rumble;
     final DoubleProperty visionDeltaLimitProp;
     Double goal = null;
     boolean goalFrozen = false;
@@ -33,11 +36,13 @@ public class RotateToVisionTargetCommand extends BaseCommand {
     @Inject
     public RotateToVisionTargetCommand(OperatorInterface oi, 
             VisionSubsystem visionSubsystem, CommonLibFactory clf,
-            DriveSubsystem drive, PoseSubsystem pose, PropertyFactory propFactory) {
+            DriveSubsystem drive, PoseSubsystem pose, PropertyFactory propFactory,
+            RumbleSubsystem rumbleSubsystem, RumbleManager rumble) {
         propFactory.setPrefix(this);
         this.pose = pose;
         this.oi = oi;
         this.drive = drive;
+        this.rumble = rumble;
         this.visionSubsystem = visionSubsystem;
         this.visionDeltaLimitProp = propFactory.createPersistentProperty("Freeze Angle Delta Deg", 5.0);
         constantOffsetProp = propFactory.createPersistentProperty("ConstantOffset", 0);
@@ -47,6 +52,7 @@ public class RotateToVisionTargetCommand extends BaseCommand {
         hm = clf.createHeadingModule(drive.getRotateToHeadingPid());
         this.requires(visionSubsystem);
         this.requires(drive);
+        this.requires(rumbleSubsystem);
     }
 
     @Override
@@ -67,6 +73,11 @@ public class RotateToVisionTargetCommand extends BaseCommand {
 
     @Override
     public void execute() {
+
+        if (visionSubsystem.isTargetInView()) {
+            rumble.rumbleDriverGamepad(0.5, 0.1);
+        }
+
         // if not yet acquired, look for target
         if(!goalFrozen && (goal == null || continuousAcquisition) && visionSubsystem.isTargetInView()) {
             double relativeAngle = visionSubsystem.getAngleToTarget();

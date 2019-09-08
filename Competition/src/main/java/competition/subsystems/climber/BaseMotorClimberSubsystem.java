@@ -30,6 +30,7 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
     private final BooleanProperty rightLimitProp;
     private final DoubleProperty maximumLegTravelInTicks;
     protected final DoubleProperty retroRocketPowerProp;
+    private final DoubleProperty powerFactorProp;
 
     private final Latch leftCalibrationLatch;
     private final Latch rightCalibrationLatch;
@@ -146,6 +147,8 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
         maximumLegTravelInTicks = propFactory.createPersistentProperty("MaximumLegTravelInTicks", 100000);
         retroRocketPowerProp = propFactory.createPersistentProperty("RetroRocketPower", 0.15);
 
+        powerFactorProp = propFactory.createPersistentProperty("PowerFactor", 0.5);
+
         // We also setup two calibration latches, so we will only hard calibrate on the
         // first jump from false->true.
         leftCalibrationLatch = new Latch(false, EdgeType.Both, edge ->
@@ -220,8 +223,17 @@ public abstract class BaseMotorClimberSubsystem extends BaseSetpointSubsystem im
             if (limit.get()) {
                 power = MathUtils.constrainDouble(power, 0, 1);
             }
+            power *= powerFactorProp.get();
             motor.simpleSet(power);
         }
+    }
+
+    public double getPowerFactor() {
+        return powerFactorProp.get();
+    }
+
+    public void setPowerFactor(double value) {
+        powerFactorProp.set(value);
     }
 
     /**

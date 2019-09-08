@@ -23,6 +23,7 @@ public class HoldRobotLevelCommandTest extends BaseCompetitionTest {
         command = injector.getInstance(HoldRobotLevelCommand.class);
         pose = injector.getInstance(PoseSubsystem.class);
         rear = injector.getInstance(RearMotorClimberSubsystem.class);
+        rear.setPowerFactor(1);
     }
 
     @Test

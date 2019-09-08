@@ -320,17 +320,6 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/StandardPower"
             }
           },
-          "6,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/ElevatorMaster",
-              "_title": "/SmartDashboard/ElevatorSubsystem/ElevatorMaster"
-            }
-          },
           "9,0": {
             "size": [
               1,
@@ -353,7 +342,7 @@
               "_title": "/SmartDashboard/ElevatorSubsystem/BrakePowerLimit"
             }
           },
-          "3,3": {
+          "5,3": {
             "size": [
               1,
               1
@@ -386,7 +375,7 @@
               "_title": "SmartDashboard/ElevatorSubsystem/CalibrationOffset"
             }
           },
-          "3,1": {
+          "8,3": {
             "size": [
               2,
               1
@@ -397,7 +386,7 @@
               "_title": "SmartDashboard/ElevatorSubsystem/Arm Forced Down To Free Ratchet Duration"
             }
           },
-          "3,0": {
+          "8,2": {
             "size": [
               2,
               1
@@ -406,6 +395,175 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/UnlockPower",
               "_title": "SmartDashboard/ElevatorSubsystem/UnlockPower"
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID"
+            }
+          },
+          "1,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/ElevatorHeightTicks",
+              "_title": "/SmartDashboard/ElevatorSubsystem/ElevatorHeightTicks"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/P",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/P"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/CalibrationOffset",
+              "_title": "/SmartDashboard/ElevatorSubsystem/CalibrationOffset"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/LowerLimitSwitch",
+              "_title": "/SmartDashboard/ElevatorSubsystem/LowerLimitSwitch",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/Max Output",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/Max Output"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/Min Output",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/Min Output"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/ElevatorHeightTicks",
+              "_title": "/SmartDashboard/ElevatorSubsystem/ElevatorHeightTicks"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/CurrentPower",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/CurrentPower"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/IsCalibrated",
+              "_title": "/SmartDashboard/ElevatorSubsystem/IsCalibrated",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorSubsystem/TickGoal",
+              "_title": "/SmartDashboard/ElevatorSubsystem/TickGoal"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/P",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/P"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/I",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/I"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/D",
+              "_title": "/SmartDashboard/ElevatorMaintainerCommand/PositionPID/D"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ElevatorMaintainerCommand/PositionPID/Is Enabled",
+              "_title": "SmartDashboard/ElevatorMaintainerCommand/PositionPID/Is Enabled"
             }
           }
         }
@@ -609,7 +767,7 @@
               "_title": "SmartDashboard/FrontMotorClimberSubsystem/MaximumLegTravelInTicks"
             }
           },
-          "6,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -622,7 +780,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "7,0": {
+          "6,0": {
             "size": [
               1,
               1
@@ -668,9 +826,9 @@
               "_title": "SmartDashboard/HoldRobotLevelCommand/PitchControl/D"
             }
           },
-          "3,4": {
+          "2,4": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {

@@ -19,7 +19,7 @@ public class Competition2019Contract extends Practice2019Contract {
 
     @Override
     public DeviceInfo getFrontLeftClimber() {
-        return new DeviceInfo(29, true);
+        return new DeviceInfo(29, false);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class Practice2019Contract extends ElectricalContract2019 {
 
     @Override
     public DeviceInfo getElevatorMasterEncoder() {
-        return new DeviceInfo(5, false);
+        return new DeviceInfo(5, true);
     }
 
     @Override
@@ -218,6 +218,11 @@ public class Practice2019Contract extends ElectricalContract2019 {
     @Override
     public DeviceInfo getRearRightLimit() {
         return null;
+    }
+
+    @Override
+    public boolean invertVisionData() {
+        return true;
     }
 
 }

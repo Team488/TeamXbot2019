@@ -194,9 +194,10 @@ public class OperatorCommandMap {
                 setElevatorMid.setGoal(elevatorSubsystem.getTickHeightForLevel(HatchLevel.Medium));
                 setElevatorHigh.setGoal(elevatorSubsystem.getTickHeightForLevel(HatchLevel.High));
 
-                operatorInterface.operatorGamepad.getPovIfAvailable(0).whenPressed(setElevatorLow);
+                operatorInterface.operatorGamepad.getPovIfAvailable(180).whenPressed(setElevatorLow);
                 operatorInterface.operatorGamepad.getPovIfAvailable(90).whenPressed(setElevatorMid);
-                operatorInterface.operatorGamepad.getPovIfAvailable(270).whenPressed(setElevatorHigh);
+                operatorInterface.operatorGamepad.getPovIfAvailable(270).whenPressed(setElevatorMid);
+                operatorInterface.operatorGamepad.getPovIfAvailable(0).whenPressed(setElevatorHigh);
         }
 
         @Inject
@@ -234,6 +235,7 @@ public class OperatorCommandMap {
                 rotateToVisionTargetCommand.setContinuousAcquisition(true);
                 operatorInterface.driverGamepad.getifAvailable(8).whileHeld(rotateToVisionTargetCommand);
                 rotateToVisionTargetCommand.includeOnSmartDashboard("Rotate To Vision Target");
+                operatorInterface.driverGamepad.getifAvailable(6).whileHeld(rotateToVisionTargetCommand);
         }
 
         @Inject

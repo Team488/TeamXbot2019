@@ -222,4 +222,9 @@ public class RoboxContract extends ElectricalContract2019 {
         return null;
     }
 
+    @Override
+    public boolean invertVisionData() {
+        return true;
+    }
+
 }

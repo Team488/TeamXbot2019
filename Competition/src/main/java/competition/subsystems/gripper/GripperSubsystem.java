@@ -31,12 +31,14 @@ public class GripperSubsystem extends BaseSubsystem {
     private final BooleanProperty grabbingDiscProp;
     private Latch gripperLatch;
     private PoseSubsystem pose;
+    private boolean isExtended;
 
     @Inject
     public GripperSubsystem(CommonLibFactory clf, ElectricalContract2019 contract, PropertyFactory propFactory,
             RumbleManager rumble, PoseSubsystem pose) {
         gripperReady = contract.isGripperReady();
         gripperState = ToggleState.GRAB;
+        isExtended = false;
         this.pose = pose;
 
         propFactory.setPrefix(this.getPrefix());
@@ -86,6 +88,11 @@ public class GripperSubsystem extends BaseSubsystem {
 
     public void setExtension(boolean extend) {
         gripperExtensionPiston.setOn(extend);
+        isExtended = extend;
+    }
+
+    public boolean getExtended() {
+        return isExtended;
     }
 
     public boolean currentlyHasDisk() {

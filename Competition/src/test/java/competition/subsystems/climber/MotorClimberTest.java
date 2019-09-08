@@ -16,6 +16,8 @@ public class MotorClimberTest extends BaseCompetitionTest {
         super.setUp();
         front = injector.getInstance(FrontMotorClimberSubsystem.class);
         rear = injector.getInstance(RearMotorClimberSubsystem.class);
+        front.setPowerFactor(1);
+        rear.setPowerFactor(1);
     }
 
     @Test

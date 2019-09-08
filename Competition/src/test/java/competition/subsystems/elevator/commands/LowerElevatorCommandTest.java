@@ -4,19 +4,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import competition.BaseCompetitionTest;
-import competition.subsystems.elevator.ElevatorSubsystem;
+import competition.subsystems.elevator.BaseElevatorTest;
 
-public class LowerElevatorCommandTest extends BaseCompetitionTest {
+public class LowerElevatorCommandTest extends BaseElevatorTest {
 
     LowerElevatorCommand lowerElevatorCommand;
-    ElevatorSubsystem elevatorSubsystem;
 
     @Override
     public void setUp() {
         super.setUp();
         lowerElevatorCommand = this.injector.getInstance(LowerElevatorCommand.class);
-        elevatorSubsystem = this.injector.getInstance(ElevatorSubsystem.class);
     }
 
     @Test

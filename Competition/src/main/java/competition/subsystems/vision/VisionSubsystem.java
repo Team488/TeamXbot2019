@@ -7,6 +7,8 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.ElectricalContract2019;
+
 import com.fasterxml.jackson.jr.ob.JSON;
 
 import xbot.common.command.BaseSubsystem;
@@ -38,9 +40,11 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
     final DoubleProperty yawToTargetProperty;
     final DoubleProperty targetRangeProperty;
     final DoubleProperty targetRotationProperty;
+    final ElectricalContract2019 contract;
 
     @Inject
-    public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf) {
+    public VisionSubsystem(PropertyFactory propMan, CommonLibFactory clf, ElectricalContract2019 contract) {
+        this.contract = contract;
         this.client = clf.createZeromqListener("tcp://10.4.88.12:5801", "");
         propMan.setPrefix(this.getPrefix());
         differenceBetweenTime = propMan.createPersistentProperty("differenceBetweenTime", 1);
@@ -106,7 +110,11 @@ public class VisionSubsystem extends BaseSubsystem implements PeriodicDataSource
 
     public double getAngleToTarget() {
         if (isTargetInView()) {
-            return visionData.getYaw().doubleValue();
+            double yaw = visionData.getYaw().doubleValue();
+            if (contract.invertVisionData()) {
+                yaw = -yaw;
+            }
+            return yaw;
         }
         return 0.0;
     }

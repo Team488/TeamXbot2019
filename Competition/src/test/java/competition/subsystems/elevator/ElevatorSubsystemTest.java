@@ -10,14 +10,11 @@ import competition.BaseCompetitionTest;
 import edu.wpi.first.wpilibj.MockDigitalInput;
 import xbot.common.controls.actuators.mock_adapters.MockCANTalon;
 
-public class ElevatorSubsystemTest extends BaseCompetitionTest {
-
-    ElevatorSubsystem elevatorSubsystem;
+public class ElevatorSubsystemTest extends BaseElevatorTest {
 
     @Override
     public void setUp() {
         super.setUp();
-        elevatorSubsystem = this.injector.getInstance(ElevatorSubsystem.class);
     }
 
     @Test
@@ -28,10 +25,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testStopElevator() {
         assertEquals(0, getMasterPower(), 0.001);
-        elevatorSubsystem.raise();
-        timer.advanceTimeInSecondsBy(3);
-        elevatorSubsystem.raise();
-        assertEquals(1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
+        makeElevatorRaiseHandlingRatchet();
         elevatorSubsystem.stop();
         assertEquals(0, getMasterPower(), 0.001);
     }
@@ -39,10 +33,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testRaiseElevator() {
         assertEquals(0, getMasterPower(), 0.001);
-        elevatorSubsystem.raise();
-        timer.advanceTimeInSecondsBy(3);
-        elevatorSubsystem.raise();
-        assertEquals(1*elevatorSubsystem.getMaximumPower(), getMasterPower(), 0.001);
+        makeElevatorRaiseHandlingRatchet();
     }
 
     @Test
@@ -98,7 +89,7 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
     @Test
     public void testSetPowerOne() {
         elevatorSubsystem.setPower(1);
-        timer.advanceTimeInSecondsBy(3);
+        setElevatorPositionForMovingUpwards();
         elevatorSubsystem.setPower(1);
         elevatorReady();
         ((MockDigitalInput) elevatorSubsystem.calibrationSensor).setValue(false);
@@ -118,14 +109,4 @@ public class ElevatorSubsystemTest extends BaseCompetitionTest {
         assertEquals(0, getMasterPower(), 0.001);
         assertFalse(elevatorSubsystem.allowElevatorMotionSolenoid.getAdjusted());
     }
-
-    public void elevatorReady() {
-        assertTrue(contract.isElevatorReady());
-        assertTrue(contract.isElevatorLimitSwitchReady());
-    }
-
-    private double getMasterPower() {
-        return elevatorSubsystem.master.getMotorOutputPercent();
-    }
-
 }

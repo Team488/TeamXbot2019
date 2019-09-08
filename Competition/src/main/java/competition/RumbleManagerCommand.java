@@ -47,7 +47,7 @@ public class RumbleManagerCommand extends BaseCommand {
         boolean isTargetNowInView = isTargetInView && !wasTargetInView;
         boolean hasEnoughTimePassed = lastRumbleCall == null || XTimer.getFPGATimestamp() - lastRumbleCall > timeBetweenRumble.get();
         
-        if (isTargetNowInView && hasEnoughTimePassed) {
+        if (isTargetInView && hasEnoughTimePassed) {
             rumble.rumbleDriverGamepad(rumbleIntensity.get(), rumbleLength.get());
             lastRumbleCall = XTimer.getFPGATimestamp();
         }

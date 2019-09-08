@@ -84,4 +84,6 @@ public abstract class ElectricalContract2019 extends ElectricalContract {
     public abstract DeviceInfo getRearRightClimber();
     public abstract DeviceInfo getRearRightEncoder();
     public abstract DeviceInfo getRearRightLimit();
+
+    public abstract boolean invertVisionData();
 }
