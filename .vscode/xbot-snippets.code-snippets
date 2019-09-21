@@ -19,7 +19,7 @@
 		"scope": "java",
 		"prefix": "xcommand",
 		"body": [
-			"package ${TM_DIRECTORY/.*java\\/([^\\/]*)\\/([^\\/]*)\\/([^\\/]*)\\/([^\\/]*).*/$1.$2.$3.$4/};",
+			"package ${TM_DIRECTORY/.*java[\\/\\\\](([^\\/\\\\]*)([\\/\\\\])?)|([\\/\\\\])([^\\/\\\\]*)/$2${3:+.}${5:+.}$5/g};",
 			"",
 			"import com.google.inject.Inject;",
 			"import xbot.common.command.BaseCommand;",
