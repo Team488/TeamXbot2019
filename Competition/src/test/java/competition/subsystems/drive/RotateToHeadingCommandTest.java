@@ -9,6 +9,7 @@ import org.junit.Test;
 import competition.BaseCompetitionTest;
 import competition.subsystems.drive.commands.RotateToHeadingCommand;
 import competition.subsystems.pose.PoseSubsystem;
+import xbot.common.controls.sensors.mock_adapters.MockGyro;
 
 public class RotateToHeadingCommandTest extends BaseCompetitionTest {
 
@@ -67,13 +68,13 @@ public class RotateToHeadingCommandTest extends BaseCompetitionTest {
     }
 
     protected void changeMockGyroHeading(double delta) {
-        double oldHeading = mockRobotIO.getGyroHeading();
+        double oldHeading = pose.imu.getHeading().getValue();
         double newHeading = oldHeading + delta;
         setMockGyroHeading(newHeading);
     }
 
     protected void setMockGyroHeading(double heading) {
-        mockRobotIO.setGyroHeading(heading);
+        ((MockGyro)pose.imu).setYaw(heading);
     }
 
 }
